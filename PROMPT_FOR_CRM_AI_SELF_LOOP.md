@@ -129,13 +129,60 @@ CRM AI tạo file `e2e_reports/customer_groups_AUTOLOOP_round<N>_<date>.md` ghi:
 
 → Khi gặp giới hạn này, commit message ghi `REQUIRES HUB ACTION` + tag Hub.
 
-## Sau customer_groups xong
+## Sau customer_groups xong — TỰ test toàn bộ 23 module còn lại
 
-Áp dụng prompt này cho 7 module còn lại đã có report ở `e2e_reports/`:
-- customers, finance, funnel, loyalty, orders, pos, services
-- (Mỗi module có file `<module>_20260506.md` liệt kê skill lỗi)
+Hub chỉ test 8 module nhỏ round 1 (72 skill có sẵn report `e2e_reports/<module>_20260506.md`). **23 module còn lại CRM AI tự test** bằng cùng script curl ở Bước 1, không chờ Hub đẩy report.
 
-CRM AI lặp self-loop từng module. Hub chỉ ack cuối cùng + chạy round 2 (8 module mid) + round 3 (8 module lớn) khi 8 module nhỏ xanh.
+### Danh sách 23 module CRM AI cần tự test
+
+**Round 1 đã có report Hub đẩy** (8 module — đọc `e2e_reports/<module>_20260506.md`):
+- customers, customer_groups (đang fix), finance, funnel, loyalty, orders, pos, services
+
+**Round 2 — 8 module mid (~120 skill)** — CRM AI tự test:
+- notifications, hr, inventory, settings, reports, cskh, documents, academy
+
+**Round 3 — 8 module lớn (~530 skill)** — CRM AI tự test:
+- ads, ai_assistant, marketing, cards_deposits, sale, telesale, integrations, _other
+
+### Cách CRM AI tự test 1 module
+
+```bash
+# Lấy danh sách skill của module từ _index.json
+MODULE=notifications
+SKILLS=$(jq -r '.skills[].name' $MODULE/_index.json)
+
+# Loop test mỗi skill (dùng script curl ở Bước 1, đổi $skill thành từng tên)
+for skill in $SKILLS; do
+  echo "=== $skill ==="
+  curl -s -X POST "https://api-core.spaclaw.pro/api/v1/hermes/companies/$GROUP/agents/crm/ask" \
+    -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+    -d "{\"message\":\"Hãy gọi skill \`$skill\` ngay với args mẫu hợp lý. KHÔNG hỏi lại.\"}" \
+    | jq -r '.data.response // .response // "TIMEOUT"' | head -c 300
+  echo
+done
+
+# Phân loại verdict + ghi report e2e_reports/<module>_AUTO_<date>.md
+# Áp Loop A fix từng skill verdict ≠ PASS
+```
+
+### Output mỗi module
+
+CRM AI tạo `e2e_reports/<module>_AUTO_<date>.md` với cấu trúc:
+- Total skill / PASS / NO_SKILL / ERROR / DECLINE / TIMEOUT
+- Bảng từng skill × verdict
+- Action plan: skill nào paste handler, skill nào sửa description, skill nào defer
+- Commit message tag chuẩn: `REQUIRES HUB SPEC DEPLOY: <module>` nếu cần Hub deploy
+
+### Stop conditions per module
+
+- ✅ ≥80% skill PASS hoặc PASS_VALIDATION → coi module xong, sang module tiếp
+- ⚠️ <80% PASS sau 3 vòng → commit `<module>_BLOCKED.md` + ping Hub debug
+- 🛑 Module có >50 skill spec_only (chưa wire backend) → commit list skill cần loại khỏi `_tool_spec_anthropic_implemented.json`, để LLM khỏi tra
+
+Hub chỉ:
+1. Chạy `scripts/hub_deploy_spec.sh --auto` mỗi khi commit có tag `REQUIRES HUB SPEC DEPLOY`
+2. Verify final round khi CRM AI báo "all 31 modules done"
+3. Bump `_master_manifest.json` 3.3.0 → 3.4.0 sau consolidate
 
 ---
 
