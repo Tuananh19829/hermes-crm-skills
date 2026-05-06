@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
 # AUTO-APPLY customer_groups handler patch on VPS spaclaw-main
-# Version: 2 (use awk instead of sudo node)
+# Version: 3 (switch keyword = "action" not "skillName")
 # ============================================================
 # Usage: SSH vào VPS, paste:
 #   bash <(curl -sL https://raw.githubusercontent.com/Tuananh19829/hermes-crm-skills/main/customer_groups/APPLY_PATCH.sh)
@@ -56,13 +56,13 @@ echo "Extracted $LINES dòng vào $TMP_BLOCK"
 
 echo "=== Step 5: Insert vào routes.js (dùng awk) ==="
 
-# Tìm dòng 'default:' trong switch (skillName) {...} để insert TRƯỚC nó
+# Tìm dòng 'default:' trong switch (action) {...} để insert TRƯỚC nó
 # Strategy: tạo file mới = phần trước default: + patch block + default: trở đi
 
 # Backup trước
 sudo cp "$ROUTES_FILE" /tmp/routes_pre_patch.js
 
-# Dùng awk để chèn block trước "default:" đầu tiên gặp trong switch (skillName)
+# Dùng awk để chèn block trước "default:" đầu tiên gặp trong switch (action)
 awk -v patch_file="$TMP_BLOCK" '
   BEGIN {
     # Đọc patch block vào biến
@@ -72,8 +72,8 @@ awk -v patch_file="$TMP_BLOCK" '
     close(patch_file)
     inserted = 0
   }
-  # Detect switch (skillName) block
-  /switch\s*\(\s*skillName\s*\)/ { in_switch = 1 }
+  # Detect switch (action) block
+  /switch\s*\(\s*action\s*\)/ { in_switch = 1 }
   # Insert before first default: encountered in the switch
   in_switch && !inserted && /^[[:space:]]*default[[:space:]]*:/ {
     print patch_block
@@ -82,7 +82,7 @@ awk -v patch_file="$TMP_BLOCK" '
   { print }
   END {
     if (!inserted) {
-      print "ERROR: Không tìm thấy default: trong switch (skillName)" > "/dev/stderr"
+      print "ERROR: Không tìm thấy default: trong switch (action)" > "/dev/stderr"
       exit 1
     }
   }
