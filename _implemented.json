@@ -2,8 +2,10 @@
   "_meta": {
     "description": "Whitelist tên skill ĐÃ wire handler trong agent-tools-hermes.js. Hub Hermes nên dùng list này để filter tools cho LLM, tránh hallucinate skill chưa implement.",
     "generated_at": "2026-05-06",
-    "manifest_version": "3.4.0",
-    "source_of_truth": "Confirmed by anh (Hub side) sau E2E test + verified live trên VPS 136.112.201.221 (2026-05-06)"
+    "manifest_version": "3.5.0",
+    "source_of_truth": "Verified live + RETEST2 by Hub (2 PASS, 5 chờ Hub spec sync) + dispatcher 7/7 = 1 confirmed via SSH (2026-05-06T20:30)",
+    "verification_method": "ssh daotaokinhdoanhspanoibo@136.112.201.221 'docker exec appcrm-api grep -c \"case .\\$skill.\" /app/dist/modules/agent-tools/routes.js' = 1 cho cả 7 skill",
+    "blocked_on": "Hub Hermes spec deploy customer_groups/_index.json v1.2.0 lên /opt/hermes/skills/crm/ trên 34.142.240.11 — sau đó 5 NO_SKILL/AMBIG/DECLINE sẽ resolve"
   },
   "implemented": [
     "find_customer",
@@ -44,7 +46,7 @@
   "not_implemented_count": 686,
   "by_module_status": {
     "crm": "ALL_IMPLEMENTED (15 skills + 10 lead-related from anh dispatcher)",
-    "customer_groups": "ALL_IMPLEMENTED + VERIFIED LIVE (7/7 — applied 2026-05-06 20:13)",
+    "customer_groups": "BACKEND_VERIFIED 7/7 (dispatcher count=1 cho mỗi case). RETEST2: 2/7 PASS (create + delete). 5 còn lại NO_SKILL/AMBIG/DECLINE = blocked on Hub spec sync — REQUIRES HUB SPEC DEPLOY",
     "customers": "PARTIAL (search/create/update/get done; delete/merge/export/import/tier_distribution/overview/list_customers/top_sources implemented)",
     "services": "PARTIAL (search/create/list categories done; treatments/bundles partial)",
     "ads": "NOT_STARTED",
