@@ -113,6 +113,47 @@ CRM AI tạo file `e2e_reports/customer_groups_AUTOLOOP_round<N>_<date>.md` ghi:
 - Diff `_implemented.json`
 - Stop reason nếu dừng
 
+## ⚡ TEST DIRECT (bypass Hermes/LLM) — RECOMMENDED cho dev iteration
+
+Thay vì gọi qua `/ask` (mất ~30-60s/skill, LLM ambiguity), CRM AI test trực tiếp endpoint internal nhanh hơn 100x + deterministic:
+
+```bash
+ssh vienthammykjm@136.112.201.221
+SECRET=$(docker exec appcrm-api printenv CRM_INTERNAL_SECRET)
+WS=52b399db-ff89-4f75-a780-4c85477a0c24       # My Salon test workspace (daotaokinhdoanhspa)
+USER_ID=$(docker exec appcrm-api psql $DATABASE_URL -t -c "SELECT id FROM users WHERE email='daotaokinhdoanhspa@gmail.com' LIMIT 1" | tr -d ' ')
+SENTINEL=00000000-0000-0000-0000-000000000000  # UUID giả → expect GROUP_NOT_FOUND
+
+# READ + validation test (an toàn, không tạo rác prod)
+for skill in get_customer_group_detail list_group_members find_customer; do
+  echo "=== $skill ==="
+  docker exec appcrm-api curl -s -X POST http://localhost:3000/internal/skills/$skill \
+    -H "X-Internal-Secret: $SECRET" \
+    -H "X-User-Id: $USER_ID" -H "X-Group-Id: $WS" \
+    -H "Content-Type: application/json" \
+    -d "{\"group_id\":\"$SENTINEL\",\"customer_id\":\"$SENTINEL\",\"limit\":5}" | head -c 400
+  echo
+done
+```
+
+### Verdict mapping (direct test)
+
+| HTTP / body | Verdict | Action |
+|---|---|---|
+| `200 {ok:true,data:{...}}` | PASS | skip |
+| `404 {error:{code:"GROUP_NOT_FOUND"}}` | PASS_VALIDATION | skip (handler sống, validate đúng) |
+| `400 {error:{code:"MISSING_PARAM"}}` | PASS_VALIDATION | skip |
+| `404 Cannot POST /internal/skills/<name>` | NO_HANDLER | wire case mới vào dispatcher |
+| `500 ...` | ERROR | đọc `docker logs appcrm-api` fix SQL/Prisma |
+
+### Sau khi direct test PASS → mới chạy E2E qua Hermes
+
+E2E `/ask` còn dùng để verify LLM tra `_index.json` thấy skill, parse args đúng. Direct test chỉ verify backend; E2E verify cả pipeline LLM → dispatcher → DB.
+
+→ Loop A workflow tối ưu: **direct test trước** (~10s/module), sửa hết `NO_HANDLER` + `ERROR` → mới chạy E2E `/ask` (~5 phút/module) verify LLM tra spec gọi được.
+
+---
+
 ## Quyền CRM AI có
 
 ✅ SSH `vienthammykjm@136.112.201.221`
