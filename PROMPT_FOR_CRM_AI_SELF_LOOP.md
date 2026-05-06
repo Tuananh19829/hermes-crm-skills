@@ -9,49 +9,35 @@ Mày là AI quản lý app CRM. Việc của mày:
 
 ---
 
-## 1. Tài khoản + workspace test
+## 1. Tài khoản test (DÙNG ACCOUNT NÀY)
 
-Có sẵn:
-- Email: `daotaokinhdoanhspa@gmail.com` / pass đã set sẵn (hỏi anh nếu chưa biết)
-- workspace_id (My Salon): `52b399db-ff89-4f75-a780-4c85477a0c24`
+- **Email**: `daotaokinhdoanhspa@gmail.com`
+- **Password**: hỏi anh (KHÔNG commit pass vào repo)
+- **workspace_id (My Salon)**: `52b399db-ff89-4f75-a780-4c85477a0c24`
 
-Nếu cần tạo mới:
-```bash
-curl -s -X POST https://api-auth.spaclaw.pro/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"crm-test-<random>@spaclaw.local","password":"Test@1234","fullName":"CRM Test","companyName":"CRM Test Salon"}'
-```
-
-Login lấy JWT:
-```bash
-TOKEN=$(curl -s -X POST https://api-auth.spaclaw.pro/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"daotaokinhdoanhspa@gmail.com","password":"<pass>"}' | jq -r '.token')
-```
-
-Lấy workspace_id (nếu mới tạo):
-```bash
-WS=$(curl -s https://api-core.spaclaw.pro/api/bff/workspace-groups \
-  -H "Authorization: Bearer $TOKEN" | jq -r '.data.items[0].id')
-```
+Account này có sẵn data + đã link app CRM. Không tạo mới.
 
 ---
 
-## 2. Gọi Hermes agent CRM (E2E qua LLM)
+## 2. Script test có sẵn — `scripts/test_via_hermes.mjs`
 
+**Chạy lệnh duy nhất**:
 ```bash
-ask () {
-  curl -s -X POST "https://api-core.spaclaw.pro/api/v1/hermes/companies/$WS/agents/crm/ask" \
-    -H "Authorization: Bearer $TOKEN" \
-    -H "Content-Type: application/json" \
-    -d "{\"message\":\"$1\"}" \
-    --max-time 90
-}
-
-# Ví dụ test 1 skill
-ask "Hãy gọi skill list_customers với limit=5. KHÔNG hỏi lại, gọi luôn."
-sleep 20    # Hermes/LLM cooldown 15–30s tránh rate limit
+EMAIL=daotaokinhdoanhspa@gmail.com \
+PASSWORD='<hỏi-anh>' \
+WORKSPACE_ID=52b399db-ff89-4f75-a780-4c85477a0c24 \
+node scripts/test_via_hermes.mjs --module=customer_groups
 ```
+
+Script tự:
+1. Login SSO → lấy JWT
+2. Đọc `customer_groups/_index.json` → lấy danh sách skill
+3. Với mỗi skill: gọi `POST /api/v1/hermes/companies/$WS/agents/crm/ask` body `{"message":"Hãy gọi skill <name> với args mẫu..."}` (timeout 90s)
+4. Sleep 20s giữa 2 skill
+5. Phân loại verdict
+6. Ghi `e2e_reports/customer_groups_<YYYYMMDD>.md`
+
+Đổi module: `--module=notifications`, `--module=hr`, ...
 
 ---
 
@@ -117,4 +103,4 @@ Push lên repo này sau mỗi module.
 
 ---
 
-**Bắt đầu**: viết `scripts/test_via_hermes.mjs` (Node) — nhận tham số `--module=<name>`, đọc `<module>/_index.json`, login lấy JWT, lặp skill: `ask()` (timeout 90s) + `sleep(20)` + judge + ghi report. **Chạy module đầu tiên: `customer_groups`**. Xong báo anh.
+**Bắt đầu**: chạy `node scripts/test_via_hermes.mjs --module=customer_groups` → đọc report → fix bug → chạy lại đến khi xanh → push report → báo anh "customer_groups: X/Y PASS, xong" → DỪNG.
