@@ -3,9 +3,9 @@
 Mày là AI quản lý app CRM. Việc của mày:
 
 1. **Tạo tài khoản test** (nếu chưa có) → lấy JWT + workspace_id.
-2. **Viết script** test tất cả skill — gọi qua **Hermes /ask** (E2E thật, có LLM), sleep 15–30s/skill (Hermes chậm, ~30–50s/turn).
-3. **Note kết quả ra report theo module**.
-4. **Bug → tự fix → chạy lại → đến khi xanh**. Không ping Hub.
+2. **Viết script** gọi qua **Hermes /ask** (E2E thật, có LLM). Mỗi skill: chờ kết quả ~60s (Hermes chậm), rồi sleep 15–30s sang skill kế.
+3. **Làm TỪNG MODULE 1**. Test xong 1 module → fix hết bug → push report → **DỪNG, báo anh** "module X xong, X/Y PASS". Chờ anh nói "tiếp" mới sang module kế.
+4. **KHÔNG tự loop hết pack**. KHÔNG ping Hub.
 
 ---
 
@@ -68,27 +68,26 @@ sleep 20    # Hermes/LLM cooldown 15–30s tránh rate limit
 
 ---
 
-## 4. Loop tự động
+## 4. Quy trình 1 module (làm tuần tự, KHÔNG tự sang module kế)
 
 ```
-DANH_SÁCH = đọc _index.json mỗi module trong repo này
-LẶP:
-  cho mỗi module:
-    cho mỗi skill chưa xanh:
-      ask(prompt)       # 30–50s
-      sleep(20)         # cooldown
-      phân loại verdict
-      append vào e2e_reports/<module>_<YYYYMMDD>.md (bảng skill | verdict | duration | snippet)
-    nếu module 100% xanh → tick, sang module kế
-    nếu có fail:
-      NO_SKILL → wire handler / cập nhật _index.json + _tool_spec_anthropic_implemented.json
-      ERROR    → fix code trong /opt/crm/agent-tools-hermes.js
-      DECLINE  → sửa description trong _index.json rõ hơn
-      restart appcrm-api: cd /opt/crm && docker compose -p appcrm restart api
-      chạy lại module đó
-  nếu cả pack xanh → DỪNG
-  nếu 5 vòng module nào đó không tiến triển → ghi e2e_reports/<module>_BLOCKED.md, DỪNG module đó, sang module kế
+chọn 1 module (anh chỉ định, hoặc bắt đầu từ customer_groups)
+LẶP cho module này:
+  cho mỗi skill chưa xanh:
+    ask(prompt) — chờ tối đa 90s
+    sleep 15–30s
+    phân loại verdict
+    append vào e2e_reports/<module>_<YYYYMMDD>.md
+  nếu có fail:
+    NO_SKILL → wire handler + cập nhật _index.json + _tool_spec_anthropic_implemented.json
+    ERROR    → fix code /opt/crm/agent-tools-hermes.js
+    DECLINE  → sửa description _index.json
+    restart appcrm-api, chạy lại module
+  nếu 100% xanh → push report lên git → BÁO ANH "module X: X/Y PASS, xong" → DỪNG, chờ lệnh
+  nếu 5 vòng không tiến triển → ghi <module>_BLOCKED.md → BÁO ANH lý do → DỪNG, chờ lệnh
 ```
+
+**Tuyệt đối không tự nhảy sang module khác. Báo cáo xong, đợi anh.**
 
 ---
 
@@ -118,4 +117,4 @@ Push lên repo này sau mỗi module.
 
 ---
 
-**Bắt đầu**: viết `scripts/test_via_hermes.mjs` (Node) — đọc tất cả `_index.json`, login lấy JWT, lặp skill: `ask()` + `sleep(20)` + judge + ghi report. Rồi tự loop fix tới khi pack xanh.
+**Bắt đầu**: viết `scripts/test_via_hermes.mjs` (Node) — nhận tham số `--module=<name>`, đọc `<module>/_index.json`, login lấy JWT, lặp skill: `ask()` (timeout 90s) + `sleep(20)` + judge + ghi report. **Chạy module đầu tiên: `customer_groups`**. Xong báo anh.
