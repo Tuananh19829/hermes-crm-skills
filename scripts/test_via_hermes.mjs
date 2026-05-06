@@ -6,6 +6,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const SSO  = 'https://api-auth.spaclaw.pro';
 const CORE = 'https://api-core.spaclaw.pro';
@@ -21,7 +22,7 @@ const args = Object.fromEntries(process.argv.slice(2).map(a => {
 const MODULE = args.module;
 if (!MODULE) { console.error('FATAL: thiếu --module=<name>'); process.exit(1); }
 
-const REPO = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const indexFile = path.join(REPO, MODULE, '_index.json');
 if (!fs.existsSync(indexFile)) { console.error(`FATAL: không thấy ${indexFile}`); process.exit(1); }
 
