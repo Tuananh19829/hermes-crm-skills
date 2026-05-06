@@ -2,72 +2,120 @@
 
 Mày là AI quản lý app CRM. Việc của mày:
 
-1. **Viết script test** tất cả skill trong dispatcher `appcrm-api`.
-2. **Chạy script** → bug thì **tự fix** → chạy lại → đến khi xanh.
-3. **Không ping Hub**. Tự làm hết.
+1. **Tạo tài khoản test** (nếu chưa có) → lấy JWT + workspace_id.
+2. **Viết script** test tất cả skill — gọi qua **Hermes /ask** (E2E thật, có LLM), sleep 15–30s/skill (Hermes chậm, ~30–50s/turn).
+3. **Note kết quả ra report theo module**.
+4. **Bug → tự fix → chạy lại → đến khi xanh**. Không ping Hub.
 
 ---
 
-## 1. Cách test (DIRECT, không qua Hermes/LLM)
+## 1. Tài khoản + workspace test
 
-SSH vào VPS CRM:
-```bash
-ssh vienthammykjm@136.112.201.221
-```
+Có sẵn:
+- Email: `daotaokinhdoanhspa@gmail.com` / pass đã set sẵn (hỏi anh nếu chưa biết)
+- workspace_id (My Salon): `52b399db-ff89-4f75-a780-4c85477a0c24`
 
-Đọc secret + workspace test:
+Nếu cần tạo mới:
 ```bash
-SECRET=$(docker exec appcrm-api printenv CRM_INTERNAL_SECRET)
-WS=52b399db-ff89-4f75-a780-4c85477a0c24      # My Salon
-USER=<lấy 1 user_id thuộc WS từ DB>
-SENTINEL=00000000-0000-0000-0000-000000000000
-```
-
-Test 1 skill:
-```bash
-docker exec appcrm-api curl -s -X POST http://localhost:3000/internal/skills/<skill_name> \
-  -H "X-Internal-Secret: $SECRET" \
-  -H "X-User-Id: $USER" \
-  -H "X-Group-Id: $WS" \
+curl -s -X POST https://api-auth.spaclaw.pro/api/v1/auth/register \
   -H "Content-Type: application/json" \
-  -d '{<args mẫu, dùng SENTINEL cho mọi id>}'
+  -d '{"email":"crm-test-<random>@spaclaw.local","password":"Test@1234","fullName":"CRM Test","companyName":"CRM Test Salon"}'
 ```
 
-## 2. Verdict
-
-| HTTP | Body | Verdict | Hành động |
-|---|---|---|---|
-| 200 | `{ok:true,data:...}` | ✅ PASS | Tiếp |
-| 200/404 | `{ok:false,error:GROUP_NOT_FOUND/CUSTOMER_NOT_FOUND/MISSING_PARAM}` | ✅ PASS_VALIDATION | Tiếp (handler đúng, sentinel cố ý không tồn tại) |
-| 404 | `Cannot POST /internal/skills/<x>` | ❌ NO_HANDLER | **Wire handler** vào `/app/dist/modules/agent-tools/routes.js` |
-| 500 | error stack | ❌ ERROR | **Fix bug trong handler** |
-
-## 3. Loop tự động
-
-```
-DANH_SÁCH_SKILL = đọc tất cả _index.json mỗi module trong repo này
-LẶP:
-  cho mỗi skill chưa xanh:
-    test direct
-    PASS/PASS_VALIDATION → tick xanh
-    NO_HANDLER → paste case vào dispatcher, restart appcrm-api, test lại
-    ERROR → docker logs appcrm-api --tail 100, fix code, restart, test lại
-  nếu 100% xanh → DỪNG
-  nếu 5 vòng không tiến triển → ghi e2e_reports/<module>_BLOCKED.md, DỪNG
+Login lấy JWT:
+```bash
+TOKEN=$(curl -s -X POST https://api-auth.spaclaw.pro/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"daotaokinhdoanhspa@gmail.com","password":"<pass>"}' | jq -r '.token')
 ```
 
-## 4. Fix ở đâu
-
-- File bind-mount: `/opt/crm/agent-tools-hermes.js` → `/app/dist/modules/agent-tools/routes.js` (sửa thẳng, không cần rebuild)
-- Source TS (nếu có): rebuild → docker cp dist
-- Restart: `cd /opt/crm && docker compose -p appcrm restart api`
-
-## 5. Output
-
-Mỗi module test xong, ghi `e2e_reports/<module>_<YYYYMMDD>.md` — bảng skill | verdict | note. Push lên repo này.
-
-**Không động vào Hub VPS (`/opt/hermes/`). Chỉ làm trong appcrm-api.**
+Lấy workspace_id (nếu mới tạo):
+```bash
+WS=$(curl -s https://api-core.spaclaw.pro/api/bff/workspace-groups \
+  -H "Authorization: Bearer $TOKEN" | jq -r '.data.items[0].id')
+```
 
 ---
 
-**Bắt đầu**: viết `scripts/test_all_skills.sh` — đọc tất cả `_index.json` trong repo, direct test từng skill, ghi report `e2e_reports/`. Rồi tự loop fix tới khi xanh.
+## 2. Gọi Hermes agent CRM (E2E qua LLM)
+
+```bash
+ask () {
+  curl -s -X POST "https://api-core.spaclaw.pro/api/v1/hermes/companies/$WS/agents/crm/ask" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "{\"message\":\"$1\"}" \
+    --max-time 90
+}
+
+# Ví dụ test 1 skill
+ask "Hãy gọi skill list_customers với limit=5. KHÔNG hỏi lại, gọi luôn."
+sleep 20    # Hermes/LLM cooldown 15–30s tránh rate limit
+```
+
+---
+
+## 3. Verdict (regex trên trường `data.response`)
+
+| Pattern trong response | Verdict | Hành động |
+|---|---|---|
+| `đã gọi`, `kết quả`, `"ok":true`, có data thật | ✅ PASS | Tiếp |
+| `GROUP_NOT_FOUND`, `CUSTOMER_NOT_FOUND`, `MISSING_PARAM` | ✅ PASS_VALIDATION | Tiếp (handler đúng) |
+| `skill không tồn tại`, `không tìm thấy skill`, `skill_not_found` | ❌ NO_SKILL | Wire handler + đảm bảo có trong `_index.json` + `_tool_spec_anthropic_implemented.json` |
+| `error`, `500`, stack trace | ❌ ERROR | `docker logs appcrm-api --tail 100`, fix |
+| `tôi không`, `cannot`, `không có quyền` | ⚠ DECLINE | Sửa prompt skill rõ hơn trong `_index.json` |
+| Khác | ⚠ AMBIG | Đọc snippet, phân loại tay |
+
+---
+
+## 4. Loop tự động
+
+```
+DANH_SÁCH = đọc _index.json mỗi module trong repo này
+LẶP:
+  cho mỗi module:
+    cho mỗi skill chưa xanh:
+      ask(prompt)       # 30–50s
+      sleep(20)         # cooldown
+      phân loại verdict
+      append vào e2e_reports/<module>_<YYYYMMDD>.md (bảng skill | verdict | duration | snippet)
+    nếu module 100% xanh → tick, sang module kế
+    nếu có fail:
+      NO_SKILL → wire handler / cập nhật _index.json + _tool_spec_anthropic_implemented.json
+      ERROR    → fix code trong /opt/crm/agent-tools-hermes.js
+      DECLINE  → sửa description trong _index.json rõ hơn
+      restart appcrm-api: cd /opt/crm && docker compose -p appcrm restart api
+      chạy lại module đó
+  nếu cả pack xanh → DỪNG
+  nếu 5 vòng module nào đó không tiến triển → ghi e2e_reports/<module>_BLOCKED.md, DỪNG module đó, sang module kế
+```
+
+---
+
+## 5. Fix ở đâu (chỉ trong appcrm-api)
+
+- Handler: `/opt/crm/agent-tools-hermes.js` (bind-mount → `/app/dist/modules/agent-tools/routes.js`) — sửa thẳng, không rebuild
+- Mirror tên skill: `_index.json` của module + `_tool_spec_anthropic_implemented.json` (whitelist LLM thấy)
+- Restart: `cd /opt/crm && docker compose -p appcrm restart api`
+- **KHÔNG động** `/opt/hermes/` trên Hub VPS, KHÔNG sửa Hub `_index.json` canonical
+
+---
+
+## 6. Output (per module)
+
+`e2e_reports/<module>_<YYYYMMDD>.md`:
+```markdown
+# <module> — <date>
+**Account**: <email> | **Workspace**: <ws_id>
+**Kết quả**: X/Y PASS
+
+| Skill | Verdict | Duration | Snippet |
+|---|---|---|---|
+| ... | PASS | 32s | ... |
+```
+
+Push lên repo này sau mỗi module.
+
+---
+
+**Bắt đầu**: viết `scripts/test_via_hermes.mjs` (Node) — đọc tất cả `_index.json`, login lấy JWT, lặp skill: `ask()` + `sleep(20)` + judge + ghi report. Rồi tự loop fix tới khi pack xanh.
