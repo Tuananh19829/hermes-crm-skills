@@ -1,0 +1,311 @@
+{
+  "app": "crm",
+  "module": "customers",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "search_customers",
+      "description": "Tìm khách hàng theo tên, SĐT, tag hoặc nhóm khách hàng. Dùng khi user hỏi 'tìm khách tên Hoa', 'kh SĐT 0901', 'tìm nhóm VIP', 'khách tag thân thiết'.",
+      "triggers": [
+        "tìm khách hàng",
+        "tìm kh",
+        "search khách",
+        "khách tên",
+        "kh sdt",
+        "khách tag",
+        "khách nhóm",
+        "danh sách khách"
+      ],
+      "endpoint": "POST /internal/skills/search_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Tên, SĐT, email hoặc một phần thông tin khách hàng" },
+          "filter": {
+            "type": "object",
+            "properties": {
+              "tag": { "type": "string", "description": "Tag/nhãn của khách" },
+              "group_id": { "type": "string", "description": "ID nhóm khách hàng" },
+              "group_name": { "type": "string", "description": "Tên nhóm: VIP, than_thiet, moi, v.v." },
+              "gender": { "type": "string", "enum": ["MALE", "FEMALE", "OTHER"] },
+              "last_visit_before": { "type": "string", "format": "date", "description": "Lâu không đến (trước ngày này)" },
+              "birthday_month": { "type": "integer", "minimum": 1, "maximum": 12, "description": "Lọc khách sinh nhật tháng này" }
+            }
+          },
+          "limit": { "type": "integer", "default": 10, "maximum": 50 }
+        }
+      }
+    },
+    {
+      "name": "get_customer_detail",
+      "description": "Xem chi tiết khách hàng: thông tin cá nhân, lịch sử mua hàng, điểm loyalty, thẻ thành viên, công nợ. Dùng khi đã có ID hoặc user muốn tra toàn bộ hồ sơ khách.",
+      "triggers": [
+        "chi tiết khách hàng",
+        "hồ sơ khách",
+        "xem thông tin kh",
+        "lịch sử khách",
+        "kh id",
+        "tra cứu khách",
+        "điểm khách",
+        "thẻ khách"
+      ],
+      "endpoint": "POST /internal/skills/get_customer_detail",
+      "input_schema": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string", "description": "UUID của khách hàng" },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["orders", "notes", "loyalty", "vouchers", "debt", "cards"]
+            },
+            "default": ["orders", "notes", "loyalty"],
+            "description": "Chọn sections cần trả về để tối ưu payload"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_customer",
+      "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead).",
+      "triggers": [
+        "tạo khách hàng",
+        "thêm khách mới",
+        "đăng ký khách",
+        "create customer",
+        "thêm kh mới",
+        "nhập thông tin kh"
+      ],
+      "endpoint": "POST /internal/skills/create_customer",
+      "input_schema": {
+        "type": "object",
+        "required": ["full_name"],
+        "properties": {
+          "full_name": { "type": "string", "description": "Họ và tên đầy đủ" },
+          "phone": { "type": "string", "description": "Số điện thoại (định dạng 10 số, bắt đầu 0)" },
+          "email": { "type": "string", "format": "email" },
+          "gender": { "type": "string", "enum": ["MALE", "FEMALE", "OTHER"] },
+          "birthday": { "type": "string", "format": "date", "description": "Ngày sinh dạng YYYY-MM-DD" },
+          "address": { "type": "string" },
+          "note": { "type": "string", "description": "Ghi chú ban đầu về khách" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Tag gắn ngay khi tạo, ví dụ: ['vip', 'referral']"
+          },
+          "group_id": { "type": "string", "description": "Gán vào nhóm khách hàng ngay khi tạo" },
+          "source": { "type": "string", "description": "Nguồn khách: zalo, facebook, walk_in, referral, v.v." }
+        }
+      }
+    },
+    {
+      "name": "update_customer",
+      "description": "Cập nhật thông tin khách hàng: tên, SĐT, email, địa chỉ, ngày sinh, tag, nhóm, ghi chú. Dùng khi user muốn sửa dữ liệu KH đã có.",
+      "triggers": [
+        "cập nhật khách",
+        "sửa thông tin kh",
+        "update kh",
+        "đổi sdt khách",
+        "đổi email khách",
+        "chỉnh thông tin kh",
+        "gán tag",
+        "đổi nhóm kh"
+      ],
+      "endpoint": "POST /internal/skills/update_customer",
+      "input_schema": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string", "description": "UUID của khách hàng cần cập nhật" },
+          "full_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "gender": { "type": "string", "enum": ["MALE", "FEMALE", "OTHER"] },
+          "birthday": { "type": "string", "format": "date" },
+          "address": { "type": "string" },
+          "note": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Tag mới (merge hoặc replace tùy tham số mode)"
+          },
+          "tags_mode": {
+            "type": "string",
+            "enum": ["merge", "replace"],
+            "default": "merge",
+            "description": "merge: giữ tag cũ + thêm mới; replace: xóa hết rồi gán lại"
+          },
+          "group_id": { "type": "string", "description": "Chuyển sang nhóm khách khác" }
+        }
+      }
+    },
+    {
+      "name": "get_loyalty_points",
+      "description": "Xem điểm tích lũy, lịch sử tích/dùng điểm, quy đổi điểm sang tiền hoặc cộng điểm cho khách. Dùng khi user hỏi 'điểm của kh X', 'cộng điểm cho kh', 'dùng điểm thanh toán'.",
+      "triggers": [
+        "điểm tích lũy",
+        "loyalty point",
+        "cộng điểm",
+        "dùng điểm",
+        "điểm khách",
+        "quy đổi điểm",
+        "trừ điểm",
+        "xem điểm kh"
+      ],
+      "endpoint": "POST /internal/skills/get_loyalty_points",
+      "input_schema": {
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string", "description": "UUID của khách hàng" },
+          "action": {
+            "type": "string",
+            "enum": ["view", "earn", "redeem"],
+            "default": "view",
+            "description": "view: chỉ xem; earn: cộng điểm; redeem: dùng điểm"
+          },
+          "points": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Số điểm cần cộng hoặc dùng (bắt buộc khi action = earn hoặc redeem)"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Lý do cộng/dùng điểm, ví dụ: 'mua hàng ORD-123', 'sinh nhật'"
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Gắn với đơn hàng nếu có"
+          }
+        }
+      }
+    },
+    {
+      "name": "manage_vouchers",
+      "description": "Tạo voucher mới, áp dụng voucher cho đơn hàng, kiểm tra voucher còn hiệu lực không. Dùng khi user hỏi về mã giảm giá, coupon, voucher tặng sinh nhật.",
+      "triggers": [
+        "tạo voucher",
+        "áp dụng voucher",
+        "kiểm tra voucher",
+        "mã giảm giá",
+        "coupon",
+        "voucher kh",
+        "tặng voucher",
+        "kiểm tra mã"
+      ],
+      "endpoint": "POST /internal/skills/manage_vouchers",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["create", "apply", "check", "list"],
+            "description": "create: tạo voucher; apply: áp dụng vào đơn; check: kiểm tra mã; list: danh sách voucher của KH"
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "UUID khách hàng (bắt buộc với create, list, apply)"
+          },
+          "voucher_code": {
+            "type": "string",
+            "description": "Mã voucher (bắt buộc với apply và check)"
+          },
+          "order_id": {
+            "type": "string",
+            "description": "Đơn hàng áp dụng voucher (dùng với action=apply)"
+          },
+          "voucher_config": {
+            "type": "object",
+            "description": "Cấu hình voucher mới (dùng với action=create)",
+            "properties": {
+              "type": { "type": "string", "enum": ["percent", "fixed_amount"], "description": "Loại giảm giá" },
+              "value": { "type": "number", "description": "Giá trị: phần trăm (0-100) hoặc số tiền cố định (VND)" },
+              "min_order_value": { "type": "number", "description": "Giá trị đơn hàng tối thiểu để áp dụng" },
+              "max_discount": { "type": "number", "description": "Giảm tối đa (áp dụng cho loại percent)" },
+              "expires_at": { "type": "string", "format": "date-time", "description": "Hạn sử dụng" },
+              "reason": { "type": "string", "description": "Lý do tặng: sinh nhật, loyal, compensation, v.v." }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "list_customer_groups",
+      "description": "Liệt kê các nhóm khách hàng (VIP, thân thiết, mới, v.v.), số lượng thành viên và tiêu chí xếp hạng. Dùng khi user hỏi về phân loại nhóm khách, tier khách hàng.",
+      "triggers": [
+        "nhóm khách hàng",
+        "danh sách nhóm kh",
+        "tier khách",
+        "phân loại khách",
+        "nhóm VIP",
+        "nhóm thân thiết",
+        "xếp hạng kh",
+        "customer group"
+      ],
+      "endpoint": "POST /internal/skills/list_customer_groups",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "include_members_count": {
+            "type": "boolean",
+            "default": true,
+            "description": "Có đếm số khách trong từng nhóm không"
+          },
+          "include_criteria": {
+            "type": "boolean",
+            "default": true,
+            "description": "Có trả về tiêu chí xếp hạng (chi tiêu tối thiểu, số lần mua, v.v.)"
+          },
+          "limit": { "type": "integer", "default": 20, "maximum": 50 }
+        }
+      }
+    },
+    {
+      "name": "customer_care_list",
+      "description": "Danh sách khách hàng cần chăm sóc: lâu không đến, có sinh nhật sắp tới, có nợ chưa thanh toán, chưa được follow-up. Dùng khi user hỏi 'khách nào cần gọi', 'sinh nhật tuần này', 'kh lâu không đến'.",
+      "triggers": [
+        "khách cần chăm sóc",
+        "kh cần gọi",
+        "follow up khách",
+        "sinh nhật khách",
+        "kh lâu không đến",
+        "danh sách cskh",
+        "nhắc nhở kh",
+        "kh có nợ"
+      ],
+      "endpoint": "POST /internal/skills/customer_care_list",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "care_type": {
+            "type": "string",
+            "enum": ["no_visit", "birthday", "debt", "no_followup", "all"],
+            "default": "all",
+            "description": "no_visit: lâu không đến; birthday: sinh nhật sắp tới; debt: còn nợ; no_followup: chưa được gọi/nhắn"
+          },
+          "no_visit_days": {
+            "type": "integer",
+            "default": 30,
+            "description": "Số ngày không đến để tính là lâu (dùng với care_type=no_visit)"
+          },
+          "birthday_days_ahead": {
+            "type": "integer",
+            "default": 7,
+            "description": "Xem trước sinh nhật bao nhiêu ngày (dùng với care_type=birthday)"
+          },
+          "limit": { "type": "integer", "default": 20, "maximum": 100 }
+        }
+      }
+    }
+  ]
+}

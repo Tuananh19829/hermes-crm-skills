@@ -1,0 +1,252 @@
+{
+  "app": "crm",
+  "module": "finance",
+  "version": "2.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "cashbook_report",
+      "description": "Báo cáo thu chi sổ quỹ theo ngày/tuần/tháng hoặc kỳ tuỳ chỉnh. Dùng khi user hỏi 'thu chi hôm nay', 'sổ quỹ tháng này', 'tổng chi tháng 3'.",
+      "triggers": ["thu chi", "sổ quỹ", "cashbook", "báo cáo thu chi", "tổng thu", "tổng chi", "quỹ tiền mặt"],
+      "endpoint": "POST /internal/skills/cashbook_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month", "custom"], "default": "month" },
+          "from_date": { "type": "string", "format": "date", "description": "Bắt buộc khi period=custom" },
+          "to_date": { "type": "string", "format": "date", "description": "Bắt buộc khi period=custom" },
+          "type": { "type": "string", "enum": ["INCOME", "EXPENSE", "ALL"], "default": "ALL" },
+          "category": { "type": "string", "description": "Lọc theo loại phiếu (ví dụ: DICH_VU, VAT_TU, LUONG)" }
+        }
+      }
+    },
+    {
+      "name": "create_cashbook_entry",
+      "description": "Tạo phiếu thu hoặc phiếu chi thủ công vào sổ quỹ. Dùng khi user nói 'tạo phiếu chi mua vật tư 500k', 'ghi thu tiền mặt', 'thêm phiếu thu dịch vụ'.",
+      "triggers": ["tạo phiếu thu", "tạo phiếu chi", "thêm phiếu", "ghi thu", "ghi chi", "create cashbook", "phiếu chi tiền"],
+      "endpoint": "POST /internal/skills/create_cashbook_entry",
+      "input_schema": {
+        "type": "object",
+        "required": ["type", "amount", "description"],
+        "properties": {
+          "type": { "type": "string", "enum": ["INCOME", "EXPENSE"], "description": "INCOME = phiếu thu, EXPENSE = phiếu chi" },
+          "amount": { "type": "number", "description": "Số tiền (VND), phải > 0" },
+          "description": { "type": "string", "description": "Mô tả ngắn về khoản thu/chi" },
+          "category": { "type": "string", "description": "Loại phiếu: DICH_VU, VAT_TU, LUONG, THUE, KHAC" },
+          "person_id": { "type": "string", "description": "UUID khách hàng liên quan (tuỳ chọn)" },
+          "payment_method": { "type": "string", "enum": ["CASH", "TRANSFER", "CARD", "MOMO"], "default": "CASH" },
+          "date": { "type": "string", "format": "date", "description": "Ngày phát sinh, mặc định hôm nay" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "list_debts",
+      "description": "Danh sách công nợ của khách hàng hoặc nhà cung cấp. Dùng khi user hỏi 'kh nào còn nợ', 'công nợ NCC', 'khách X nợ bao nhiêu'.",
+      "triggers": ["công nợ", "nợ khách", "nợ NCC", "list debts", "khách nợ tiền", "nợ chưa thu", "nợ nhà cung cấp"],
+      "endpoint": "POST /internal/skills/list_debts",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "debtor_type": { "type": "string", "enum": ["CUSTOMER", "SUPPLIER", "ALL"], "default": "ALL" },
+          "person_id": { "type": "string", "description": "Lọc công nợ của 1 KH/NCC cụ thể" },
+          "min_amount": { "type": "number", "description": "Chỉ lấy nợ >= số tiền này" },
+          "overdue_only": { "type": "boolean", "default": false, "description": "Chỉ lấy nợ quá hạn" },
+          "limit": { "type": "integer", "default": 20, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "collect_debt",
+      "description": "Thu nợ từ khách hàng: ghi nhận thanh toán khoản nợ còn tồn đọng. Dùng khi user nói 'thu nợ kh X', 'kh X trả 2tr', 'ghi nhận kh thanh toán'.",
+      "triggers": ["thu nợ", "kh trả nợ", "collect debt", "thanh toán nợ", "ghi thu nợ", "kh thanh toán công nợ"],
+      "endpoint": "POST /internal/skills/collect_debt",
+      "input_schema": {
+        "type": "object",
+        "required": ["debt_id", "amount"],
+        "properties": {
+          "debt_id": { "type": "string", "description": "UUID khoản nợ (lấy từ list_debts)" },
+          "amount": { "type": "number", "description": "Số tiền thu (VND), phải <= số nợ còn lại" },
+          "payment_method": { "type": "string", "enum": ["CASH", "TRANSFER", "CARD", "MOMO"], "default": "CASH" },
+          "note": { "type": "string" },
+          "date": { "type": "string", "format": "date", "description": "Ngày thu, mặc định hôm nay" }
+        }
+      }
+    },
+    {
+      "name": "list_service_cards",
+      "description": "Danh sách thẻ dịch vụ của một khách hàng: số dư, ngày hết hạn, loại thẻ. Dùng khi user hỏi 'kh X có thẻ gì', 'thẻ dịch vụ của Mai', 'số dư thẻ'.",
+      "triggers": ["thẻ dịch vụ", "service card", "thẻ của kh", "số dư thẻ", "thẻ KH", "danh sách thẻ"],
+      "endpoint": "POST /internal/skills/list_service_cards",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": { "type": "string", "description": "UUID khách hàng (trả về thẻ của 1 KH cụ thể)" },
+          "status": { "type": "string", "enum": ["ACTIVE", "EXPIRED", "DEPLETED", "ALL"], "default": "ACTIVE" },
+          "card_type": { "type": "string", "description": "Lọc theo loại thẻ: VALUE (thẻ tiền), SESSION (thẻ buổi)" },
+          "limit": { "type": "integer", "default": 20, "maximum": 50 }
+        }
+      }
+    },
+    {
+      "name": "deposit_card",
+      "description": "Nạp tiền hoặc buổi vào thẻ dịch vụ cho khách hàng. Dùng khi user nói 'nạp 1tr vào thẻ kh X', 'thêm 5 buổi thẻ da', 'top-up thẻ KH'.",
+      "triggers": ["nạp thẻ", "top-up thẻ", "deposit card", "nạp tiền thẻ", "thêm buổi thẻ", "nạp vào thẻ dịch vụ"],
+      "endpoint": "POST /internal/skills/deposit_card",
+      "input_schema": {
+        "type": "object",
+        "required": ["card_id", "amount"],
+        "properties": {
+          "card_id": { "type": "string", "description": "UUID thẻ dịch vụ (lấy từ list_service_cards)" },
+          "amount": { "type": "number", "description": "Số tiền nạp (VND) nếu thẻ tiền, hoặc số buổi nếu thẻ buổi" },
+          "payment_method": { "type": "string", "enum": ["CASH", "TRANSFER", "CARD", "MOMO"], "default": "CASH" },
+          "note": { "type": "string" },
+          "date": { "type": "string", "format": "date", "description": "Ngày nạp, mặc định hôm nay" }
+        }
+      }
+    },
+    {
+      "name": "list_input_invoices",
+      "description": "Danh sách hóa đơn đầu vào từ nhà cung cấp (lọc theo NCC, ngày, trạng thái thanh toán). Dùng khi user muốn xem hóa đơn mua hàng, kiểm tra hóa đơn chưa thanh toán, đối soát với NCC.",
+      "triggers": [
+        "hóa đơn đầu vào",
+        "hóa đơn ncc",
+        "invoice nhà cung cấp",
+        "input invoice",
+        "hóa đơn mua hàng",
+        "hóa đơn chưa thanh toán",
+        "đối soát ncc",
+        "hóa đơn nhập kho",
+        "công nợ ncc",
+        "hóa đơn tháng này"
+      ],
+      "endpoint": "POST /internal/skills/list_input_invoices",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "supplier_id": { "type": "string", "description": "UUID nhà cung cấp (bỏ trống = lấy tất cả NCC)" },
+          "status": {
+            "type": "string",
+            "enum": ["UNPAID", "PARTIAL", "PAID", "ALL"],
+            "default": "ALL",
+            "description": "Lọc theo trạng thái thanh toán"
+          },
+          "from_date": { "type": "string", "format": "date", "description": "Từ ngày hóa đơn (YYYY-MM-DD)" },
+          "to_date": { "type": "string", "format": "date", "description": "Đến ngày hóa đơn (YYYY-MM-DD)" },
+          "period": {
+            "type": "string",
+            "enum": ["today", "week", "month", "quarter"],
+            "description": "Kỳ nhanh (thay thế from_date/to_date)"
+          },
+          "include_items": { "type": "boolean", "default": false, "description": "Có trả về danh sách sản phẩm trong hóa đơn không" },
+          "limit": { "type": "integer", "default": 20, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "manage_payment_methods",
+      "description": "Xem hoặc tạo phương thức thanh toán được chấp nhận tại spa (tiền mặt, VietQR, POS/thẻ, thẻ dịch vụ, điểm tích lũy). Dùng khi cần biết PTTT nào đang hoạt động hoặc thêm PTTT mới.",
+      "triggers": [
+        "phương thức thanh toán",
+        "pttt",
+        "thêm pttt",
+        "payment method",
+        "thanh toán bằng gì",
+        "vietqr",
+        "pos thẻ",
+        "tạo pttt",
+        "danh sách thanh toán",
+        "điểm tích lũy thanh toán",
+        "thẻ dịch vụ thanh toán"
+      ],
+      "endpoint": "POST /internal/skills/manage_payment_methods",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["list", "create", "toggle"],
+            "description": "list: xem PTTT; create: tạo mới; toggle: bật/tắt PTTT"
+          },
+          "active_only": { "type": "boolean", "default": true, "description": "Chỉ lấy PTTT đang hoạt động (dùng với action=list)" },
+          "payment_method_id": { "type": "string", "description": "UUID PTTT (dùng với action=toggle)" },
+          "is_active": { "type": "boolean", "description": "Trạng thái mới (dùng với action=toggle)" },
+          "payment_method_data": {
+            "type": "object",
+            "description": "Thông tin PTTT mới (dùng với action=create)",
+            "required": ["name", "type"],
+            "properties": {
+              "name": { "type": "string", "description": "Tên hiển thị PTTT" },
+              "type": {
+                "type": "string",
+                "enum": ["CASH", "BANK_TRANSFER", "POS_CARD", "VIETQR", "SERVICE_CARD", "LOYALTY_POINTS", "EWALLET", "OTHER"],
+                "description": "Loại phương thức thanh toán"
+              },
+              "bank_name": { "type": "string", "description": "Tên ngân hàng (nếu là BANK_TRANSFER hoặc VIETQR)" },
+              "account_number": { "type": "string", "description": "Số tài khoản" },
+              "account_name": { "type": "string", "description": "Tên chủ tài khoản" },
+              "qr_code_url": { "type": "string", "format": "uri", "description": "URL mã QR tĩnh" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "manage_finance_categories",
+      "description": "Xem hoặc tạo danh mục thu/chi tài chính (doanh thu dịch vụ, chi phí nhân viên, chi phí vận hành...). Dùng khi cần biết có những loại thu/chi nào hoặc muốn thêm danh mục mới để phân loại sổ quỹ.",
+      "triggers": [
+        "danh mục thu chi",
+        "loại thu chi",
+        "danh mục tài chính",
+        "finance category",
+        "nhóm thu chi",
+        "thêm danh mục thu",
+        "thêm danh mục chi",
+        "phân loại sổ quỹ",
+        "tạo loại thu",
+        "tạo loại chi",
+        "danh mục doanh thu"
+      ],
+      "endpoint": "POST /internal/skills/manage_finance_categories",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["list", "create", "update"],
+            "description": "list: xem danh mục; create: tạo mới; update: sửa danh mục"
+          },
+          "flow_type": {
+            "type": "string",
+            "enum": ["INCOME", "EXPENSE", "ALL"],
+            "default": "ALL",
+            "description": "Lọc theo loại (INCOME=thu, EXPENSE=chi) — dùng với action=list"
+          },
+          "category_id": { "type": "string", "description": "UUID danh mục (bắt buộc khi action=update)" },
+          "category_data": {
+            "type": "object",
+            "description": "Thông tin danh mục (dùng với action=create hoặc update)",
+            "properties": {
+              "name": { "type": "string", "description": "Tên danh mục thu/chi" },
+              "flow_type": {
+                "type": "string",
+                "enum": ["INCOME", "EXPENSE"],
+                "description": "Loại: thu hoặc chi (bắt buộc khi create)"
+              },
+              "parent_id": { "type": "string", "description": "UUID danh mục cha (để tạo danh mục con)" },
+              "is_active": { "type": "boolean", "description": "Bật/tắt danh mục (dùng với update)" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

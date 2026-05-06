@@ -1,0 +1,281 @@
+{
+  "app": "crm",
+  "version": "2.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "get_workspace_info",
+      "description": "Xem thông tin cơ sở: tên, địa chỉ, giờ hoạt động, logo, liên hệ. Dùng khi user hỏi 'thông tin cơ sở', 'địa chỉ clinic', 'giờ mở cửa'.",
+      "triggers": ["thông tin cơ sở", "workspace info", "địa chỉ", "giờ mở cửa", "thông tin spa", "giờ hoạt động"],
+      "endpoint": "POST /internal/skills/get_workspace_info",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "update_workspace_info",
+      "description": "Cập nhật thông tin cơ sở (tên, địa chỉ, giờ hoạt động, SĐT). Chỉ dùng khi user có quyền ADMIN và muốn thay đổi rõ ràng.",
+      "triggers": ["cập nhật cơ sở", "đổi địa chỉ", "cập nhật giờ mở cửa", "update workspace", "sửa thông tin spa"],
+      "endpoint": "POST /internal/skills/update_workspace_info",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string" },
+          "working_hours": {
+            "type": "object",
+            "description": "Giờ mở cửa theo ngày: {mon: {open:'08:00', close:'20:00'}, ...}"
+          },
+          "logo_url": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "list_branches",
+      "description": "Danh sách chi nhánh trong workspace. Dùng khi user hỏi 'có mấy chi nhánh', 'danh sách cơ sở', 'chi nhánh nào đang mở'.",
+      "triggers": ["chi nhánh", "danh sách cơ sở", "list branches", "cơ sở nào", "số chi nhánh"],
+      "endpoint": "POST /internal/skills/list_branches",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "active_only": { "type": "boolean", "default": true }
+        }
+      }
+    },
+    {
+      "name": "list_rooms",
+      "description": "Danh sách phòng/giường và trạng thái hiện tại (trống, đang dùng, bảo trì). Dùng khi user hỏi 'phòng nào trống', 'còn giường không', 'trạng thái phòng'.",
+      "triggers": ["phòng trống", "danh sách phòng", "list rooms", "giường trống", "trạng thái phòng", "phòng nào"],
+      "endpoint": "POST /internal/skills/list_rooms",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "branch_id": { "type": "string", "description": "Lọc theo chi nhánh, mặc định = tất cả" },
+          "status": { "type": "string", "enum": ["available", "occupied", "maintenance"], "description": "Lọc theo trạng thái" }
+        }
+      }
+    },
+    {
+      "name": "list_members",
+      "description": "Danh sách thành viên workspace, vai trò và trạng thái. Dùng khi user hỏi 'nhân viên nào trong hệ thống', 'ai có quyền admin', 'thành viên workspace'.",
+      "triggers": ["thành viên", "danh sách nv", "list members", "ai có quyền", "thành viên workspace", "nhân sự hệ thống"],
+      "endpoint": "POST /internal/skills/list_members",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "role": { "type": "string", "description": "Lọc theo role: admin | manager | staff | telesale" },
+          "active_only": { "type": "boolean", "default": true },
+          "limit": { "type": "integer", "default": 30, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "get_audit_log",
+      "description": "Nhật ký thao tác hệ thống: ai làm gì, lúc nào, trên dữ liệu nào. Dùng khi user hỏi 'ai xóa khách X', 'lịch sử thao tác', 'ai vừa đổi gì'.",
+      "triggers": ["nhật ký", "audit log", "lịch sử thao tác", "ai đã làm", "log hệ thống", "activity log"],
+      "endpoint": "POST /internal/skills/get_audit_log",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "actor_id": { "type": "string", "description": "UUID người thực hiện, lọc theo NV cụ thể" },
+          "resource_type": { "type": "string", "description": "Loại đối tượng: customer | order | invoice | settings | member" },
+          "resource_id": { "type": "string", "description": "UUID đối tượng cụ thể" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 30, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "get_plan_usage",
+      "description": "Xem gói đang dùng, mức sử dụng coins, số API calls, quota còn lại. Dùng khi user hỏi 'còn bao nhiêu coin', 'gói nào đang dùng', 'usage tháng này'.",
+      "triggers": ["gói dịch vụ", "coin còn lại", "plan usage", "quota", "mức sử dụng", "usage tháng này", "coins"],
+      "endpoint": "POST /internal/skills/get_plan_usage",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["current_month", "last_month"], "default": "current_month" }
+        }
+      }
+    },
+    {
+      "name": "manage_business_hours",
+      "description": "Xem/cập nhật giờ hoạt động từng ngày trong tuần và ngày nghỉ lễ. Dùng khi user hỏi 'đổi giờ mở cửa', 'thêm ngày nghỉ lễ', 'thứ 7 mở mấy giờ'.",
+      "triggers": ["giờ hoạt động", "giờ làm việc", "ngày nghỉ lễ", "business hours", "đổi giờ mở cửa", "cập nhật giờ", "ngày nghỉ", "lịch nghỉ"],
+      "endpoint": "POST /internal/skills/manage_business_hours",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["get", "update", "add_holiday", "remove_holiday"] },
+          "working_hours": { "type": "object", "description": "Object ngày → {open, close, closed}" },
+          "holiday": { "type": "object", "description": "{date: 'YYYY-MM-DD', name: string}" },
+          "holiday_date": { "type": "string", "format": "date" }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_bank_accounts",
+      "description": "Xem/thêm/xóa tài khoản ngân hàng (MB Bank, Vietcombank, VietQR). Dùng khi user hỏi 'số tài khoản ngân hàng', 'thêm tài khoản', 'VietQR'.",
+      "triggers": ["tài khoản ngân hàng", "bank account", "thêm ngân hàng", "xóa ngân hàng", "VietQR", "số tài khoản", "chuyển khoản", "MB Bank", "Vietcombank"],
+      "endpoint": "POST /internal/skills/manage_bank_accounts",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "add", "remove", "set_default"] },
+          "bank_name": { "type": "string" },
+          "account_number": { "type": "string" },
+          "account_name": { "type": "string" },
+          "account_id": { "type": "string" },
+          "vietqr_enabled": { "type": "boolean", "default": true }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_print_settings",
+      "description": "Cấu hình mẫu in hóa đơn: logo, tên cơ sở, footer, font, barcode, khổ giấy. Dùng khi user hỏi 'mẫu in', 'footer hóa đơn', 'đổi logo bill'.",
+      "triggers": ["mẫu in", "in hóa đơn", "print settings", "cấu hình in", "logo hóa đơn", "footer hóa đơn", "barcode", "mẫu bill", "in bill"],
+      "endpoint": "POST /internal/skills/manage_print_settings",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["get", "update", "preview"] },
+          "logo_url": { "type": "string" },
+          "header_name": { "type": "string" },
+          "header_phone": { "type": "string" },
+          "header_address": { "type": "string" },
+          "footer_text": { "type": "string" },
+          "show_barcode": { "type": "boolean" },
+          "show_qr": { "type": "boolean" },
+          "paper_size": { "type": "string", "enum": ["A4", "K80", "K57"] },
+          "font_size": { "type": "string", "enum": ["small", "medium", "large"] }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_roles",
+      "description": "Xem/cập nhật phân quyền theo vai trò (Owner/Manager/Staff/Viewer). CHỈ OWNER/ADMIN. Dùng khi user hỏi 'quyền của staff', 'đổi vai trò', 'phân quyền'.",
+      "triggers": ["phân quyền", "vai trò", "role", "quyền hạn", "permission", "cập nhật quyền", "đổi vai trò", "quản lý quyền", "thêm quyền"],
+      "endpoint": "POST /internal/skills/manage_roles",
+      "requires_role": ["owner", "admin"],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["list_roles", "get_role", "update_role", "assign_role", "list_permissions"] },
+          "role": { "type": "string", "enum": ["owner", "manager", "staff", "viewer"] },
+          "permissions": { "type": "object", "description": "Map permission key → boolean" },
+          "user_id": { "type": "string" }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_notifications",
+      "description": "Bật/tắt thông báo hệ thống: lịch hẹn mới, thanh toán, kho hàng thấp, nhân viên check-in. Dùng khi user hỏi 'tắt thông báo', 'cảnh báo kho'.",
+      "triggers": ["thông báo", "notification", "bật thông báo", "tắt thông báo", "cài đặt thông báo", "cảnh báo kho", "nhắc lịch hẹn", "alert"],
+      "endpoint": "POST /internal/skills/manage_notifications",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["get", "update", "set_channel", "set_threshold"] },
+          "notifications": { "type": "object", "description": "Map notification_type → boolean" },
+          "channel": { "type": "string", "enum": ["in_app", "email", "zalo"] },
+          "enabled": { "type": "boolean" },
+          "threshold_type": { "type": "string" },
+          "value": { "type": "integer" }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_automation",
+      "description": "Xem/tạo/xóa quy tắc tự động hóa: nhắc lịch, gửi Zalo sinh nhật, follow-up. Dùng khi user hỏi 'tạo rule tự động', 'rule nào gửi Zalo', 'workflow'.",
+      "triggers": ["tự động hóa", "automation", "quy tắc tự động", "nhắc lịch tự động", "gửi Zalo tự động", "sinh nhật tự động", "follow-up", "tạo rule", "workflow"],
+      "endpoint": "POST /internal/skills/manage_automation",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "get", "create", "update", "toggle", "delete", "get_history"] },
+          "rule_id": { "type": "string" },
+          "name": { "type": "string" },
+          "trigger": { "type": "string", "enum": ["before_appointment", "after_appointment", "birthday", "after_invoice_paid", "no_visit_days", "low_course_sessions"] },
+          "trigger_config": { "type": "object" },
+          "actions": { "type": "array", "items": { "type": "object" } },
+          "enabled": { "type": "boolean" },
+          "filter": { "type": "string", "enum": ["active", "inactive", "all"], "default": "all" },
+          "limit": { "type": "integer", "default": 20 }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "get_account_profile",
+      "description": "Xem/cập nhật hồ sơ cá nhân: tên, avatar, email, SĐT, ngôn ngữ. Dùng khi user hỏi 'thông tin tài khoản', 'đổi tên', 'đổi số điện thoại'.",
+      "triggers": ["hồ sơ cá nhân", "account profile", "thông tin cá nhân", "đổi tên", "cập nhật avatar", "đổi email", "đổi số điện thoại", "ngôn ngữ", "profile"],
+      "endpoint": "POST /internal/skills/get_account_profile",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["get", "update"] },
+          "display_name": { "type": "string" },
+          "avatar_url": { "type": "string" },
+          "phone": { "type": "string" },
+          "language": { "type": "string", "enum": ["vi", "en"] }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_billing",
+      "description": "Xem gói hiện tại, lịch sử thanh toán, nâng cấp gói, tải hóa đơn PDF. CHỈ OWNER cho nâng/hạ cấp. Dùng khi user hỏi 'gói hết hạn chưa', 'nâng cấp plan'.",
+      "triggers": ["gói dịch vụ", "billing", "nâng cấp gói", "lịch sử thanh toán", "hóa đơn gói", "subscription", "gia hạn", "gói nào đang dùng", "hết hạn khi nào"],
+      "endpoint": "POST /internal/skills/manage_billing",
+      "requires_role": ["owner"],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["get_plan", "list_invoices", "get_invoice", "get_upgrade_options", "request_upgrade"] },
+          "invoice_id": { "type": "string" },
+          "plan_id": { "type": "string" },
+          "limit": { "type": "integer", "default": 10 },
+          "offset": { "type": "integer", "default": 0 }
+        },
+        "required": ["action"]
+      }
+    },
+    {
+      "name": "manage_security",
+      "description": "Đổi mật khẩu, bật/tắt 2FA, xem/thu hồi phiên đăng nhập. Thao tác workspace-wide chỉ OWNER/ADMIN. Dùng khi user hỏi 'đổi password', 'đăng xuất thiết bị lạ', 'bật 2FA'.",
+      "triggers": ["bảo mật", "security", "đổi mật khẩu", "2FA", "xác thực hai yếu tố", "phiên đăng nhập", "thu hồi session", "đăng xuất thiết bị", "đổi password"],
+      "endpoint": "POST /internal/skills/manage_security",
+      "requires_role_for": {
+        "list_sessions_others": ["owner", "admin"],
+        "require_2fa_workspace": ["owner", "admin"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string", "enum": ["get_security_status", "change_password", "enable_2fa", "disable_2fa", "list_sessions", "revoke_session", "revoke_all_sessions", "require_2fa_workspace"] },
+          "current_password": { "type": "string" },
+          "new_password": { "type": "string" },
+          "totp_code": { "type": "string" },
+          "session_id": { "type": "string" },
+          "user_id": { "type": "string", "description": "Chỉ OWNER/ADMIN mới xem session của user khác" },
+          "enabled": { "type": "boolean" }
+        },
+        "required": ["action"]
+      }
+    }
+  ]
+}

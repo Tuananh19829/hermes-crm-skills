@@ -1,0 +1,486 @@
+{
+  "app": "crm",
+  "module": "inventory",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "search_products",
+      "description": "Tìm sản phẩm theo tên, mã SKU, danh mục hoặc mức tồn kho. Dùng khi user hỏi 'tìm sản phẩm X', 'hàng nào còn tồn', 'SKU ABC', 'danh mục dưỡng da'.",
+      "triggers": [
+        "tìm sản phẩm",
+        "search sp",
+        "sp nào còn",
+        "sku",
+        "tồn kho sp",
+        "danh mục sản phẩm",
+        "hàng còn không",
+        "kiểm tra tồn"
+      ],
+      "endpoint": "POST /internal/skills/search_products",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Tên sản phẩm, mã SKU hoặc một phần thông tin" },
+          "filter": {
+            "type": "object",
+            "properties": {
+              "category_id": { "type": "string", "description": "Lọc theo danh mục" },
+              "category_name": { "type": "string", "description": "Tên danh mục (tìm gần đúng)" },
+              "warehouse_id": { "type": "string", "description": "Lọc tồn kho tại chi nhánh/kho cụ thể" },
+              "in_stock_only": { "type": "boolean", "default": false, "description": "Chỉ lấy sản phẩm còn hàng" },
+              "low_stock": { "type": "boolean", "default": false, "description": "Chỉ lấy sản phẩm sắp hết hàng (dưới ngưỡng min)" },
+              "supplier_id": { "type": "string", "description": "Lọc theo nhà cung cấp" }
+            }
+          },
+          "limit": { "type": "integer", "default": 20, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "get_stock_report",
+      "description": "Báo cáo xuất nhập tồn kho: tổng tồn, giá trị kho, số lượng nhập/xuất theo kỳ, sản phẩm sắp hết. Dùng khi user hỏi 'báo cáo kho', 'tồn kho tháng này', 'hàng nào sắp hết'.",
+      "triggers": [
+        "báo cáo kho",
+        "tồn kho",
+        "xuất nhập tồn",
+        "stock report",
+        "kho hàng tháng",
+        "hàng sắp hết",
+        "giá trị kho",
+        "inventory report"
+      ],
+      "endpoint": "POST /internal/skills/get_stock_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "report_type": {
+            "type": "string",
+            "enum": ["summary", "movement", "low_stock", "valuation"],
+            "default": "summary",
+            "description": "summary: tổng quan; movement: xuất nhập theo kỳ; low_stock: sắp hết; valuation: giá trị tồn kho"
+          },
+          "warehouse_id": { "type": "string", "description": "Lọc theo kho/chi nhánh cụ thể" },
+          "category_id": { "type": "string", "description": "Lọc theo danh mục sản phẩm" },
+          "from_date": { "type": "string", "format": "date", "description": "Từ ngày (dùng với report_type=movement)" },
+          "to_date": { "type": "string", "format": "date", "description": "Đến ngày" },
+          "period": {
+            "type": "string",
+            "enum": ["today", "week", "month", "quarter"],
+            "description": "Kỳ nhanh (thay thế from_date/to_date)"
+          },
+          "low_stock_threshold": {
+            "type": "integer",
+            "default": 10,
+            "description": "Ngưỡng cảnh báo hết hàng (số lượng)"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_import_stock",
+      "description": "Tạo phiếu nhập kho từ nhà cung cấp: chọn NCC, danh sách sản phẩm, số lượng, giá nhập. Dùng khi user muốn nhập hàng, thêm stock từ NCC.",
+      "triggers": [
+        "nhập kho",
+        "tạo phiếu nhập",
+        "nhập hàng từ ncc",
+        "import stock",
+        "đặt hàng ncc",
+        "phiếu nhập kho",
+        "nhập sản phẩm",
+        "thêm hàng vào kho"
+      ],
+      "endpoint": "POST /internal/skills/create_import_stock",
+      "input_schema": {
+        "type": "object",
+        "required": ["warehouse_id", "items"],
+        "properties": {
+          "warehouse_id": { "type": "string", "description": "Kho nhận hàng" },
+          "supplier_id": { "type": "string", "description": "UUID nhà cung cấp (nếu có)" },
+          "supplier_invoice_no": { "type": "string", "description": "Số hóa đơn/phiếu nhập từ NCC" },
+          "note": { "type": "string", "description": "Ghi chú phiếu nhập" },
+          "import_date": { "type": "string", "format": "date", "description": "Ngày nhập (mặc định hôm nay)" },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Danh sách sản phẩm nhập kho",
+            "items": {
+              "type": "object",
+              "required": ["product_id", "quantity"],
+              "properties": {
+                "product_id": { "type": "string", "description": "UUID sản phẩm" },
+                "quantity": { "type": "integer", "minimum": 1 },
+                "unit_price": { "type": "number", "description": "Giá nhập đơn vị (VND)" },
+                "batch_no": { "type": "string", "description": "Số lô hàng (nếu theo dõi lô)" },
+                "expiry_date": { "type": "string", "format": "date", "description": "Hạn sử dụng (nếu có)" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "create_export_stock",
+      "description": "Tạo phiếu xuất kho nội bộ hoặc xuất bán: chọn kho, sản phẩm, số lượng, lý do xuất. Dùng khi user muốn ghi nhận xuất kho cho sử dụng nội bộ, tặng mẫu, hỏng/hủy.",
+      "triggers": [
+        "xuất kho",
+        "tạo phiếu xuất",
+        "export stock",
+        "xuất hàng nội bộ",
+        "phiếu xuất kho",
+        "hủy hàng",
+        "xuất mẫu",
+        "ghi nhận xuất"
+      ],
+      "endpoint": "POST /internal/skills/create_export_stock",
+      "input_schema": {
+        "type": "object",
+        "required": ["warehouse_id", "reason", "items"],
+        "properties": {
+          "warehouse_id": { "type": "string", "description": "Kho xuất hàng" },
+          "reason": {
+            "type": "string",
+            "enum": ["internal_use", "sample", "damaged", "expired", "other"],
+            "description": "Lý do xuất: internal_use (nội bộ), sample (tặng mẫu), damaged (hỏng), expired (hết hạn), other"
+          },
+          "note": { "type": "string", "description": "Ghi chú thêm về lý do xuất" },
+          "export_date": { "type": "string", "format": "date", "description": "Ngày xuất (mặc định hôm nay)" },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Danh sách sản phẩm xuất kho",
+            "items": {
+              "type": "object",
+              "required": ["product_id", "quantity"],
+              "properties": {
+                "product_id": { "type": "string" },
+                "quantity": { "type": "integer", "minimum": 1 },
+                "batch_no": { "type": "string", "description": "Số lô xuất (nếu theo dõi lô)" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "create_stock_transfer",
+      "description": "Tạo phiếu chuyển kho giữa các chi nhánh hoặc kho: chọn kho nguồn, kho đích, sản phẩm và số lượng. Dùng khi user muốn điều chuyển hàng giữa các kho.",
+      "triggers": [
+        "chuyển kho",
+        "điều chuyển hàng",
+        "transfer kho",
+        "chuyển hàng chi nhánh",
+        "phiếu chuyển kho",
+        "di chuyển hàng",
+        "kho nguồn kho đích"
+      ],
+      "endpoint": "POST /internal/skills/create_stock_transfer",
+      "input_schema": {
+        "type": "object",
+        "required": ["from_warehouse_id", "to_warehouse_id", "items"],
+        "properties": {
+          "from_warehouse_id": { "type": "string", "description": "Kho xuất (nguồn)" },
+          "to_warehouse_id": { "type": "string", "description": "Kho nhận (đích)" },
+          "note": { "type": "string", "description": "Ghi chú lý do chuyển" },
+          "transfer_date": { "type": "string", "format": "date", "description": "Ngày chuyển (mặc định hôm nay)" },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Danh sách sản phẩm cần chuyển",
+            "items": {
+              "type": "object",
+              "required": ["product_id", "quantity"],
+              "properties": {
+                "product_id": { "type": "string" },
+                "quantity": { "type": "integer", "minimum": 1 },
+                "batch_no": { "type": "string", "description": "Chuyển theo lô cụ thể (nếu có)" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "create_stocktake",
+      "description": "Tạo phiên kiểm kho: chọn kho, danh mục hoặc toàn bộ, nhập số liệu thực tế để đối chiếu với sổ sách. Dùng khi user muốn kiểm kê, đối chiếu tồn kho.",
+      "triggers": [
+        "kiểm kho",
+        "kiểm kê",
+        "stocktake",
+        "đếm hàng",
+        "đối chiếu tồn kho",
+        "tạo phiên kiểm kê",
+        "inventory check",
+        "kiểm tra kho"
+      ],
+      "endpoint": "POST /internal/skills/create_stocktake",
+      "input_schema": {
+        "type": "object",
+        "required": ["warehouse_id"],
+        "properties": {
+          "warehouse_id": { "type": "string", "description": "Kho cần kiểm kê" },
+          "category_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Chỉ kiểm danh mục này (bỏ trống = kiểm toàn kho)"
+          },
+          "note": { "type": "string", "description": "Ghi chú phiên kiểm kho" },
+          "stocktake_date": { "type": "string", "format": "date", "description": "Ngày kiểm (mặc định hôm nay)" },
+          "items": {
+            "type": "array",
+            "description": "Số liệu thực tế đếm được (để trống thì tạo phiên trắng, điền sau)",
+            "items": {
+              "type": "object",
+              "required": ["product_id", "actual_quantity"],
+              "properties": {
+                "product_id": { "type": "string" },
+                "actual_quantity": { "type": "integer", "minimum": 0, "description": "Số lượng thực tế đếm được" },
+                "batch_no": { "type": "string" },
+                "note": { "type": "string", "description": "Ghi chú cho dòng này (hàng hỏng, thiếu, v.v.)" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "manage_suppliers",
+      "description": "Tìm kiếm, xem chi tiết hoặc tạo nhà cung cấp mới. Dùng khi user hỏi về NCC, muốn xem danh sách nhà cung cấp, thêm NCC mới hoặc tra cứu thông tin NCC.",
+      "triggers": [
+        "nhà cung cấp",
+        "ncc",
+        "tìm ncc",
+        "danh sách ncc",
+        "thêm ncc",
+        "tạo nhà cung cấp",
+        "supplier",
+        "thông tin ncc"
+      ],
+      "endpoint": "POST /internal/skills/manage_suppliers",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["search", "get", "create"],
+            "description": "search: tìm kiếm NCC; get: xem chi tiết 1 NCC; create: tạo NCC mới"
+          },
+          "query": {
+            "type": "string",
+            "description": "Từ khóa tìm NCC theo tên, SĐT (dùng với action=search)"
+          },
+          "supplier_id": {
+            "type": "string",
+            "description": "UUID nhà cung cấp (dùng với action=get)"
+          },
+          "limit": { "type": "integer", "default": 10, "maximum": 50 },
+          "supplier_data": {
+            "type": "object",
+            "description": "Thông tin NCC mới (dùng với action=create)",
+            "properties": {
+              "name": { "type": "string", "description": "Tên nhà cung cấp" },
+              "phone": { "type": "string" },
+              "email": { "type": "string", "format": "email" },
+              "address": { "type": "string" },
+              "tax_code": { "type": "string", "description": "Mã số thuế" },
+              "contact_person": { "type": "string", "description": "Người liên hệ" },
+              "note": { "type": "string" },
+              "payment_terms": { "type": "string", "description": "Điều khoản thanh toán, ví dụ: NET30, COD" }
+            },
+            "required": ["name"]
+          }
+        }
+      }
+    },
+    {
+      "name": "create_product",
+      "description": "Tạo sản phẩm mới hoặc cập nhật thông tin sản phẩm hiện có (tên, danh mục, đơn vị, giá bán, giá vốn, barcode, tồn tối thiểu). Dùng khi user muốn thêm sản phẩm vào kho, sửa giá, đổi danh mục.",
+      "triggers": [
+        "tạo sản phẩm",
+        "thêm sản phẩm",
+        "cập nhật sản phẩm",
+        "sửa sản phẩm",
+        "tạo sp mới",
+        "add sản phẩm",
+        "create product",
+        "nhập sản phẩm mới",
+        "cập nhật giá sp"
+      ],
+      "endpoint": "POST /internal/skills/create_product",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["create", "update"],
+            "description": "create: tạo sản phẩm mới; update: cập nhật sản phẩm hiện có"
+          },
+          "product_id": { "type": "string", "description": "UUID sản phẩm (bắt buộc khi action=update)" },
+          "product_data": {
+            "type": "object",
+            "description": "Thông tin sản phẩm",
+            "properties": {
+              "name": { "type": "string", "description": "Tên sản phẩm" },
+              "category_id": { "type": "string", "description": "UUID danh mục sản phẩm" },
+              "category_name": { "type": "string", "description": "Tên danh mục (tạo mới nếu chưa có)" },
+              "unit_id": { "type": "string", "description": "UUID đơn vị tính" },
+              "unit_name": { "type": "string", "description": "Tên đơn vị tính (tìm hoặc tạo)" },
+              "brand_id": { "type": "string", "description": "UUID thương hiệu" },
+              "sale_price": { "type": "number", "description": "Giá bán (VND)" },
+              "cost_price": { "type": "number", "description": "Giá vốn (VND)" },
+              "barcode": { "type": "string", "description": "Mã vạch sản phẩm" },
+              "min_stock": { "type": "integer", "default": 0, "description": "Tồn kho tối thiểu để cảnh báo" },
+              "description": { "type": "string", "description": "Mô tả sản phẩm" },
+              "is_active": { "type": "boolean", "default": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "manage_brands",
+      "description": "Tìm kiếm, tạo mới hoặc xóa thương hiệu sản phẩm. Dùng khi user hỏi danh sách thương hiệu, muốn thêm brand mới, hoặc kiểm tra brand nào đang có trong hệ thống.",
+      "triggers": [
+        "thương hiệu",
+        "brand sản phẩm",
+        "tìm brand",
+        "danh sách thương hiệu",
+        "thêm thương hiệu",
+        "tạo brand",
+        "xóa thương hiệu",
+        "brand nào có"
+      ],
+      "endpoint": "POST /internal/skills/manage_brands",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["search", "create", "delete"],
+            "description": "search: tìm thương hiệu; create: tạo mới; delete: ẩn thương hiệu"
+          },
+          "query": { "type": "string", "description": "Từ khoá tìm theo tên thương hiệu (dùng với action=search)" },
+          "brand_id": { "type": "string", "description": "UUID thương hiệu (dùng với action=delete)" },
+          "limit": { "type": "integer", "default": 20, "maximum": 100 },
+          "brand_data": {
+            "type": "object",
+            "description": "Thông tin thương hiệu mới (dùng với action=create)",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string", "description": "Tên thương hiệu" },
+              "country_of_origin": { "type": "string", "description": "Xuất xứ" },
+              "website": { "type": "string", "format": "uri", "description": "Website thương hiệu" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "manage_units",
+      "description": "Tìm kiếm hoặc tạo đơn vị tính sản phẩm (hộp, chai, tuýp, gói, viên, lọ...). Dùng trước khi tạo sản phẩm mới để có unit_id hợp lệ.",
+      "triggers": [
+        "đơn vị tính",
+        "tạo đơn vị",
+        "tìm đơn vị",
+        "unit tính",
+        "danh sách đơn vị",
+        "thêm đơn vị",
+        "hộp chai tuýp gói",
+        "unit sản phẩm"
+      ],
+      "endpoint": "POST /internal/skills/manage_units",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["search", "create"],
+            "description": "search: tìm đơn vị tính; create: tạo đơn vị mới"
+          },
+          "query": { "type": "string", "description": "Tên đơn vị cần tìm (để trống = lấy toàn bộ)" },
+          "unit_data": {
+            "type": "object",
+            "description": "Thông tin đơn vị mới (dùng với action=create)",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string", "description": "Tên đơn vị tính (Chai, Hộp, Tuýp, Gói...)" },
+              "abbreviation": { "type": "string", "description": "Ký hiệu viết tắt (tuỳ chọn)" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "manage_fixed_assets",
+      "description": "Xem danh sách hoặc tạo tài sản cố định (thiết bị, nội thất, máy móc) với thông tin khấu hao hàng tháng. Dùng khi user hỏi về tài sản spa, máy móc, muốn ghi nhận mua thiết bị mới.",
+      "triggers": [
+        "tài sản cố định",
+        "thiết bị spa",
+        "máy móc",
+        "fixed asset",
+        "khấu hao",
+        "thêm thiết bị",
+        "tạo tài sản",
+        "danh sách tài sản",
+        "nội thất",
+        "thiết bị làm đẹp"
+      ],
+      "endpoint": "POST /internal/skills/manage_fixed_assets",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["list", "get", "create"],
+            "description": "list: danh sách tài sản; get: chi tiết 1 tài sản; create: thêm tài sản mới"
+          },
+          "asset_id": { "type": "string", "description": "UUID tài sản (dùng với action=get)" },
+          "filter": {
+            "type": "object",
+            "description": "Bộ lọc khi action=list",
+            "properties": {
+              "category": {
+                "type": "string",
+                "enum": ["equipment", "furniture", "vehicle", "other"],
+                "description": "Loại tài sản"
+              },
+              "location_id": { "type": "string", "description": "Lọc theo phòng/chi nhánh" },
+              "status": { "type": "string", "enum": ["active", "disposed", "all"], "default": "active" }
+            }
+          },
+          "asset_data": {
+            "type": "object",
+            "description": "Thông tin tài sản mới (dùng với action=create)",
+            "required": ["name", "purchase_price", "purchase_date"],
+            "properties": {
+              "name": { "type": "string", "description": "Tên tài sản" },
+              "category": {
+                "type": "string",
+                "enum": ["equipment", "furniture", "vehicle", "other"],
+                "description": "Loại tài sản"
+              },
+              "purchase_price": { "type": "number", "description": "Nguyên giá mua (VND)" },
+              "purchase_date": { "type": "string", "format": "date", "description": "Ngày mua (YYYY-MM-DD)" },
+              "useful_life_months": { "type": "integer", "description": "Thời gian sử dụng ước tính (tháng) để tính khấu hao" },
+              "residual_value": { "type": "number", "default": 0, "description": "Giá trị còn lại sau khi khấu hao hết (VND)" },
+              "location_id": { "type": "string", "description": "Vị trí đặt tài sản (phòng/chi nhánh)" },
+              "serial_no": { "type": "string", "description": "Số serial/mã máy" },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

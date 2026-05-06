@@ -1,0 +1,93 @@
+{
+  "app": "crm",
+  "module": "crm",
+  "version": "3.4.0-ext",
+  "merge_into": "_index.json",
+  "_note": "Skills handler có sẵn ở routes.js (anh report 2026-05-06) nhưng manifest thiếu — bổ sung để LLM thấy.",
+  "skills": [
+    {
+      "name": "count_leads_today",
+      "description": "Đếm số leads tạo trong ngày hôm nay (today, theo timezone Asia/Ho_Chi_Minh). App: crm.",
+      "triggers": ["lead hôm nay", "đếm lead today", "leads hôm nay bao nhiêu", "count leads today"],
+      "endpoint": "POST /internal/skills/count_leads_today",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string", "description": "Lọc theo nguồn (facebook/google/zalo/...)" }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'count_leads_today'"
+    },
+    {
+      "name": "list_leads",
+      "description": "Liệt kê leads trong CRM (paginated). Khác list_ads_leads ở chỗ list_leads bao gồm cả leads thủ công + ads.",
+      "triggers": ["danh sách lead", "list leads", "all leads", "leads trong CRM"],
+      "endpoint": "POST /internal/skills/list_leads",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["NEW", "CONTACTED", "QUALIFIED", "WON", "LOST", "ALL"], "default": "ALL" },
+          "source": { "type": "string" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 30, "maximum": 200 },
+          "offset": { "type": "integer", "default": 0 }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'list_leads'"
+    },
+    {
+      "name": "lead_detail",
+      "description": "Chi tiết 1 lead: thông tin + lịch sử contact + ads source nếu có.",
+      "triggers": ["chi tiết lead", "xem lead", "lead detail", "thông tin lead"],
+      "endpoint": "POST /internal/skills/lead_detail",
+      "input_schema": {
+        "type": "object", "required": ["lead_id"],
+        "properties": {
+          "lead_id": { "type": "string", "description": "UUID lead" }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'lead_detail'"
+    },
+    {
+      "name": "sales_summary",
+      "description": "Tổng quan doanh số (sales): tổng đơn + doanh thu + AOV + conversion. Khác report_revenue ở chỗ tập trung sales pipeline + KH mới.",
+      "triggers": ["sales summary", "tổng quan sale", "doanh số", "tóm tắt bán hàng"],
+      "endpoint": "POST /internal/skills/sales_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month", "quarter", "year"], "default": "month" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "branch_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'sales_summary'"
+    },
+    {
+      "name": "list_services",
+      "description": "Liệt kê dịch vụ active của spa/salon (alias cho search_services). KHÔNG phải tools coding/debug. Dùng khi user hỏi 'spa có dịch vụ gì', 'list DV'.",
+      "triggers": ["list services", "danh sách dịch vụ", "dịch vụ gì", "spa có gì"],
+      "endpoint": "POST /internal/skills/list_services",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Lọc theo tên DV (ILIKE)" },
+          "limit": { "type": "integer", "default": 30, "maximum": 100 }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'list_services'"
+    }
+  ]
+}

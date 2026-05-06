@@ -1,0 +1,245 @@
+{
+  "app": "crm",
+  "module": "reports",
+  "version": "2.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "revenue_report",
+      "description": "Báo cáo doanh thu theo kỳ (ngày/tuần/tháng/quý), so sánh kỳ trước, phân tích theo dịch vụ và nhân viên",
+      "endpoint": "POST /internal/skills/revenue_report",
+      "triggers": [
+        "báo cáo doanh thu",
+        "doanh thu tháng",
+        "doanh thu tuần",
+        "doanh thu hôm nay",
+        "so sánh doanh thu",
+        "tổng doanh thu"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["date", "month", "quarter", "start_date", "end_date", "compare_previous", "group_by"]
+    },
+    {
+      "name": "service_report",
+      "description": "Báo cáo dịch vụ: lượt thực hiện, doanh thu, đánh giá KH, so sánh kỳ trước",
+      "endpoint": "POST /internal/skills/service_report",
+      "triggers": [
+        "báo cáo dịch vụ",
+        "dịch vụ phổ biến",
+        "lượt dịch vụ",
+        "đánh giá dịch vụ",
+        "dịch vụ doanh thu cao"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "start_date", "end_date", "service_id", "sort_by", "sort_order", "compare_previous"]
+    },
+    {
+      "name": "customer_report",
+      "description": "Báo cáo khách hàng: mới, cũ quay lại, tỷ lệ retention, phân khúc, LTV",
+      "endpoint": "POST /internal/skills/customer_report",
+      "triggers": [
+        "báo cáo khách hàng",
+        "khách mới tháng này",
+        "tỷ lệ quay lại",
+        "retention",
+        "phân khúc khách hàng"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "start_date", "end_date", "segment", "compare_previous", "include_churn_risk"]
+    },
+    {
+      "name": "staff_performance_report",
+      "description": "Báo cáo hiệu suất toàn bộ NV: xếp hạng, phân loại, so sánh phòng ban",
+      "endpoint": "POST /internal/skills/staff_performance_report",
+      "triggers": [
+        "báo cáo hiệu suất nhân viên",
+        "xếp hạng nhân viên",
+        "top nhân viên",
+        "nhân viên xuất sắc tháng",
+        "bảng xếp hạng nhân viên"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "quarter", "department_id", "sort_by", "sort_order", "top_n", "compare_previous"]
+    },
+    {
+      "name": "booking_report",
+      "description": "Báo cáo lịch hẹn: hoàn thành, hủy, no-show, tỷ lệ lấp đầy, phân tích lý do hủy",
+      "endpoint": "POST /internal/skills/booking_report",
+      "triggers": [
+        "báo cáo lịch hẹn",
+        "tỷ lệ hủy lịch",
+        "no-show",
+        "khách không đến",
+        "tỷ lệ lấp đầy"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["date", "month", "start_date", "end_date", "staff_id", "service_id", "status", "group_by", "compare_previous"]
+    },
+    {
+      "name": "inventory_report",
+      "description": "Báo cáo xuất nhập tồn kho: biến động vật tư, sản phẩm, cảnh báo hàng sắp hết",
+      "endpoint": "POST /internal/skills/inventory_report",
+      "triggers": [
+        "báo cáo kho",
+        "xuất nhập kho",
+        "tồn kho",
+        "hàng tồn",
+        "sắp hết hàng",
+        "cảnh báo kho"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "start_date", "end_date", "category_id", "product_id", "alert_low_stock", "low_stock_threshold", "report_type"]
+    },
+    {
+      "name": "commission_report",
+      "description": "Báo cáo hoa hồng tổng hợp theo NV / dịch vụ / tháng để đối chiếu trước khi tính lương",
+      "endpoint": "POST /internal/skills/commission_report",
+      "triggers": [
+        "báo cáo hoa hồng",
+        "hoa hồng tổng hợp",
+        "tổng hoa hồng",
+        "hoa hồng theo dịch vụ",
+        "đối chiếu hoa hồng"
+      ],
+      "required_params": ["month"],
+      "optional_params": ["staff_id", "department_id", "service_id", "group_by", "sort_by", "sort_order", "compare_months"]
+    },
+    {
+      "name": "kpi_overview",
+      "description": "Tổng quan KPI cơ sở so với mục tiêu: doanh thu, lượt khách, hài lòng KH, tiến độ tháng",
+      "endpoint": "POST /internal/skills/kpi_overview",
+      "triggers": [
+        "tổng quan kpi",
+        "kpi cơ sở",
+        "mục tiêu tháng",
+        "đạt mục tiêu chưa",
+        "dashboard kpi",
+        "tiến độ kpi"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "quarter", "compare_previous", "include_trend", "trend_months"]
+    },
+    {
+      "name": "get_kpi_by_staff",
+      "description": "KPI chi tiết từng nhân viên trong tháng: mục tiêu, thực tế, điểm số, xếp loại và cảnh báo",
+      "endpoint": "POST /internal/skills/get_kpi_by_staff",
+      "triggers": [
+        "kpi theo nhân viên",
+        "kpi chi tiết nhân viên",
+        "mục tiêu nhân viên",
+        "đạt kpi chưa",
+        "kpi cá nhân",
+        "nhân viên không đạt kpi"
+      ],
+      "required_params": ["month"],
+      "optional_params": ["staff_id", "department_id", "status_filter", "sort_by", "sort_order", "compare_previous"]
+    },
+    {
+      "name": "debt_report",
+      "description": "Báo cáo công nợ: khách hàng nợ cơ sở, cơ sở nợ NCC, công nợ quá hạn, tổng nợ theo kỳ",
+      "endpoint": "POST /internal/skills/debt_report",
+      "triggers": [
+        "báo cáo công nợ",
+        "công nợ tháng",
+        "khách nợ bao nhiêu",
+        "nợ quá hạn",
+        "cơ sở nợ nhà cung cấp",
+        "tổng nợ"
+      ],
+      "required_params": [],
+      "optional_params": ["period", "month", "start_date", "end_date", "debt_type", "overdue_only", "overdue_days_threshold", "person_id", "supplier_id", "sort_by", "sort_order", "limit"]
+    },
+    {
+      "name": "card_report",
+      "description": "Báo cáo thẻ dịch vụ: tổng thẻ phát hành, số dư còn lại, lượng nạp/sử dụng theo tháng, thẻ sắp hết hạn",
+      "endpoint": "POST /internal/skills/card_report",
+      "triggers": [
+        "báo cáo thẻ",
+        "thẻ dịch vụ",
+        "thẻ sắp hết hạn",
+        "số dư thẻ",
+        "nạp thẻ tháng này"
+      ],
+      "required_params": [],
+      "optional_params": ["period", "month", "start_date", "end_date", "report_type", "expiring_within_days", "card_id", "person_id", "include_zero_balance", "sort_by", "sort_order", "limit"]
+    },
+    {
+      "name": "loyalty_report",
+      "description": "Báo cáo điểm tích lũy: tổng điểm đang lưu hành, điểm tích/đổi trong tháng, top khách hàng điểm cao",
+      "endpoint": "POST /internal/skills/loyalty_report",
+      "triggers": [
+        "báo cáo tích điểm",
+        "điểm tích lũy",
+        "tích điểm tháng",
+        "top khách hàng điểm",
+        "điểm sắp hết hạn"
+      ],
+      "required_params": [],
+      "optional_params": ["period", "month", "quarter", "start_date", "end_date", "report_type", "top_n", "expiring_within_days", "person_id", "min_points", "compare_previous"]
+    },
+    {
+      "name": "marketing_report",
+      "description": "Báo cáo marketing: chi phí theo kênh, CPL, ROI, tỷ lệ chuyển đổi leads",
+      "endpoint": "POST /internal/skills/marketing_report",
+      "triggers": [
+        "báo cáo marketing",
+        "chi phí marketing",
+        "cpl theo kênh",
+        "roi marketing",
+        "leads chuyển đổi",
+        "kênh nào hiệu quả"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "quarter", "start_date", "end_date", "channel", "group_by", "compare_previous", "include_funnel", "include_roi"]
+    },
+    {
+      "name": "telesale_report",
+      "description": "Báo cáo telesale: tổng cuộc gọi, tỷ lệ tiếp cận, tỷ lệ chuyển đổi, phân tích theo nhân viên",
+      "endpoint": "POST /internal/skills/telesale_report",
+      "triggers": [
+        "báo cáo telesale",
+        "tổng cuộc gọi",
+        "tỷ lệ tiếp cận",
+        "telesale chuyển đổi",
+        "cuộc gọi theo nhân viên",
+        "tỷ lệ bắt máy"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["date", "month", "start_date", "end_date", "staff_id", "group_by", "compare_previous", "include_golden_hours", "sort_by", "sort_order"]
+    },
+    {
+      "name": "kpi_by_branch",
+      "description": "KPI theo chi nhánh: doanh thu, lịch hẹn, khách hàng mới so với mục tiêu đặt ra",
+      "endpoint": "POST /internal/skills/kpi_by_branch",
+      "triggers": [
+        "kpi chi nhánh",
+        "so sánh chi nhánh",
+        "doanh thu theo chi nhánh",
+        "chi nhánh nào đạt kpi",
+        "xếp hạng chi nhánh"
+      ],
+      "required_params": ["period"],
+      "optional_params": ["month", "quarter", "start_date", "end_date", "branch_id", "metrics", "compare_target", "sort_by", "sort_order", "include_trend"]
+    },
+    {
+      "name": "kpi_config",
+      "description": "Xem hoặc cập nhật cấu hình mục tiêu KPI (doanh thu mục tiêu, số lịch hẹn, khách hàng mới) theo tháng/chi nhánh",
+      "endpoint": "POST /internal/skills/kpi_config",
+      "triggers": [
+        "cấu hình kpi",
+        "đặt mục tiêu kpi",
+        "mục tiêu doanh thu",
+        "thiết lập kpi",
+        "cập nhật mục tiêu",
+        "target tháng"
+      ],
+      "required_params": ["action", "month"],
+      "optional_params": ["branch_id", "targets", "copy_month", "apply_to_all_branches"]
+    }
+  ]
+}

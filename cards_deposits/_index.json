@@ -1,0 +1,322 @@
+{
+  "app": "crm",
+  "module": "cards_deposits",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": { "header_secret": "X-Internal-Secret", "header_user": "X-User-Id", "header_group": "X-Group-Id" },
+  "skills": [
+    {
+      "name": "prepaid_cards_summary",
+      "description": "Tổng quan thẻ trả trước (thẻ buổi + thẻ tiền): counts theo status, total value remaining.",
+      "triggers": ["tổng quan thẻ trả trước"],
+      "endpoint": "POST /internal/skills/prepaid_cards_summary",
+      "input_schema": { "type": "object", "properties": { "card_type": { "type": "string", "enum": ["VALUE", "SESSION", "ALL"], "default": "ALL" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "get_card_detail",
+      "description": "Chi tiết thẻ DV: progress + lịch sử movements + KH liên quan.",
+      "triggers": ["chi tiết thẻ", "card detail"],
+      "endpoint": "POST /internal/skills/get_card_detail",
+      "input_schema": {
+        "type": "object", "required": ["card_id"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "include_movements": { "type": "boolean", "default": true }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "issue_service_card",
+      "description": "Phát hành thẻ DV mới cho KH (thẻ tiền hoặc thẻ buổi).",
+      "triggers": ["phát hành thẻ", "tạo thẻ KH"],
+      "endpoint": "POST /internal/skills/issue_service_card",
+      "input_schema": {
+        "type": "object", "required": ["person_id", "card_type", "price"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "card_type": { "type": "string", "enum": ["VALUE", "SESSION"] },
+          "value": { "type": "number", "description": "Số tiền nạp (VALUE) hoặc số buổi (SESSION)" },
+          "price": { "type": "number", "description": "Giá bán thẻ" },
+          "service_id": { "type": "string", "description": "Bắt buộc khi card_type=SESSION" },
+          "expires_at": { "type": "string", "format": "date" },
+          "payment_method": { "type": "string", "enum": ["CASH", "TRANSFER", "CARD", "VIETQR"] },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "update_service_card",
+      "description": "Sửa thông tin thẻ (note, expires_at).",
+      "triggers": ["sửa thẻ KH"],
+      "endpoint": "POST /internal/skills/update_service_card",
+      "input_schema": {
+        "type": "object", "required": ["card_id"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "expires_at": { "type": "string", "format": "date" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "cancel_service_card",
+      "description": "Hủy thẻ + hoàn tiền (số dư còn lại).",
+      "triggers": ["hủy thẻ", "cancel card"],
+      "endpoint": "POST /internal/skills/cancel_service_card",
+      "input_schema": {
+        "type": "object", "required": ["card_id", "reason"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "reason": { "type": "string" },
+          "refund_amount": { "type": "number" },
+          "refund_method": { "type": "string", "enum": ["CASH", "TRANSFER", "SERVICE_CREDIT"] }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "extend_service_card",
+      "description": "Gia hạn thẻ.",
+      "triggers": ["gia hạn thẻ"],
+      "endpoint": "POST /internal/skills/extend_service_card",
+      "input_schema": {
+        "type": "object", "required": ["card_id", "new_expires_at"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "new_expires_at": { "type": "string", "format": "date" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "transfer_service_card",
+      "description": "Chuyển nhượng thẻ sang KH khác.",
+      "triggers": ["chuyển thẻ"],
+      "endpoint": "POST /internal/skills/transfer_service_card",
+      "input_schema": {
+        "type": "object", "required": ["card_id", "new_person_id"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "new_person_id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "consume_card_session",
+      "description": "Trừ 1 buổi của thẻ buổi (khi KH dùng DV).",
+      "triggers": ["trừ buổi thẻ", "consume session"],
+      "endpoint": "POST /internal/skills/consume_card_session",
+      "input_schema": {
+        "type": "object", "required": ["card_id"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "sessions": { "type": "integer", "default": 1, "minimum": 1 },
+          "staff_id": { "type": "string" },
+          "service_date": { "type": "string", "format": "date-time" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "deduct_card_value",
+      "description": "Trừ tiền từ thẻ tiền (khi thanh toán HĐ).",
+      "triggers": ["trừ thẻ tiền", "deduct card value"],
+      "endpoint": "POST /internal/skills/deduct_card_value",
+      "input_schema": {
+        "type": "object", "required": ["card_id", "amount"],
+        "properties": {
+          "card_id": { "type": "string" },
+          "amount": { "type": "number" },
+          "invoice_id": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "revert_card_consumption",
+      "description": "Hoàn lại buổi/tiền đã trừ (do nhập sai).",
+      "triggers": ["hoàn lại buổi thẻ"],
+      "endpoint": "POST /internal/skills/revert_card_consumption",
+      "input_schema": {
+        "type": "object", "required": ["movement_id", "reason"],
+        "properties": { "movement_id": { "type": "string" }, "reason": { "type": "string" } }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "list_card_movements",
+      "description": "Lịch sử biến động thẻ DV (toàn workspace).",
+      "triggers": ["lịch sử thẻ DV"],
+      "endpoint": "POST /internal/skills/list_card_movements",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "card_id": { "type": "string" },
+          "person_id": { "type": "string" },
+          "action": { "type": "string", "enum": ["DEPOSIT", "CONSUME", "REFUND", "TRANSFER", "ALL"], "default": "ALL" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "query": { "type": "string" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "card_movements_summary",
+      "description": "Tổng hợp biến động thẻ theo period.",
+      "triggers": ["tổng hợp biến động thẻ"],
+      "endpoint": "POST /internal/skills/card_movements_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month"], "default": "month" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "get_card_movement_detail",
+      "description": "Chi tiết 1 giao dịch trên thẻ.",
+      "triggers": ["chi tiết giao dịch thẻ"],
+      "endpoint": "POST /internal/skills/get_card_movement_detail",
+      "input_schema": { "type": "object", "required": ["movement_id"], "properties": { "movement_id": { "type": "string" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "deposits_summary",
+      "description": "Tổng quan đặt cọc: số đang giữ, số đã áp HĐ, số đã hoàn.",
+      "triggers": ["tổng quan đặt cọc"],
+      "endpoint": "POST /internal/skills/deposits_summary",
+      "input_schema": { "type": "object", "properties": {} },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_deposits",
+      "description": "Liệt kê khoản cọc theo trạng thái.",
+      "triggers": ["danh sách cọc"],
+      "endpoint": "POST /internal/skills/list_deposits",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["AVAILABLE", "APPLIED", "REFUNDED", "ALL"], "default": "ALL" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 30 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "get_deposit_detail",
+      "description": "Chi tiết 1 khoản cọc + lịch sử.",
+      "triggers": ["chi tiết cọc"],
+      "endpoint": "POST /internal/skills/get_deposit_detail",
+      "input_schema": { "type": "object", "required": ["deposit_id"], "properties": { "deposit_id": { "type": "string" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_deposit",
+      "description": "Tạo khoản đặt cọc cho KH.",
+      "triggers": ["tạo cọc", "thêm đặt cọc"],
+      "endpoint": "POST /internal/skills/create_deposit",
+      "input_schema": {
+        "type": "object", "required": ["person_id", "amount"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "amount": { "type": "number" },
+          "payment_method": { "type": "string", "enum": ["CASH", "TRANSFER", "CARD", "VIETQR"], "default": "CASH" },
+          "reason": { "type": "string", "description": "Vd: giữ chỗ DV X, đặt liệu trình Y" },
+          "expected_use_at": { "type": "string", "format": "date-time" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "apply_deposit_to_invoice",
+      "description": "Áp khoản cọc vào HĐ (trừ vào số phải trả).",
+      "triggers": ["áp cọc vào HĐ"],
+      "endpoint": "POST /internal/skills/apply_deposit_to_invoice",
+      "input_schema": {
+        "type": "object", "required": ["deposit_id", "invoice_id"],
+        "properties": {
+          "deposit_id": { "type": "string" },
+          "invoice_id": { "type": "string" },
+          "amount": { "type": "number", "description": "Số tiền áp; default = min(deposit.balance, invoice.debt)" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "refund_deposit",
+      "description": "Hoàn cọc cho KH.",
+      "triggers": ["hoàn cọc"],
+      "endpoint": "POST /internal/skills/refund_deposit",
+      "input_schema": {
+        "type": "object", "required": ["deposit_id", "amount"],
+        "properties": {
+          "deposit_id": { "type": "string" },
+          "amount": { "type": "number" },
+          "method": { "type": "string", "enum": ["CASH", "TRANSFER", "CARD"] },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "update_deposit",
+      "description": "Sửa khoản cọc (note, expected_use_at).",
+      "triggers": ["sửa cọc"],
+      "endpoint": "POST /internal/skills/update_deposit",
+      "input_schema": {
+        "type": "object", "required": ["deposit_id"],
+        "properties": {
+          "deposit_id": { "type": "string" },
+          "expected_use_at": { "type": "string", "format": "date-time" },
+          "note": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "delete_deposit",
+      "description": "Xóa cọc (chỉ khi chưa áp HĐ).",
+      "triggers": ["xóa cọc"],
+      "endpoint": "POST /internal/skills/delete_deposit",
+      "input_schema": {
+        "type": "object", "required": ["deposit_id"],
+        "properties": { "deposit_id": { "type": "string" }, "reason": { "type": "string" } }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "list_deposit_movements",
+      "description": "Lịch sử biến động cọc.",
+      "triggers": ["lịch sử cọc"],
+      "endpoint": "POST /internal/skills/list_deposit_movements",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "deposit_id": { "type": "string" },
+          "person_id": { "type": "string" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    }
+  ]
+}

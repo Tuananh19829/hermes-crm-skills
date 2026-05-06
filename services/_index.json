@@ -1,0 +1,280 @@
+{
+  "app": "crm",
+  "module": "services",
+  "version": "2.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "search_services",
+      "description": "Tìm dịch vụ theo tên, danh mục hoặc khoảng giá. Dùng khi user hỏi 'dịch vụ nào về da', 'DV giá dưới 500k', 'spa có dịch vụ gì'.",
+      "triggers": ["tìm dịch vụ", "dịch vụ nào", "search service", "dv có gì", "liệu pháp", "spa dịch vụ", "giá dịch vụ"],
+      "endpoint": "POST /internal/skills/search_services",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Tên hoặc từ khoá mô tả dịch vụ" },
+          "category_id": { "type": "string", "description": "UUID danh mục dịch vụ" },
+          "price_min": { "type": "number", "description": "Giá từ (VND)" },
+          "price_max": { "type": "number", "description": "Giá đến (VND)" },
+          "active_only": { "type": "boolean", "default": true },
+          "limit": { "type": "integer", "default": 20, "maximum": 50 }
+        }
+      }
+    },
+    {
+      "name": "get_service_detail",
+      "description": "Xem chi tiết một dịch vụ: giá niêm yết, thời gian thực hiện, danh sách vật tư, cấu hình hoa hồng nhân viên. Dùng khi đã biết service_id.",
+      "triggers": ["chi tiết dịch vụ", "service detail", "thông tin dv", "giá dv", "vật tư dv", "hoa hồng dv"],
+      "endpoint": "POST /internal/skills/get_service_detail",
+      "input_schema": {
+        "type": "object",
+        "required": ["service_id"],
+        "properties": {
+          "service_id": { "type": "string", "description": "UUID của dịch vụ" }
+        }
+      }
+    },
+    {
+      "name": "list_service_categories",
+      "description": "Liệt kê tất cả danh mục dịch vụ đang hoạt động. Dùng khi user hỏi 'có những loại dịch vụ gì', 'các nhóm DV', trước khi search_services.",
+      "triggers": ["danh mục dịch vụ", "nhóm dịch vụ", "loại dịch vụ", "service categories", "category dv"],
+      "endpoint": "POST /internal/skills/list_service_categories",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "active_only": { "type": "boolean", "default": true }
+        }
+      }
+    },
+    {
+      "name": "search_treatments",
+      "description": "Tìm gói liệu trình đã mua của khách hàng. Dùng khi user hỏi 'kh X có liệu trình gì', 'gói nào còn hạn', 'liệu trình da của Mai'.",
+      "triggers": ["liệu trình khách", "tìm liệu trình", "gói liệu trình", "treatment của kh", "search treatment", "liệu trình còn"],
+      "endpoint": "POST /internal/skills/search_treatments",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": { "type": "string", "description": "UUID khách hàng" },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "COMPLETED", "PAUSED", "EXPIRED"],
+            "description": "Lọc theo trạng thái liệu trình"
+          },
+          "service_id": { "type": "string", "description": "Lọc theo dịch vụ cụ thể" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 20, "maximum": 50 }
+        }
+      }
+    },
+    {
+      "name": "get_treatment_progress",
+      "description": "Xem tiến độ chi tiết một liệu trình: tổng buổi, đã dùng, còn lại, danh sách buổi đã thực hiện, nhân viên phụ trách. Dùng khi đã biết treatment_id.",
+      "triggers": ["tiến độ liệu trình", "đã dùng bao nhiêu buổi", "còn mấy buổi", "treatment progress", "lịch sử liệu trình", "buổi còn lại"],
+      "endpoint": "POST /internal/skills/get_treatment_progress",
+      "input_schema": {
+        "type": "object",
+        "required": ["treatment_id"],
+        "properties": {
+          "treatment_id": { "type": "string", "description": "UUID của liệu trình" },
+          "include_sessions": { "type": "boolean", "default": true, "description": "Có trả về danh sách buổi chi tiết không" }
+        }
+      }
+    },
+    {
+      "name": "list_bundles",
+      "description": "Liệt kê combo/gói dịch vụ đang bán. Dùng khi user hỏi 'có gói nào không', 'combo dịch vụ', 'gói ưu đãi', 'bán gói da mặt'.",
+      "triggers": ["gói dịch vụ", "combo dv", "bundle", "gói ưu đãi", "liệt kê gói", "bán gói", "service bundle"],
+      "endpoint": "POST /internal/skills/list_bundles",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "active_only": { "type": "boolean", "default": true },
+          "category_id": { "type": "string" },
+          "price_min": { "type": "number" },
+          "price_max": { "type": "number" },
+          "limit": { "type": "integer", "default": 20, "maximum": 50 }
+        }
+      }
+    },
+    {
+      "name": "create_service",
+      "description": "Tạo dịch vụ mới hoặc cập nhật dịch vụ hiện có (tên, danh mục, giá, thời gian, vật tư cần dùng, hoa hồng nhân viên). Dùng khi user muốn thêm hoặc sửa thông tin dịch vụ.",
+      "triggers": [
+        "tạo dịch vụ",
+        "thêm dịch vụ",
+        "cập nhật dịch vụ",
+        "sửa dịch vụ",
+        "create service",
+        "thêm dv mới",
+        "dịch vụ mới",
+        "cập nhật giá dv",
+        "vật tư dịch vụ",
+        "hoa hồng dịch vụ"
+      ],
+      "endpoint": "POST /internal/skills/create_service",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["create", "update"],
+            "description": "create: tạo dịch vụ mới; update: cập nhật dịch vụ hiện có"
+          },
+          "service_id": { "type": "string", "description": "UUID dịch vụ (bắt buộc khi action=update)" },
+          "service_data": {
+            "type": "object",
+            "description": "Thông tin dịch vụ",
+            "properties": {
+              "name": { "type": "string", "description": "Tên dịch vụ" },
+              "category_id": { "type": "string", "description": "UUID danh mục dịch vụ" },
+              "category_name": { "type": "string", "description": "Tên danh mục (tạo mới nếu chưa có)" },
+              "price": { "type": "number", "description": "Giá niêm yết (VND)" },
+              "duration_minutes": { "type": "integer", "description": "Thời gian thực hiện (phút)" },
+              "commission_rate": { "type": "number", "minimum": 0, "maximum": 1, "description": "Tỷ lệ hoa hồng (0–1), ví dụ: 0.15 = 15%" },
+              "description": { "type": "string", "description": "Mô tả dịch vụ" },
+              "is_active": { "type": "boolean", "default": true },
+              "materials": {
+                "type": "array",
+                "description": "Vật tư tiêu hao cần dùng mỗi buổi",
+                "items": {
+                  "type": "object",
+                  "required": ["product_id", "quantity_per_session"],
+                  "properties": {
+                    "product_id": { "type": "string", "description": "UUID sản phẩm vật tư" },
+                    "quantity_per_session": { "type": "number", "description": "Lượng dùng mỗi buổi" },
+                    "unit": { "type": "string", "description": "Đơn vị (ml, g, cái...)" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "create_treatment",
+      "description": "Tạo gói liệu trình cho khách hàng (số buổi, giá gói, nhân viên phụ trách, lịch buổi đầu tiên). Dùng khi khách mua gói liệu trình và cần ghi nhận vào hệ thống.",
+      "triggers": [
+        "tạo liệu trình",
+        "mở gói liệu trình",
+        "gói liệu trình mới",
+        "create treatment",
+        "đăng ký liệu trình",
+        "kh mua gói",
+        "mua liệu trình",
+        "tạo gói buổi",
+        "ghi nhận liệu trình"
+      ],
+      "endpoint": "POST /internal/skills/create_treatment",
+      "input_schema": {
+        "type": "object",
+        "required": ["person_id", "service_id", "total_sessions", "package_price"],
+        "properties": {
+          "person_id": { "type": "string", "description": "UUID khách hàng" },
+          "service_id": { "type": "string", "description": "UUID dịch vụ gốc" },
+          "total_sessions": { "type": "integer", "minimum": 1, "description": "Tổng số buổi gói liệu trình" },
+          "package_price": { "type": "number", "description": "Giá trọn gói (VND)" },
+          "staff_id": { "type": "string", "description": "UUID nhân viên phụ trách (tuỳ chọn)" },
+          "start_date": { "type": "string", "format": "date", "description": "Ngày bắt đầu liệu trình (YYYY-MM-DD)" },
+          "first_session_datetime": { "type": "string", "format": "date-time", "description": "Thời điểm buổi đầu tiên (ISO 8601)" },
+          "notes": { "type": "string", "description": "Ghi chú tình trạng khách, mục tiêu điều trị" }
+        }
+      }
+    },
+    {
+      "name": "cancel_service_refund",
+      "description": "Tạo phiếu hoàn dịch vụ hoặc sản phẩm cho khách hàng (lý do hoàn, số tiền hoàn, phương thức thanh toán hoàn). Dùng khi khách hủy liệu trình, trả sản phẩm, hoàn gói chưa dùng hết.",
+      "triggers": [
+        "hoàn tiền",
+        "hủy dịch vụ",
+        "hoàn dịch vụ",
+        "trả hàng",
+        "refund",
+        "hoàn gói",
+        "hoàn liệu trình",
+        "khách hủy",
+        "tạo phiếu hoàn",
+        "cancel dịch vụ",
+        "hoàn sản phẩm"
+      ],
+      "endpoint": "POST /internal/skills/cancel_service_refund",
+      "input_schema": {
+        "type": "object",
+        "required": ["refund_type", "reference_id", "refund_amount", "refund_method", "reason"],
+        "properties": {
+          "refund_type": {
+            "type": "string",
+            "enum": ["treatment", "product", "bundle", "service"],
+            "description": "Loại đối tượng hoàn: liệu trình, sản phẩm, gói combo, dịch vụ lẻ"
+          },
+          "reference_id": { "type": "string", "description": "UUID liệu trình/đơn hàng/gói cần hoàn" },
+          "product_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Danh sách UUID sản phẩm cần hoàn (dùng khi refund_type=product)"
+          },
+          "refund_amount": { "type": "number", "description": "Số tiền hoàn thực tế (VND)" },
+          "refund_method": {
+            "type": "string",
+            "enum": ["CASH", "TRANSFER", "CARD", "SERVICE_CREDIT"],
+            "description": "Phương thức hoàn: tiền mặt, chuyển khoản, thẻ, hoàn vào credit tài khoản"
+          },
+          "reason": { "type": "string", "description": "Lý do hoàn (bắt buộc để lưu vết audit)" },
+          "note": { "type": "string", "description": "Ghi chú thêm" }
+        }
+      }
+    },
+    {
+      "name": "manage_marketing_cost",
+      "description": "Xem báo cáo hoặc ghi nhận chi phí marketing theo kênh (Facebook, Google, Zalo, offline). Dùng khi user muốn xem ROI marketing, ghi ngân sách ads, so sánh hiệu quả kênh.",
+      "triggers": [
+        "chi phí marketing",
+        "chi phí quảng cáo",
+        "ngân sách ads",
+        "marketing cost",
+        "chi phí facebook ads",
+        "chi phí google",
+        "roi marketing",
+        "hiệu quả kênh",
+        "ghi chi marketing",
+        "báo cáo marketing"
+      ],
+      "endpoint": "POST /internal/skills/manage_marketing_cost",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["list", "create"],
+            "description": "list: xem báo cáo chi phí; create: ghi nhận khoản chi marketing"
+          },
+          "channel": {
+            "type": "string",
+            "enum": ["facebook", "google", "zalo", "tiktok", "offline", "other"],
+            "description": "Kênh marketing (tuỳ chọn khi list để lọc)"
+          },
+          "period": {
+            "type": "string",
+            "enum": ["today", "week", "month", "quarter", "custom"],
+            "description": "Kỳ thời gian xem báo cáo"
+          },
+          "from_date": { "type": "string", "format": "date", "description": "Từ ngày (dùng khi period=custom)" },
+          "to_date": { "type": "string", "format": "date", "description": "Đến ngày (dùng khi period=custom)" },
+          "include_roi": { "type": "boolean", "default": false, "description": "Có tính ROI theo kênh không" },
+          "amount": { "type": "number", "description": "Số tiền chi (VND) — bắt buộc khi action=create" },
+          "date": { "type": "string", "format": "date", "description": "Ngày chi — bắt buộc khi action=create" },
+          "description": { "type": "string", "description": "Mô tả khoản chi — bắt buộc khi action=create" }
+        }
+      }
+    }
+  ]
+}

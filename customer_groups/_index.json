@@ -1,0 +1,151 @@
+{
+  "app": "crm",
+  "module": "customer_groups",
+  "version": "1.1.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id"
+  },
+  "_handler_path": "appcrm-api:/app/dist/modules/agent-tools/routes.js (host bind: /opt/crm/agent-tools-hermes.js)",
+  "_db_tables_required": ["customer_groups", "customer_group_members"],
+  "skills": [
+    {
+      "name": "get_customer_group_detail",
+      "description": "Lấy chi tiết 1 nhóm khách hàng CRM (CustomerGroup): tên + criteria + danh sách thành viên + thống kê. NHÓM Ở ĐÂY LÀ NHÓM PHÂN LOẠI KHÁCH HÀNG (vd 'KH VIP', 'KH thân thiết'), KHÔNG phải nhóm Zalo. App: crm. Mặc định trả 50 thành viên đầu.",
+      "triggers": ["chi tiết nhóm KH", "xem nhóm khách hàng", "thông tin nhóm KH", "group detail", "nhóm KH ID"],
+      "endpoint": "POST /internal/skills/get_customer_group_detail",
+      "input_schema": {
+        "type": "object", "required": ["group_id"],
+        "properties": {
+          "group_id": { "type": "string", "description": "UUID nhóm KH lấy từ list_customer_groups" }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'get_customer_group_detail'",
+      "verified_at": "2026-05-06"
+    },
+    {
+      "name": "create_customer_group",
+      "description": "Tạo nhóm phân loại khách hàng CRM mới (vd 'VIP Q1', 'Khách thân thiết'). App: crm. Auto_assign=true sẽ tự gán KH thỏa criteria vào nhóm sau khi tạo.",
+      "triggers": ["tạo nhóm KH", "thêm nhóm khách hàng", "create customer group", "phân nhóm khách", "tạo nhóm phân loại KH"],
+      "endpoint": "POST /internal/skills/create_customer_group",
+      "input_schema": {
+        "type": "object", "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "description": "Tên nhóm KH (bắt buộc)" },
+          "description": { "type": "string" },
+          "criteria": {
+            "type": "object",
+            "description": "Tiêu chí phân loại tự động (optional)",
+            "properties": {
+              "min_spent_amount": { "type": "number" },
+              "min_visits": { "type": "integer" },
+              "tags": { "type": "array", "items": { "type": "string" } },
+              "joined_within_days": { "type": "integer" }
+            }
+          },
+          "auto_assign": { "type": "boolean", "default": false },
+          "color": { "type": "string", "default": "#6b7280" }
+        }
+      },
+      "type": "action", "risk_level": "normal",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'create_customer_group'",
+      "verified_at": "2026-05-06"
+    },
+    {
+      "name": "update_customer_group",
+      "description": "Sửa thông tin nhóm phân loại khách hàng CRM (đổi tên, criteria, màu). App: crm.",
+      "triggers": ["sửa nhóm KH", "cập nhật nhóm khách hàng", "update customer group", "đổi tên nhóm KH"],
+      "endpoint": "POST /internal/skills/update_customer_group",
+      "input_schema": {
+        "type": "object", "required": ["group_id"],
+        "properties": {
+          "group_id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "criteria": { "type": "object" },
+          "color": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'update_customer_group'",
+      "verified_at": "2026-05-06"
+    },
+    {
+      "name": "delete_customer_group",
+      "description": "Xóa nhóm phân loại khách hàng CRM (KHÔNG xóa khách hàng, chỉ xóa nhóm và quan hệ thành viên). App: crm. Yêu cầu lý do để audit.",
+      "triggers": ["xóa nhóm KH", "delete customer group", "remove group", "xoá nhóm khách"],
+      "endpoint": "POST /internal/skills/delete_customer_group",
+      "input_schema": {
+        "type": "object", "required": ["group_id"],
+        "properties": {
+          "group_id": { "type": "string" },
+          "reason": { "type": "string", "description": "Lý do xóa (audit)" }
+        }
+      },
+      "type": "action", "risk_level": "high",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'delete_customer_group'",
+      "verified_at": "2026-05-06"
+    },
+    {
+      "name": "add_member_to_group",
+      "description": "Thêm 1 khách hàng vào 1 nhóm phân loại KH CRM. KHÔNG phải Zalo group. App: crm. Default role=MEMBER.",
+      "triggers": ["thêm KH vào nhóm", "add customer to group", "gán KH vào nhóm", "thêm thành viên nhóm KH"],
+      "endpoint": "POST /internal/skills/add_member_to_group",
+      "input_schema": {
+        "type": "object", "required": ["group_id", "customer_id"],
+        "properties": {
+          "group_id": { "type": "string", "description": "UUID nhóm KH" },
+          "customer_id": { "type": "string", "description": "UUID khách hàng" },
+          "role": { "type": "string", "enum": ["MEMBER", "VIP", "PARTNER"], "default": "MEMBER" }
+        }
+      },
+      "type": "action", "risk_level": "normal",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'add_member_to_group'",
+      "verified_at": "2026-05-06"
+    },
+    {
+      "name": "remove_member_from_group",
+      "description": "Xóa 1 khách hàng khỏi 1 nhóm phân loại KH CRM (giữ lại KH, chỉ remove quan hệ). App: crm. KHÔNG phải remove khỏi Zalo group.",
+      "triggers": ["xóa KH khỏi nhóm", "remove customer from group", "loại bỏ KH khỏi nhóm", "xoá thành viên nhóm KH"],
+      "endpoint": "POST /internal/skills/remove_member_from_group",
+      "input_schema": {
+        "type": "object", "required": ["group_id", "customer_id"],
+        "properties": {
+          "group_id": { "type": "string" },
+          "customer_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'remove_member_from_group'",
+      "verified_at": "2026-05-06"
+    },
+    {
+      "name": "list_group_members",
+      "description": "Liệt kê thành viên trong 1 nhóm phân loại KH CRM (paginated, sort theo added_at desc). App: crm. KHÔNG phải Zalo group members.",
+      "triggers": ["thành viên nhóm KH", "list group members", "danh sách KH trong nhóm", "ai trong nhóm"],
+      "endpoint": "POST /internal/skills/list_group_members",
+      "input_schema": {
+        "type": "object", "required": ["group_id"],
+        "properties": {
+          "group_id": { "type": "string" },
+          "role": { "type": "string", "enum": ["MEMBER", "VIP", "PARTNER", "ALL"], "default": "ALL" },
+          "limit": { "type": "integer", "default": 50, "maximum": 200 },
+          "offset": { "type": "integer", "default": 0 }
+        }
+      },
+      "type": "action", "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'list_group_members'",
+      "verified_at": "2026-05-06"
+    }
+  ]
+}

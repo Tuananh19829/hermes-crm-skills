@@ -1,0 +1,1127 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "find_customer",
+        "description": "Tìm khách hàng theo tên, SĐT, email hoặc tag. Dùng khi user hỏi 'tìm khách X', 'kh nào tên Mai', 'search customer 0901...'",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Tên, SĐT, email hoặc một phần thông tin"
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "tag": {
+                  "type": "string"
+                },
+                "lead_status": {
+                  "type": "string",
+                  "enum": [
+                    "NEW",
+                    "CONTACTED",
+                    "QUALIFIED",
+                    "WON",
+                    "LOST"
+                  ]
+                },
+                "last_order_after": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            },
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_lead",
+        "description": "Tạo lead mới từ thông tin user cung cấp. Dùng khi user muốn thêm khách tiềm năng mới.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "full_name"
+          ],
+          "properties": {
+            "full_name": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "lead_source": {
+              "type": "string",
+              "description": "Ví dụ: facebook, zalo, website, referral"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "update_lead_status",
+        "description": "Cập nhật trạng thái lead. Dùng khi user nói 'đã gọi cho kh X', 'kh X chốt rồi', 'kh X bỏ'.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "id",
+            "status"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "NEW",
+                "CONTACTED",
+                "QUALIFIED",
+                "WON",
+                "LOST"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "add_note",
+        "description": "Thêm ghi chú cho khách hàng. Dùng khi user muốn ghi lại thông tin cuộc gọi, meeting, quan sát.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "person_id",
+            "content"
+          ],
+          "properties": {
+            "person_id": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "search_orders",
+        "description": "Tìm đơn hàng theo khách/thời gian/trạng thái. Dùng khi user hỏi về đơn, order.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "person_id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "CONFIRMED",
+                "COMPLETED",
+                "CANCELLED",
+                "DELIVERED"
+              ]
+            },
+            "from_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "to_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 50
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "report_revenue",
+        "description": "Báo cáo doanh thu theo kỳ. Dùng khi user hỏi doanh thu hôm nay/tuần/tháng.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "period": {
+              "type": "string",
+              "enum": [
+                "today",
+                "week",
+                "month"
+              ],
+              "default": "month"
+            },
+            "from_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Dùng kèm to_date cho kỳ tuỳ chỉnh"
+            },
+            "to_date": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_campaigns",
+        "description": "Liệt kê pipeline funnel CRM và khuyến mãi đang chạy. Dùng khi user hỏi về chiến dịch, funnel.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 30
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "link_ads_lead",
+        "description": "Gắn thông tin Ads/Facebook vào khách hàng CRM (campaign_id, adset, ad, lead_id).",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "person_id"
+          ],
+          "properties": {
+            "person_id": {
+              "type": "string"
+            },
+            "fb_campaign_id": {
+              "type": "string"
+            },
+            "fb_adset_id": {
+              "type": "string"
+            },
+            "fb_ad_id": {
+              "type": "string"
+            },
+            "fb_lead_id": {
+              "type": "string"
+            },
+            "lead_source": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "bulk_tag",
+        "description": "Gắn tag cho nhiều khách cùng lúc. Dùng khi user muốn label/phân nhóm nhiều khách.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "person_ids",
+            "tags"
+          ],
+          "properties": {
+            "person_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "merge",
+                "replace"
+              ],
+              "default": "merge",
+              "description": "merge: thêm vào tag cũ, replace: thay toàn bộ"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_appointment",
+        "description": "Tạo lịch hẹn cho khách. Tự động: tìm người theo phone, nếu chưa có thì tạo (cần full_name); resolve service theo tên; pick branch mặc định. Nếu user nói 'đặt lịch khách Mai 14h thứ 6', extract phone+full_name+start_at+service_name.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "phone",
+            "start_at"
+          ],
+          "properties": {
+            "phone": {
+              "type": "string",
+              "description": "SĐT khách (bắt buộc, dùng để find-or-create person)"
+            },
+            "full_name": {
+              "type": "string",
+              "description": "Họ tên — bắt buộc nếu khách chưa tồn tại"
+            },
+            "start_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Thời gian hẹn ISO 8601 (vd 2026-05-10T14:00:00+07:00)"
+            },
+            "duration_min": {
+              "type": "integer",
+              "default": 60,
+              "maximum": 600
+            },
+            "service_name": {
+              "type": "string",
+              "description": "Tên dịch vụ để link vào lịch hẹn (optional, ILIKE)"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "update_appointment_status",
+        "description": "Đổi trạng thái lịch hẹn. Dùng khi 'lịch X đã check-in', 'hủy lịch X', 'hoàn thành lịch X'.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "id",
+            "status"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "UUID lịch hẹn"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "BOOKED",
+                "CHECKED_IN",
+                "COMPLETED",
+                "CANCELLED",
+                "NO_SHOW",
+                "WAITING"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_bundle",
+        "description": "Tạo combo dịch vụ. Resolve N service theo tên (ILIKE), insert product_bundles + product_bundle_items. Dùng khi 'tạo gói combo X gồm massage + foot detox', 'set combo Y giá 1tr5'.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "name",
+            "items"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Tên combo"
+            },
+            "bundle_price": {
+              "type": "number",
+              "description": "Giá combo (VND)"
+            },
+            "description": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "description": "Danh sách dịch vụ trong combo",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Tên dịch vụ (ILIKE search)"
+                  },
+                  "qty": {
+                    "type": "integer",
+                    "default": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_loyalty_tiers",
+        "description": "Liệt kê hạng thẻ thành viên trong workspace (NORMAL, VIP, GOLD, PLATINUM...), sort theo sort_order. Dùng khi user hỏi 'có những hạng nào', 'tier list', 'list loyalty tiers'.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "active_only": {
+              "type": "boolean",
+              "default": true,
+              "description": "Chỉ lấy hạng đang active"
+            },
+            "include_member_count": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_loyalty_tier",
+        "description": "Tạo hạng thẻ thành viên mới (vd Bạc, Vàng, Kim cương). Dùng khi 'thêm hạng X', 'tạo hạng VIP với giảm 10%'.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Tên hạng (vd Bạc, Vàng, Kim cương)"
+            },
+            "min_points": {
+              "type": "integer",
+              "default": 0
+            },
+            "min_spent_amount": {
+              "type": "number",
+              "default": 0
+            },
+            "discount_percent": {
+              "type": "integer",
+              "default": 0
+            },
+            "benefits": {
+              "type": "string",
+              "description": "Mô tả ưu đãi"
+            },
+            "color": {
+              "type": "string",
+              "default": "#6b7280"
+            },
+            "free_service_count": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_appointments",
+        "description": "Liệt kê lịch hẹn theo ngày/tuần/today, lọc theo status. Dùng khi user hỏi 'lịch hôm nay', 'ai đặt tuần này', 'lịch ngày X'.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "format": "date",
+              "description": "YYYY-MM-DD (timezone Asia/Ho_Chi_Minh). Bỏ qua nếu dùng range."
+            },
+            "range": {
+              "type": "string",
+              "enum": [
+                "today",
+                "week"
+              ],
+              "description": "today = ngày hôm nay (VN), week = ±7 ngày từ hiện tại"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "BOOKED",
+                "CHECKED_IN",
+                "COMPLETED",
+                "CANCELLED",
+                "NO_SHOW",
+                "WAITING"
+              ]
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "count_leads_today",
+        "description": "Đếm số leads tạo trong ngày hôm nay (today, theo timezone Asia/Ho_Chi_Minh). App: crm.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "Lọc theo nguồn (facebook/google/zalo/...)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_leads",
+        "description": "Liệt kê leads trong CRM (paginated). Khác list_ads_leads ở chỗ list_leads bao gồm cả leads thủ công + ads.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "NEW",
+                "CONTACTED",
+                "QUALIFIED",
+                "WON",
+                "LOST",
+                "ALL"
+              ],
+              "default": "ALL"
+            },
+            "source": {
+              "type": "string"
+            },
+            "from_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "to_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 30,
+              "maximum": 200
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "lead_detail",
+        "description": "Chi tiết 1 lead: thông tin + lịch sử contact + ads source nếu có.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "lead_id"
+          ],
+          "properties": {
+            "lead_id": {
+              "type": "string",
+              "description": "UUID lead"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sales_summary",
+        "description": "Tổng quan doanh số (sales): tổng đơn + doanh thu + AOV + conversion. Khác report_revenue ở chỗ tập trung sales pipeline + KH mới.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "period": {
+              "type": "string",
+              "enum": [
+                "today",
+                "week",
+                "month",
+                "quarter",
+                "year"
+              ],
+              "default": "month"
+            },
+            "from_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "to_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "branch_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_services",
+        "description": "Liệt kê dịch vụ active của spa/salon (alias cho search_services). KHÔNG phải tools coding/debug. Dùng khi user hỏi 'spa có dịch vụ gì', 'list DV'.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Lọc theo tên DV (ILIKE)"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 30,
+              "maximum": 100
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_customer_group_detail",
+        "description": "Lấy chi tiết 1 nhóm khách hàng CRM (CustomerGroup): tên + criteria + danh sách thành viên + thống kê. NHÓM Ở ĐÂY LÀ NHÓM PHÂN LOẠI KHÁCH HÀNG (vd 'KH VIP', 'KH thân thiết'), KHÔNG phải nhóm Zalo. App: crm. Mặc định trả 50 thành viên đầu.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "group_id"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "string",
+              "description": "UUID nhóm KH lấy từ list_customer_groups"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_customer_group",
+        "description": "Tạo nhóm phân loại khách hàng CRM mới (vd 'VIP Q1', 'Khách thân thiết'). App: crm. Auto_assign=true sẽ tự gán KH thỏa criteria vào nhóm sau khi tạo.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Tên nhóm KH (bắt buộc)"
+            },
+            "description": {
+              "type": "string"
+            },
+            "criteria": {
+              "type": "object",
+              "description": "Tiêu chí phân loại tự động (optional)",
+              "properties": {
+                "min_spent_amount": {
+                  "type": "number"
+                },
+                "min_visits": {
+                  "type": "integer"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "joined_within_days": {
+                  "type": "integer"
+                }
+              }
+            },
+            "auto_assign": {
+              "type": "boolean",
+              "default": false
+            },
+            "color": {
+              "type": "string",
+              "default": "#6b7280"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "update_customer_group",
+        "description": "Sửa thông tin nhóm phân loại khách hàng CRM (đổi tên, criteria, màu). App: crm.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "group_id"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "criteria": {
+              "type": "object"
+            },
+            "color": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "delete_customer_group",
+        "description": "Xóa nhóm phân loại khách hàng CRM (KHÔNG xóa khách hàng, chỉ xóa nhóm và quan hệ thành viên). App: crm. Yêu cầu lý do để audit.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "group_id"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string",
+              "description": "Lý do xóa (audit)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "add_member_to_group",
+        "description": "Thêm 1 khách hàng vào 1 nhóm phân loại KH CRM. KHÔNG phải Zalo group. App: crm. Default role=MEMBER.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "group_id",
+            "customer_id"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "string",
+              "description": "UUID nhóm KH"
+            },
+            "customer_id": {
+              "type": "string",
+              "description": "UUID khách hàng"
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "MEMBER",
+                "VIP",
+                "PARTNER"
+              ],
+              "default": "MEMBER"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "remove_member_from_group",
+        "description": "Xóa 1 khách hàng khỏi 1 nhóm phân loại KH CRM (giữ lại KH, chỉ remove quan hệ). App: crm. KHÔNG phải remove khỏi Zalo group.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "group_id",
+            "customer_id"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "string"
+            },
+            "customer_id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_group_members",
+        "description": "Liệt kê thành viên trong 1 nhóm phân loại KH CRM (paginated, sort theo added_at desc). App: crm. KHÔNG phải Zalo group members.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "group_id"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "MEMBER",
+                "VIP",
+                "PARTNER",
+                "ALL"
+              ],
+              "default": "ALL"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_customer_detail",
+        "description": "Xem chi tiết khách hàng: thông tin cá nhân, lịch sử mua hàng, điểm loyalty, thẻ thành viên, công nợ. Dùng khi đã có ID hoặc user muốn tra toàn bộ hồ sơ khách.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "UUID của khách hàng"
+            },
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "orders",
+                  "notes",
+                  "loyalty",
+                  "vouchers",
+                  "debt",
+                  "cards"
+                ]
+              },
+              "default": [
+                "orders",
+                "notes",
+                "loyalty"
+              ],
+              "description": "Chọn sections cần trả về để tối ưu payload"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_customer",
+        "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead).",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "full_name"
+          ],
+          "properties": {
+            "full_name": {
+              "type": "string",
+              "description": "Họ và tên đầy đủ"
+            },
+            "phone": {
+              "type": "string",
+              "description": "Số điện thoại (định dạng 10 số, bắt đầu 0)"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "gender": {
+              "type": "string",
+              "enum": [
+                "MALE",
+                "FEMALE",
+                "OTHER"
+              ]
+            },
+            "birthday": {
+              "type": "string",
+              "format": "date",
+              "description": "Ngày sinh dạng YYYY-MM-DD"
+            },
+            "address": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string",
+              "description": "Ghi chú ban đầu về khách"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tag gắn ngay khi tạo, ví dụ: ['vip', 'referral']"
+            },
+            "group_id": {
+              "type": "string",
+              "description": "Gán vào nhóm khách hàng ngay khi tạo"
+            },
+            "source": {
+              "type": "string",
+              "description": "Nguồn khách: zalo, facebook, walk_in, referral, v.v."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_customers",
+        "description": "Liệt kê khách hàng (alias của search_customers). Dùng khi user nói 'list customers', 'danh sách khách hàng', 'all customers'.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0
+            },
+            "tier": {
+              "type": "string",
+              "enum": [
+                "NORMAL",
+                "VIP",
+                "ALL"
+              ],
+              "default": "ALL"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "top_sources",
+        "description": "Top nguồn khách hàng (Walk-in/Referral/Ads/Zalo/...) theo doanh thu hoặc số lượng KH trong kỳ. Dùng khi user hỏi 'nguồn nào nhiều khách nhất', 'top channel', 'KH đến từ đâu'.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "period": {
+              "type": "string",
+              "enum": [
+                "today",
+                "week",
+                "month",
+                "quarter",
+                "year"
+              ],
+              "default": "month"
+            },
+            "from_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "to_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "metric": {
+              "type": "string",
+              "enum": [
+                "customer_count",
+                "revenue",
+                "ltv"
+              ],
+              "default": "customer_count"
+            },
+            "top_n": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_service",
+        "description": "Tạo dịch vụ mới hoặc cập nhật dịch vụ hiện có (tên, danh mục, giá, thời gian, vật tư cần dùng, hoa hồng nhân viên). Dùng khi user muốn thêm hoặc sửa thông tin dịch vụ.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "action"
+          ],
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
+                "create",
+                "update"
+              ],
+              "description": "create: tạo dịch vụ mới; update: cập nhật dịch vụ hiện có"
+            },
+            "service_id": {
+              "type": "string",
+              "description": "UUID dịch vụ (bắt buộc khi action=update)"
+            },
+            "service_data": {
+              "type": "object",
+              "description": "Thông tin dịch vụ",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Tên dịch vụ"
+                },
+                "category_id": {
+                  "type": "string",
+                  "description": "UUID danh mục dịch vụ"
+                },
+                "category_name": {
+                  "type": "string",
+                  "description": "Tên danh mục (tạo mới nếu chưa có)"
+                },
+                "price": {
+                  "type": "number",
+                  "description": "Giá niêm yết (VND)"
+                },
+                "duration_minutes": {
+                  "type": "integer",
+                  "description": "Thời gian thực hiện (phút)"
+                },
+                "commission_rate": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Tỷ lệ hoa hồng (0–1), ví dụ: 0.15 = 15%"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Mô tả dịch vụ"
+                },
+                "is_active": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "materials": {
+                  "type": "array",
+                  "description": "Vật tư tiêu hao cần dùng mỗi buổi",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "product_id",
+                      "quantity_per_session"
+                    ],
+                    "properties": {
+                      "product_id": {
+                        "type": "string",
+                        "description": "UUID sản phẩm vật tư"
+                      },
+                      "quantity_per_session": {
+                        "type": "number",
+                        "description": "Lượng dùng mỗi buổi"
+                      },
+                      "unit": {
+                        "type": "string",
+                        "description": "Đơn vị (ml, g, cái...)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "total": 32,
+  "note": "Filtered."
+}

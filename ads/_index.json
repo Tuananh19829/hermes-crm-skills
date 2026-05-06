@@ -1,0 +1,332 @@
+{
+  "app": "crm",
+  "version": "2.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "ads_dashboard",
+      "description": "Tổng quan hiệu quả quảng cáo: số leads, CPL, tỉ lệ chuyển đổi, chi phí theo kênh. Dùng khi user hỏi 'ads hôm nay thế nào', 'CPL tháng này', 'hiệu quả quảng cáo'.",
+      "triggers": ["ads dashboard", "tổng quan quảng cáo", "cpl", "chi phí quảng cáo", "hiệu quả ads", "leads hôm nay", "chuyển đổi ads"],
+      "endpoint": "POST /internal/skills/ads_dashboard",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month"], "default": "today" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "channel": { "type": "string", "description": "Lọc theo kênh: facebook, google, zalo, tiktok hoặc để trống = tất cả" }
+        }
+      }
+    },
+    {
+      "name": "list_ads_leads",
+      "description": "Danh sách leads đến từ quảng cáo, lọc theo nguồn/trạng thái/nhân viên phụ trách. Dùng khi user hỏi 'leads facebook hôm nay', 'leads chưa gọi', 'leads của NV X'.",
+      "triggers": ["leads ads", "leads facebook", "leads quảng cáo", "danh sách leads", "list ads leads", "leads chưa gọi", "leads mới"],
+      "endpoint": "POST /internal/skills/list_ads_leads",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string", "description": "facebook | google | zalo | tiktok | referral" },
+          "status": { "type": "string", "enum": ["NEW", "CONTACTED", "QUALIFIED", "WON", "LOST"] },
+          "assigned_to": { "type": "string", "description": "UUID nhân viên phụ trách" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 20, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "update_lead_funnel",
+      "description": "Di chuyển lead qua các bước funnel CRM (Mới→Quan tâm→Đặt lịch→Chốt). Dùng khi user nói 'kh X đã quan tâm', 'chuyển lead sang đặt lịch', 'move funnel'.",
+      "triggers": ["di chuyển lead", "chuyển funnel", "move lead", "update funnel", "lead quan tâm", "lead đặt lịch", "chuyển bước"],
+      "endpoint": "POST /internal/skills/update_lead_funnel",
+      "input_schema": {
+        "type": "object",
+        "required": ["lead_id", "stage"],
+        "properties": {
+          "lead_id": { "type": "string", "description": "UUID lead hoặc person_id" },
+          "stage": { "type": "string", "enum": ["NEW", "INTERESTED", "APPOINTMENT", "WON", "LOST"], "description": "Bước funnel mới" },
+          "note": { "type": "string", "description": "Ghi chú lý do chuyển bước" },
+          "follow_up_at": { "type": "string", "format": "date-time", "description": "Lịch follow-up tiếp theo nếu có" }
+        }
+      }
+    },
+    {
+      "name": "telesale_call_log",
+      "description": "Ghi log cuộc gọi telesale: kết quả, ghi chú, thời gian gọi lại. Dùng khi NV báo 'đã gọi kh X', 'kh không bắt máy', 'hẹn gọi lại lúc 3h'.",
+      "triggers": ["ghi cuộc gọi", "log call", "call log", "đã gọi", "không bắt máy", "hẹn gọi lại", "telesale log"],
+      "endpoint": "POST /internal/skills/telesale_call_log",
+      "input_schema": {
+        "type": "object",
+        "required": ["person_id", "result"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "result": { "type": "string", "enum": ["ANSWERED", "NO_ANSWER", "BUSY", "CALLBACK", "WON", "NOT_INTERESTED"], "description": "Kết quả cuộc gọi" },
+          "duration_seconds": { "type": "integer", "description": "Thời lượng cuộc gọi (giây)" },
+          "note": { "type": "string", "description": "Ghi chú nội dung cuộc gọi" },
+          "callback_at": { "type": "string", "format": "date-time", "description": "Thời gian gọi lại (nếu result=CALLBACK)" }
+        }
+      }
+    },
+    {
+      "name": "list_telesale_queue",
+      "description": "Danh sách số cần gọi hôm nay theo nhân viên, ưu tiên theo hẹn callback. Dùng khi NV hỏi 'hôm nay tôi gọi ai', 'danh sách telesale', 'queue gọi điện'.",
+      "triggers": ["danh sách gọi", "queue telesale", "hôm nay gọi ai", "telesale queue", "lịch gọi", "ai cần gọi"],
+      "endpoint": "POST /internal/skills/list_telesale_queue",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "assigned_to": { "type": "string", "description": "UUID nhân viên, mặc định = người đang gọi API" },
+          "date": { "type": "string", "format": "date", "description": "Ngày cần xem, mặc định = hôm nay" },
+          "include_callbacks": { "type": "boolean", "default": true, "description": "Bao gồm các cuộc hẹn gọi lại" },
+          "limit": { "type": "integer", "default": 30, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "name": "send_zalo_message",
+      "description": "Gửi tin nhắn Zalo cho 1 khách hàng cụ thể. Dùng khi user muốn nhắn Zalo cá nhân: 'nhắn Zalo kh X', 'gửi tin Zalo cho số 0901...'.",
+      "triggers": ["gửi zalo", "nhắn zalo", "send zalo", "zalo kh", "nhắn tin zalo", "zalo message"],
+      "endpoint": "POST /internal/skills/send_zalo_message",
+      "input_schema": {
+        "type": "object",
+        "required": ["person_id", "message"],
+        "properties": {
+          "person_id": { "type": "string", "description": "UUID khách hàng (đã liên kết Zalo)" },
+          "message": { "type": "string", "description": "Nội dung tin nhắn" },
+          "template_id": { "type": "string", "description": "ID template nếu dùng ZNS template" },
+          "template_data": { "type": "object", "description": "Dữ liệu điền vào template (nếu dùng template)" }
+        }
+      }
+    },
+    {
+      "name": "send_zalo_broadcast",
+      "description": "Gửi broadcast Zalo cho nhóm khách hàng theo điều kiện lọc. Dùng khi user muốn gửi hàng loạt: 'gửi Zalo cho kh VIP', 'broadcast Zalo chưa mua tháng này'.",
+      "triggers": ["broadcast zalo", "gửi zalo hàng loạt", "zalo broadcast", "nhắn nhiều kh", "gửi bulk zalo", "gửi zalo nhóm"],
+      "endpoint": "POST /internal/skills/send_zalo_broadcast",
+      "input_schema": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": { "type": "string", "description": "Nội dung tin nhắn broadcast" },
+          "template_id": { "type": "string" },
+          "template_data": { "type": "object" },
+          "filter": {
+            "type": "object",
+            "description": "Điều kiện lọc người nhận",
+            "properties": {
+              "tags": { "type": "array", "items": { "type": "string" } },
+              "lead_status": { "type": "string", "enum": ["NEW", "CONTACTED", "QUALIFIED", "WON", "LOST"] },
+              "last_order_before": { "type": "string", "format": "date" },
+              "last_order_after": { "type": "string", "format": "date" }
+            }
+          },
+          "dry_run": { "type": "boolean", "default": false, "description": "true = chỉ đếm người nhận, không gửi thật" }
+        }
+      }
+    },
+    {
+      "name": "list_zalo_templates",
+      "description": "Xem danh sách template Zalo (ZNS) đã cấu hình trong workspace. Dùng khi user hỏi 'có template Zalo nào', 'list zalo template', 'template nhắn kh'.",
+      "triggers": ["template zalo", "zalo template", "list template", "zns template", "mẫu tin zalo"],
+      "endpoint": "POST /internal/skills/list_zalo_templates",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "active_only": { "type": "boolean", "default": true, "description": "Chỉ lấy template đang hoạt động" },
+          "limit": { "type": "integer", "default": 20 }
+        }
+      }
+    },
+    {
+      "name": "ai_analyze_customer",
+      "description": "AI phân tích hành vi, sở thích, vòng đời khách hàng và gợi ý dịch vụ phù hợp. Dùng khi user hỏi 'kh X phù hợp dịch vụ gì', 'phân tích kh', 'AI nhận xét khách'.",
+      "triggers": ["phân tích khách", "ai analyze", "gợi ý dịch vụ", "kh phù hợp gì", "nhận xét khách", "ai phân tích"],
+      "endpoint": "POST /internal/skills/ai_analyze_customer",
+      "input_schema": {
+        "type": "object",
+        "required": ["person_id"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "focus": { "type": "string", "enum": ["behavior", "preferences", "lifetime_value", "churn_risk", "upsell"], "description": "Góc phân tích cụ thể, mặc định = toàn diện" }
+        }
+      }
+    },
+    {
+      "name": "ai_suggest_followup",
+      "description": "AI gợi ý nội dung follow-up phù hợp cho khách hàng cụ thể (tin nhắn, ưu đãi, timing). Dùng khi NV hỏi 'nên nhắn gì cho kh X', 'follow-up kh X thế nào'.",
+      "triggers": ["gợi ý follow-up", "nhắn gì cho kh", "follow up kh", "ai suggest", "nên liên hệ thế nào", "ai gợi ý"],
+      "endpoint": "POST /internal/skills/ai_suggest_followup",
+      "input_schema": {
+        "type": "object",
+        "required": ["person_id"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "channel": { "type": "string", "enum": ["zalo", "call", "email", "any"], "default": "any", "description": "Kênh liên hệ ưu tiên" },
+          "context": { "type": "string", "description": "Ngữ cảnh bổ sung (ví dụ: 'kh vừa hỏi về dịch vụ X')" }
+        }
+      }
+    },
+    {
+      "name": "list_academy_courses",
+      "description": "Danh sách khóa học nội bộ dành cho nhân viên trong hệ thống Academy. Dùng khi NV hỏi 'có khóa học gì', 'danh sách training', 'học gì hôm nay'.",
+      "triggers": ["khóa học", "academy", "training", "danh sách học", "list courses", "nội dung học", "khoá học nv"],
+      "endpoint": "POST /internal/skills/list_academy_courses",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "string", "description": "Danh mục: telesale | service | product | soft_skill" },
+          "status": { "type": "string", "enum": ["active", "draft", "archived"], "default": "active" },
+          "limit": { "type": "integer", "default": 20 }
+        }
+      }
+    },
+    {
+      "name": "track_academy_attendance",
+      "description": "Điểm danh hoặc xem tiến độ học của nhân viên trong Academy. Dùng khi user nói 'điểm danh khóa X', 'NV Y học đến đâu', 'tiến độ training'.",
+      "triggers": ["điểm danh", "tiến độ học", "attendance", "track academy", "nv học đến đâu", "training progress"],
+      "endpoint": "POST /internal/skills/track_academy_attendance",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "course_id": { "type": "string", "description": "UUID khóa học cụ thể" },
+          "staff_id": { "type": "string", "description": "UUID nhân viên, mặc định = người gọi API" },
+          "action": { "type": "string", "enum": ["check_in", "view_progress"], "default": "view_progress" }
+        }
+      }
+    },
+    {
+      "name": "manage_webhooks",
+      "description": "Xem, tạo và test webhook kết nối nguồn Ads vào CRM (Facebook Lead Ads, Google Form, Zalo OA).",
+      "triggers": ["quản lý webhook", "xem webhook", "tạo webhook", "test webhook", "webhook facebook", "webhook google form", "webhook zalo", "kết nối ads"],
+      "endpoint": "POST /internal/skills/manage_webhooks",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "test", "get", "toggle", "get_logs"] },
+          "webhook_id": { "type": "string" },
+          "source": { "type": "string", "enum": ["facebook", "google_form", "zalo"] },
+          "name": { "type": "string" },
+          "target_url": { "type": "string" },
+          "secret": { "type": "string" },
+          "active": { "type": "boolean" },
+          "log_limit": { "type": "integer", "default": 20 }
+        }
+      }
+    },
+    {
+      "name": "manage_ads_settings",
+      "description": "Xem và cập nhật cấu hình kết nối tài khoản Ads (Facebook Page, Ad Account, Google Ads ID) vào CRM.",
+      "triggers": ["cấu hình ads", "kết nối facebook ads", "kết nối google ads", "ads settings", "tài khoản quảng cáo", "facebook page id", "ad account id"],
+      "endpoint": "POST /internal/skills/manage_ads_settings",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["get", "update", "disconnect", "verify"] },
+          "platform": { "type": "string", "enum": ["facebook", "google", "zalo", "tiktok"] },
+          "config": { "type": "object", "description": "Dữ liệu cấu hình theo từng platform" }
+        }
+      }
+    },
+    {
+      "name": "telesale_hub_summary",
+      "description": "Dashboard telesale hôm nay: cần gọi bao nhiêu, đã gọi, tỷ lệ tiếp cận, callback cần xử lý.",
+      "triggers": ["dashboard telesale", "telesale hôm nay", "cần gọi bao nhiêu", "đã gọi bao nhiêu", "telesale hub", "tiến độ telesale", "số liệu gọi điện hôm nay"],
+      "endpoint": "POST /internal/skills/telesale_hub_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string", "format": "date", "description": "Ngày cần xem, mặc định = hôm nay" },
+          "staff_id": { "type": "string", "description": "UUID nhân viên, mặc định = người gọi API" },
+          "include_team": { "type": "boolean", "default": false },
+          "include_alerts": { "type": "boolean", "default": true }
+        }
+      }
+    },
+    {
+      "name": "manage_telesale_scripts",
+      "description": "Xem, tạo và chỉnh sửa kịch bản gọi điện telesale theo từng tình huống (leads mới, callback, chốt đơn...).",
+      "triggers": ["kịch bản telesale", "script gọi điện", "tạo kịch bản", "xem kịch bản", "sửa script", "kịch bản cuộc gọi", "script leads mới"],
+      "endpoint": "POST /internal/skills/manage_telesale_scripts",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "get", "create", "update", "archive", "suggest"] },
+          "script_id": { "type": "string" },
+          "person_id": { "type": "string" },
+          "situation": { "type": "string", "enum": ["new_lead", "callback", "re_engage", "upsell", "appointment_confirm", "lost_recovery"] },
+          "script_data": { "type": "object" },
+          "limit": { "type": "integer", "default": 20 }
+        }
+      }
+    },
+    {
+      "name": "zalo_config",
+      "description": "Xem và cập nhật cấu hình Zalo OA (Official Account ID, ZNS quota còn lại, cài đặt auto-reply).",
+      "triggers": ["cấu hình zalo", "zalo oa", "zalo official account", "zns quota", "auto reply zalo", "zalo config", "quota zns còn bao nhiêu"],
+      "endpoint": "POST /internal/skills/zalo_config",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["get", "update", "verify", "get_quota", "get_templates"] },
+          "config": { "type": "object", "description": "Cấu hình Zalo OA và auto-reply" }
+        }
+      }
+    },
+    {
+      "name": "zalo_live_chat",
+      "description": "Xem danh sách hội thoại Zalo OA, tin nhắn gần đây, và nhận gợi ý AI reply cho từng khách hàng.",
+      "triggers": ["chat zalo", "tin nhắn zalo", "hội thoại zalo", "zalo live chat", "zalo inbox", "khách nhắn zalo", "zalo chưa trả lời", "gợi ý reply zalo"],
+      "endpoint": "POST /internal/skills/zalo_live_chat",
+      "input_schema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list_conversations", "get_messages", "suggest_reply", "mark_read"] },
+          "conversation_id": { "type": "string" },
+          "person_id": { "type": "string" },
+          "filter": { "type": "string", "enum": ["all", "unread", "unanswered", "today"], "default": "all" },
+          "message_limit": { "type": "integer", "default": 20 },
+          "suggest_context": { "type": "string" },
+          "limit": { "type": "integer", "default": 30 }
+        }
+      }
+    },
+    {
+      "name": "ai_assistant_chat",
+      "description": "Gửi câu hỏi đến AI Assistant CRM, nhận phân tích kinh doanh, gợi ý hành động và tư vấn chiến lược.",
+      "triggers": ["hỏi ai", "ai assistant", "ai crm", "phân tích giúp tôi", "gợi ý ai", "ai tư vấn", "chat với ai", "ai giúp tôi", "ai nhận xét"],
+      "endpoint": "POST /internal/skills/ai_assistant_chat",
+      "input_schema": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": { "type": "string", "description": "Câu hỏi hoặc yêu cầu của người dùng" },
+          "context": {
+            "type": "object",
+            "properties": {
+              "focus": { "type": "string", "enum": ["telesale", "marketing", "customer", "revenue", "kpi", "general"] },
+              "date_range": { "type": "object", "properties": { "start": { "type": "string" }, "end": { "type": "string" } } },
+              "branch_id": { "type": "string" },
+              "staff_id": { "type": "string" },
+              "person_id": { "type": "string" }
+            }
+          },
+          "mode": { "type": "string", "enum": ["analyze", "suggest", "draft", "summarize"], "default": "analyze" },
+          "language": { "type": "string", "default": "vi" },
+          "max_tokens": { "type": "integer", "default": 1000 }
+        }
+      }
+    }
+  ]
+}

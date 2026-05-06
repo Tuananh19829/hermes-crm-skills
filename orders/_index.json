@@ -1,0 +1,122 @@
+{
+  "app": "crm",
+  "module": "orders",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "list_orders",
+      "description": "Liệt kê đơn hàng theo kỳ/KH/status/channel. Khác invoice — order có thể chưa thanh toán hoặc đang giao.",
+      "triggers": ["danh sách đơn hàng", "list orders", "đơn hôm nay", "đơn của khách", "đơn chưa giao", "đơn còn nợ"],
+      "endpoint": "POST /internal/skills/list_orders",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": { "type": "string" },
+          "channel": { "type": "string", "enum": ["TAI_CHO", "ONLINE", "ZALO", "FACEBOOK", "TIKTOK", "PHONE"] },
+          "status": { "type": "string", "enum": ["PENDING", "CONFIRMED", "PACKING", "SHIPPING", "DELIVERED", "CANCELLED", "RETURNED", "ALL"], "default": "ALL" },
+          "payment_status": { "type": "string", "enum": ["UNPAID", "PARTIAL", "PAID", "ALL"], "default": "ALL" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "period": { "type": "string", "enum": ["today", "week", "month"] },
+          "has_debt": { "type": "boolean" },
+          "limit": { "type": "integer", "default": 30, "maximum": 200 },
+          "offset": { "type": "integer", "default": 0 }
+        }
+      },
+      "type": "action", "risk_level": "read", "requires_approval": false
+    },
+    {
+      "name": "orders_summary",
+      "description": "Aggregate đơn hàng: tổng đơn, đã thanh toán, còn nợ, đã hủy. Dùng cho widget cards trên trang Đơn hàng.",
+      "triggers": ["tổng đơn", "summary đơn", "thống kê đơn hàng"],
+      "endpoint": "POST /internal/skills/orders_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month", "quarter"], "default": "month" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "branch_id": { "type": "string" },
+          "channel": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read", "requires_approval": false
+    },
+    {
+      "name": "get_order_detail",
+      "description": "Chi tiết đơn hàng: items + payments + delivery info + invoice liên quan.",
+      "triggers": ["chi tiết đơn", "xem đơn hàng", "ORD-2026"],
+      "endpoint": "POST /internal/skills/get_order_detail",
+      "input_schema": {
+        "type": "object", "required": ["order_id"],
+        "properties": {
+          "order_id": { "type": "string" },
+          "include": { "type": "array", "items": { "type": "string", "enum": ["items", "payments", "delivery", "invoice", "customer"] }, "default": ["items", "payments", "delivery"] }
+        }
+      },
+      "type": "action", "risk_level": "read", "requires_approval": false
+    },
+    {
+      "name": "create_order",
+      "description": "Tạo đơn hàng mới (channel/items/delivery/payment_terms). Khác invoice ở chỗ order có thể đang giao.",
+      "triggers": ["tạo đơn", "tạo đơn hàng", "create order", "đơn mới"],
+      "endpoint": "POST /internal/skills/create_order",
+      "input_schema": {
+        "type": "object", "required": ["person_id", "items"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "channel": { "type": "string", "enum": ["TAI_CHO", "ONLINE", "ZALO", "FACEBOOK", "TIKTOK", "PHONE"], "default": "TAI_CHO" },
+          "items": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["product_id", "qty", "unit_price"],
+              "properties": {
+                "product_id": { "type": "string" },
+                "qty": { "type": "integer", "minimum": 1 },
+                "unit_price": { "type": "number" },
+                "discount": { "type": "number", "default": 0 }
+              }
+            }
+          },
+          "delivery_info": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "phone": { "type": "string" },
+              "shipping_provider_id": { "type": "string" },
+              "shipping_fee": { "type": "number" }
+            }
+          },
+          "discount": { "type": "number", "default": 0 },
+          "voucher_code": { "type": "string" },
+          "note": { "type": "string" },
+          "auto_create_invoice": { "type": "boolean", "default": true }
+        }
+      },
+      "type": "action", "risk_level": "high", "requires_approval": false
+    },
+    {
+      "name": "update_order_status",
+      "description": "Đổi trạng thái đơn theo workflow: PENDING → CONFIRMED → PACKING → SHIPPING → DELIVERED hoặc CANCELLED/RETURNED.",
+      "triggers": ["đổi trạng thái đơn", "xác nhận đơn", "đóng gói đơn", "giao đơn", "hủy đơn", "trả hàng"],
+      "endpoint": "POST /internal/skills/update_order_status",
+      "input_schema": {
+        "type": "object", "required": ["order_id", "status"],
+        "properties": {
+          "order_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["PENDING", "CONFIRMED", "PACKING", "SHIPPING", "DELIVERED", "CANCELLED", "RETURNED"] },
+          "tracking_code": { "type": "string", "description": "Bắt buộc khi status=SHIPPING" },
+          "reason": { "type": "string", "description": "Bắt buộc khi status=CANCELLED hoặc RETURNED" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal", "requires_approval": false
+    }
+  ]
+}

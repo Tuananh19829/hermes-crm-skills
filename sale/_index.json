@@ -1,0 +1,425 @@
+{
+  "app": "crm",
+  "module": "sale",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id"
+  },
+  "description": "Module Sale: Promotion (khuyến mãi), Discount Campaigns (giảm giá theo kỳ), Sales Pipeline (cơ hội bán + target), Flash Sale, Sales Leaderboard. Khác Marketing/Voucher: Sale tập trung vào sale event ngắn hạn (Flash Sale 1 ngày, Black Friday, sinh nhật spa) và đo hiệu quả bán hàng theo NV/cơ sở.",
+  "skills": [
+    {
+      "name": "sale_summary",
+      "description": "Tổng quan Sale: khuyến mãi đang chạy, doanh thu sale, tỷ lệ chuyển đổi, top NV bán.",
+      "triggers": ["tổng quan sale", "sale dashboard", "sale hôm nay"],
+      "endpoint": "POST /internal/skills/sale_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month"], "default": "today" },
+          "branch_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read", "requires_approval": false
+    },
+    {
+      "name": "list_promotions",
+      "description": "Liệt kê khuyến mãi (khác Voucher campaign — Promotion là discount toàn shop hoặc theo SP/DV cụ thể, không cần code).",
+      "triggers": ["danh sách khuyến mãi", "list promotion", "khuyến mãi đang chạy"],
+      "endpoint": "POST /internal/skills/list_promotions",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["DRAFT", "SCHEDULED", "ACTIVE", "ENDED", "PAUSED", "ALL"], "default": "ALL" },
+          "type": { "type": "string", "enum": ["percent_off", "fixed_off", "buy_x_get_y", "bundle_deal", "flash_sale", "all"], "default": "all" },
+          "applies_to": { "type": "string", "enum": ["all_items", "service", "product", "category", "specific_items"] },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "branch_id": { "type": "string" },
+          "limit": { "type": "integer", "default": 30 },
+          "offset": { "type": "integer", "default": 0 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "get_promotion_detail",
+      "description": "Chi tiết khuyến mãi: rules + items áp dụng + redemptions + revenue impact.",
+      "triggers": ["chi tiết khuyến mãi", "promotion detail"],
+      "endpoint": "POST /internal/skills/get_promotion_detail",
+      "input_schema": {
+        "type": "object", "required": ["promotion_id"],
+        "properties": {
+          "promotion_id": { "type": "string" },
+          "include": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["rules", "items", "redemptions", "stats"] },
+            "default": ["rules", "items", "stats"]
+          }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_promotion",
+      "description": "Tạo khuyến mãi mới (% off / số tiền fix / mua X tặng Y / combo deal / flash sale).",
+      "triggers": ["tạo khuyến mãi", "thêm sale", "create promotion"],
+      "endpoint": "POST /internal/skills/create_promotion",
+      "input_schema": {
+        "type": "object",
+        "required": ["name", "type", "from_date", "to_date"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["percent_off", "fixed_off", "buy_x_get_y", "bundle_deal", "flash_sale"],
+            "description": "percent_off: giảm theo %; fixed_off: giảm số tiền cố định; buy_x_get_y: mua N tặng M; bundle_deal: combo giá ưu đãi; flash_sale: ngắn hạn"
+          },
+          "discount_value": { "type": "number", "description": "% hoặc VND tuỳ type" },
+          "max_discount_amount": { "type": "number", "description": "Mức giảm tối đa cho percent_off" },
+          "min_order_value": { "type": "number" },
+          "applies_to": { "type": "string", "enum": ["all_items", "service", "product", "category", "specific_items"], "default": "all_items" },
+          "target_item_ids": { "type": "array", "items": { "type": "string" } },
+          "category_id": { "type": "string" },
+          "buy_x_qty": { "type": "integer", "description": "N (dùng với buy_x_get_y)" },
+          "get_y_qty": { "type": "integer", "description": "M (dùng với buy_x_get_y)" },
+          "from_date": { "type": "string", "format": "date-time" },
+          "to_date": { "type": "string", "format": "date-time" },
+          "from_time_of_day": { "type": "string", "description": "vd 18:00 cho happy hour" },
+          "to_time_of_day": { "type": "string", "description": "vd 22:00" },
+          "days_of_week": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 6 }, "description": "0=CN, 1=T2..." },
+          "branch_ids": { "type": "array", "items": { "type": "string" }, "description": "Để trống = tất cả CN" },
+          "tier_required": { "type": "string", "enum": ["NORMAL", "VIP", "any"], "default": "any" },
+          "stackable_with_voucher": { "type": "boolean", "default": false },
+          "stackable_with_other_promotion": { "type": "boolean", "default": false },
+          "limit_per_customer": { "type": "integer" },
+          "total_usage_limit": { "type": "integer" },
+          "auto_apply": { "type": "boolean", "default": true, "description": "true = tự áp khi đủ điều kiện; false = NV phải tick chọn" },
+          "banner_image_url": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "update_promotion",
+      "description": "Sửa khuyến mãi (chỉ khi chưa active hoặc với field không ảnh hưởng tính giá).",
+      "triggers": ["sửa khuyến mãi", "update promotion"],
+      "endpoint": "POST /internal/skills/update_promotion",
+      "input_schema": {
+        "type": "object", "required": ["promotion_id"],
+        "properties": {
+          "promotion_id": { "type": "string" },
+          "name": { "type": "string" },
+          "discount_value": { "type": "number" },
+          "to_date": { "type": "string", "format": "date-time" },
+          "total_usage_limit": { "type": "integer" },
+          "description": { "type": "string" },
+          "banner_image_url": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "delete_promotion",
+      "description": "Xóa khuyến mãi (chỉ khi DRAFT hoặc ENDED).",
+      "triggers": ["xóa khuyến mãi"],
+      "endpoint": "POST /internal/skills/delete_promotion",
+      "input_schema": {
+        "type": "object", "required": ["promotion_id"],
+        "properties": {
+          "promotion_id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "toggle_promotion",
+      "description": "Bật/tắt (pause/resume) khuyến mãi đang chạy.",
+      "triggers": ["bật khuyến mãi", "tắt khuyến mãi", "pause sale"],
+      "endpoint": "POST /internal/skills/toggle_promotion",
+      "input_schema": {
+        "type": "object", "required": ["promotion_id", "enabled"],
+        "properties": {
+          "promotion_id": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "duplicate_promotion",
+      "description": "Sao chép khuyến mãi (đổi tên + reset date).",
+      "triggers": ["sao chép khuyến mãi"],
+      "endpoint": "POST /internal/skills/duplicate_promotion",
+      "input_schema": {
+        "type": "object", "required": ["promotion_id"],
+        "properties": {
+          "promotion_id": { "type": "string" },
+          "new_name": { "type": "string" },
+          "new_from_date": { "type": "string", "format": "date-time" },
+          "new_to_date": { "type": "string", "format": "date-time" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "list_active_promotions_for_invoice",
+      "description": "List khuyến mãi áp dụng được cho 1 invoice/giỏ hàng cụ thể (auto-suggestion tại POS).",
+      "triggers": ["khuyến mãi áp được", "auto suggest sale"],
+      "endpoint": "POST /internal/skills/list_active_promotions_for_invoice",
+      "input_schema": {
+        "type": "object", "required": ["items"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "object" } },
+          "subtotal": { "type": "number" },
+          "branch_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "apply_promotion_to_invoice",
+      "description": "Áp khuyến mãi cụ thể vào 1 hóa đơn (manual, khi auto_apply=false hoặc NV chọn từ list_active_promotions_for_invoice).",
+      "triggers": ["áp khuyến mãi vào HĐ", "apply promotion"],
+      "endpoint": "POST /internal/skills/apply_promotion_to_invoice",
+      "input_schema": {
+        "type": "object", "required": ["invoice_id", "promotion_id"],
+        "properties": {
+          "invoice_id": { "type": "string" },
+          "promotion_id": { "type": "string" },
+          "force": { "type": "boolean", "default": false, "description": "Ghi đè promotion cũ nếu có" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "remove_promotion_from_invoice",
+      "description": "Bỏ khuyến mãi khỏi hóa đơn (revert giá gốc).",
+      "triggers": ["bỏ khuyến mãi khỏi HĐ"],
+      "endpoint": "POST /internal/skills/remove_promotion_from_invoice",
+      "input_schema": {
+        "type": "object", "required": ["invoice_id"],
+        "properties": {
+          "invoice_id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "promotion_redemption_report",
+      "description": "Báo cáo hiệu quả khuyến mãi: số lượt dùng + doanh thu attributed + ROI.",
+      "triggers": ["báo cáo khuyến mãi", "ROI sale"],
+      "endpoint": "POST /internal/skills/promotion_redemption_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "promotion_id": { "type": "string" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "branch_id": { "type": "string" },
+          "include_revenue_attributed": { "type": "boolean", "default": true }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "manage_flash_sale",
+      "description": "Hybrid quản lý flash sale (sale ngắn hạn theo giờ): start/stop khẩn cấp, đếm ngược, banner countdown.",
+      "triggers": ["flash sale", "sale chớp nhoáng"],
+      "endpoint": "POST /internal/skills/manage_flash_sale",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list_active", "start_now", "stop_now", "extend", "get_countdown"] },
+          "promotion_id": { "type": "string" },
+          "extend_minutes": { "type": "integer", "description": "Dùng với extend" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "list_sales_pipelines",
+      "description": "Sales pipelines: cơ hội bán hàng theo stage (khác Funnel CRM ở chỗ Sales pipeline tập trung B2B/đơn lớn — bán gói liệu trình lớn, hợp đồng năm).",
+      "triggers": ["sales pipeline", "cơ hội bán"],
+      "endpoint": "POST /internal/skills/list_sales_pipelines",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "stage": { "type": "string", "enum": ["PROSPECT", "QUALIFIED", "PROPOSAL", "NEGOTIATION", "WON", "LOST", "ALL"], "default": "ALL" },
+          "owner_id": { "type": "string" },
+          "min_value": { "type": "number" },
+          "expected_close_after": { "type": "string", "format": "date" },
+          "expected_close_before": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 30 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_sales_opportunity",
+      "description": "Tạo cơ hội bán hàng (deal lớn — gói VIP/hợp đồng năm/spa package premium).",
+      "triggers": ["tạo cơ hội bán", "create opportunity"],
+      "endpoint": "POST /internal/skills/create_sales_opportunity",
+      "input_schema": {
+        "type": "object", "required": ["person_id", "title", "value"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "title": { "type": "string" },
+          "value": { "type": "number", "description": "Giá trị deal (VND)" },
+          "expected_close_date": { "type": "string", "format": "date" },
+          "stage": { "type": "string", "enum": ["PROSPECT", "QUALIFIED", "PROPOSAL", "NEGOTIATION"], "default": "PROSPECT" },
+          "owner_id": { "type": "string", "description": "NV phụ trách" },
+          "products_interested": { "type": "array", "items": { "type": "string" } },
+          "source": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "update_sales_opportunity",
+      "description": "Sửa cơ hội bán (stage, value, close_date, owner).",
+      "triggers": ["sửa opportunity"],
+      "endpoint": "POST /internal/skills/update_sales_opportunity",
+      "input_schema": {
+        "type": "object", "required": ["opportunity_id"],
+        "properties": {
+          "opportunity_id": { "type": "string" },
+          "stage": { "type": "string", "enum": ["PROSPECT", "QUALIFIED", "PROPOSAL", "NEGOTIATION"] },
+          "value": { "type": "number" },
+          "expected_close_date": { "type": "string", "format": "date" },
+          "owner_id": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "close_sales_opportunity",
+      "description": "Đóng cơ hội bán (WON hoặc LOST). WON → tự tạo invoice nếu auto_invoice=true.",
+      "triggers": ["chốt deal", "đóng opportunity", "won lost"],
+      "endpoint": "POST /internal/skills/close_sales_opportunity",
+      "input_schema": {
+        "type": "object", "required": ["opportunity_id", "outcome"],
+        "properties": {
+          "opportunity_id": { "type": "string" },
+          "outcome": { "type": "string", "enum": ["WON", "LOST"] },
+          "actual_value": { "type": "number" },
+          "lost_reason": { "type": "string", "enum": ["price_too_high", "competitor", "no_budget", "no_decision", "other"] },
+          "lost_reason_detail": { "type": "string" },
+          "auto_invoice": { "type": "boolean", "default": false, "description": "WON → tự tạo invoice từ products_interested" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "set_sales_target",
+      "description": "Set mục tiêu sale theo NV/cơ sở/team theo kỳ.",
+      "triggers": ["set mục tiêu sale", "sales target"],
+      "endpoint": "POST /internal/skills/set_sales_target",
+      "input_schema": {
+        "type": "object", "required": ["target_type", "period", "target_value"],
+        "properties": {
+          "target_type": { "type": "string", "enum": ["staff", "branch", "team", "workspace"] },
+          "target_id": { "type": "string", "description": "staff_id/branch_id/team_id (null nếu workspace)" },
+          "period": { "type": "string", "description": "YYYY-MM hoặc YYYY-Q1" },
+          "metric": { "type": "string", "enum": ["revenue", "deals_won", "new_customers", "upsell_amount"], "default": "revenue" },
+          "target_value": { "type": "number" },
+          "stretch_value": { "type": "number", "description": "Mục tiêu phấn đấu cao hơn" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "get_sales_target_progress",
+      "description": "Tiến độ đạt mục tiêu sale (% achieved + projection).",
+      "triggers": ["tiến độ sale", "đạt target chưa"],
+      "endpoint": "POST /internal/skills/get_sales_target_progress",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "target_type": { "type": "string", "enum": ["staff", "branch", "team", "workspace", "all"], "default": "all" },
+          "target_id": { "type": "string" },
+          "period": { "type": "string" },
+          "include_projection": { "type": "boolean", "default": true }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "sales_leaderboard",
+      "description": "Bảng xếp hạng NV bán hàng (gamification).",
+      "triggers": ["xếp hạng sale", "leaderboard NV"],
+      "endpoint": "POST /internal/skills/sales_leaderboard",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month", "quarter", "year"], "default": "month" },
+          "branch_id": { "type": "string" },
+          "metric": { "type": "string", "enum": ["revenue", "deals_won", "upsell_amount", "achievement_rate"], "default": "revenue" },
+          "top_n": { "type": "integer", "default": 10 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_discount_campaigns",
+      "description": "List discount campaign theo kỳ (Black Friday, sinh nhật spa, end-of-year).",
+      "triggers": ["chiến dịch giảm giá", "discount campaign"],
+      "endpoint": "POST /internal/skills/list_discount_campaigns",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["DRAFT", "SCHEDULED", "ACTIVE", "ENDED", "ALL"], "default": "ALL" },
+          "type": { "type": "string", "enum": ["seasonal", "anniversary", "clearance", "happy_hour", "loyalty"] }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_discount_campaign",
+      "description": "Tạo chiến dịch giảm giá tổng (gồm nhiều promotions con).",
+      "triggers": ["tạo chiến dịch giảm giá"],
+      "endpoint": "POST /internal/skills/create_discount_campaign",
+      "input_schema": {
+        "type": "object", "required": ["name", "type", "from_date", "to_date"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["seasonal", "anniversary", "clearance", "happy_hour", "loyalty"] },
+          "from_date": { "type": "string", "format": "date-time" },
+          "to_date": { "type": "string", "format": "date-time" },
+          "budget": { "type": "number", "description": "Ngân sách chi MKT cho chiến dịch" },
+          "expected_revenue": { "type": "number" },
+          "promotion_ids": { "type": "array", "items": { "type": "string" }, "description": "Promotions con thuộc campaign này" },
+          "banner_image_url": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "apply_manual_discount_to_invoice",
+      "description": "Áp giảm giá thủ công vào HĐ (NV approve trực tiếp, có audit). Khác apply_promotion ở chỗ NV nhập số tiền/% bất kỳ trong giới hạn quyền.",
+      "triggers": ["giảm giá tay", "discount manual"],
+      "endpoint": "POST /internal/skills/apply_manual_discount_to_invoice",
+      "input_schema": {
+        "type": "object", "required": ["invoice_id", "discount_type", "discount_value", "reason"],
+        "properties": {
+          "invoice_id": { "type": "string" },
+          "discount_type": { "type": "string", "enum": ["percent", "fixed"] },
+          "discount_value": { "type": "number" },
+          "reason": { "type": "string", "description": "Bắt buộc audit: vd 'KH thân thiết', 'compensation lỗi DV'" },
+          "approver_id": { "type": "string", "description": "NV duyệt (cần khi vượt giới hạn quyền)" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    }
+  ]
+}

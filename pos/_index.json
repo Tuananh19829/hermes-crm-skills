@@ -1,0 +1,363 @@
+{
+  "app": "crm",
+  "module": "pos",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "secret_env_on_agent_server": "CRM_INTERNAL_SECRET",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id. Tất cả skill POS chạy trong 1 transaction Prisma — atomic invoice + items + payment + trừ thẻ/deposit/voucher."
+  },
+  "skills": [
+    {
+      "name": "pos_create_invoice",
+      "description": "Tạo hóa đơn POS từ giỏ hàng: chọn KH, list items (dịch vụ/sản phẩm/gói/liệu trình), staff per item (cho hoa hồng), discount, branch. Trả invoice draft hoặc issued (tuỳ status). Tự tính subtotal+total, KHÔNG xử lý payment ở bước này.",
+      "triggers": [
+        "tạo hóa đơn",
+        "tạo invoice",
+        "lập bill",
+        "thu ngân tạo bill",
+        "POS bán hàng",
+        "tạo đơn POS",
+        "xuất bill",
+        "checkout giỏ hàng"
+      ],
+      "endpoint": "POST /internal/skills/pos_create_invoice",
+      "input_schema": {
+        "type": "object",
+        "required": ["person_id", "items"],
+        "properties": {
+          "person_id": { "type": "string", "description": "UUID khách hàng" },
+          "branch_id": { "type": "string", "description": "Chi nhánh xuất bill (optional, default = branch hiện tại của user)" },
+          "appointment_id": { "type": "string", "description": "UUID lịch hẹn nếu invoice gắn với lịch (1-1, unique). Sẽ tự link appointment_services nếu chưa có." },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Danh sách item trong giỏ",
+            "items": {
+              "type": "object",
+              "required": ["kind", "qty", "unit_price"],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["SERVICE", "PRODUCT", "PACKAGE", "TREATMENT_SESSION", "BUNDLE"],
+                  "description": "Loại item"
+                },
+                "ref_id": { "type": "string", "description": "UUID dịch vụ/sản phẩm/gói/liệu trình tham chiếu" },
+                "name_snapshot": { "type": "string", "description": "Tên hiển thị tại thời điểm lập bill (snapshot, không đổi khi DV gốc đổi tên)" },
+                "qty": { "type": "integer", "minimum": 1 },
+                "unit_price": { "type": "number", "description": "Giá đơn vị (VND), có thể khác giá niêm yết để áp giá custom" },
+                "amount": { "type": "number", "description": "Thành tiền dòng (optional, default = qty × unit_price)" },
+                "staff_id": { "type": "string", "description": "UUID nhân viên thực hiện — cần để chia hoa hồng" }
+              }
+            }
+          },
+          "discount": { "type": "number", "default": 0, "description": "Giảm giá tổng (VND)" },
+          "voucher_code": { "type": "string", "description": "Mã voucher áp dụng (optional, sẽ validate + tính discount tự động nếu có)" },
+          "note": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "ISSUED"],
+            "default": "ISSUED",
+            "description": "DRAFT = tạm lưu chờ thanh toán; ISSUED = phát hành chính thức (set issued_at = now)"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "high",
+      "requires_approval": false
+    },
+    {
+      "name": "pos_add_payment",
+      "description": "Ghi nhận thanh toán cho hóa đơn (CASH / TRANSFER / CARD / SERVICE_CARD / DEPOSIT / LOYALTY_POINTS). QUAN TRỌNG: nếu method=SERVICE_CARD → tự trừ card.remaining; nếu method=DEPOSIT → tự trừ deposit balance; nếu method=LOYALTY_POINTS → tự trừ points. Tự cập nhật invoice.paid_amount + debt_amount + status (PARTIAL/PAID).",
+      "triggers": [
+        "ghi nhận thanh toán",
+        "thu tiền hóa đơn",
+        "add payment",
+        "thanh toán bill",
+        "trừ thẻ KH",
+        "POS thanh toán",
+        "thu ngân thanh toán",
+        "tiền mặt",
+        "chuyển khoản",
+        "quẹt thẻ"
+      ],
+      "endpoint": "POST /internal/skills/pos_add_payment",
+      "input_schema": {
+        "type": "object",
+        "required": ["invoice_id", "method", "amount"],
+        "properties": {
+          "invoice_id": { "type": "string", "description": "UUID hóa đơn" },
+          "method": {
+            "type": "string",
+            "enum": ["CASH", "TRANSFER", "CARD", "SERVICE_CARD", "DEPOSIT", "LOYALTY_POINTS", "MOMO", "VIETQR"],
+            "description": "Phương thức thanh toán"
+          },
+          "amount": { "type": "number", "description": "Số tiền thanh toán (VND) — phải <= invoice.debt_amount" },
+          "card_id": {
+            "type": "string",
+            "description": "UUID thẻ DV (BẮT BUỘC khi method=SERVICE_CARD). Sẽ tự trừ card.remaining."
+          },
+          "deposit_id": {
+            "type": "string",
+            "description": "UUID deposit (BẮT BUỘC khi method=DEPOSIT). Sẽ tự trừ deposit balance."
+          },
+          "loyalty_points": {
+            "type": "integer",
+            "description": "Số điểm dùng (BẮT BUỘC khi method=LOYALTY_POINTS). Sẽ tự trừ điểm + ghi loyalty_history."
+          },
+          "paid_at": { "type": "string", "format": "date-time", "description": "Thời điểm thanh toán (default = now)" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action",
+      "risk_level": "high",
+      "requires_approval": false
+    },
+    {
+      "name": "list_invoices",
+      "description": "Danh sách hóa đơn theo kỳ, KH, status, chi nhánh, nhân viên. Trả tổng số bill + tổng doanh thu + breakdown status. Dùng khi user hỏi 'bill hôm nay', 'hóa đơn KH X', 'invoice chưa thanh toán'.",
+      "triggers": [
+        "danh sách hóa đơn",
+        "list invoices",
+        "bill hôm nay",
+        "hóa đơn tháng này",
+        "invoice của khách",
+        "hóa đơn chưa thanh toán",
+        "công nợ hóa đơn",
+        "bill chi nhánh"
+      ],
+      "endpoint": "POST /internal/skills/list_invoices",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": { "type": "string", "description": "Lọc theo KH" },
+          "branch_id": { "type": "string", "description": "Lọc theo chi nhánh" },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "ISSUED", "PARTIAL", "PAID", "VOID", "ALL"],
+            "default": "ALL"
+          },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "period": {
+            "type": "string",
+            "enum": ["today", "week", "month", "quarter"],
+            "description": "Kỳ nhanh (thay from_date/to_date)"
+          },
+          "min_total": { "type": "number" },
+          "max_total": { "type": "number" },
+          "has_debt": { "type": "boolean", "description": "Chỉ lấy bill còn nợ (debt_amount > 0)" },
+          "limit": { "type": "integer", "default": 30, "maximum": 200 },
+          "include_summary": { "type": "boolean", "default": true, "description": "Trả tổng + breakdown status" }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "requires_approval": false
+    },
+    {
+      "name": "view_invoice",
+      "description": "Chi tiết 1 hóa đơn: items + payments + voucher applied + thẻ/deposit đã trừ + commission entries + appointment liên quan. Dùng khi user hỏi 'xem bill INV-123', 'chi tiết hóa đơn'.",
+      "triggers": [
+        "xem hóa đơn",
+        "chi tiết bill",
+        "view invoice",
+        "bill INV",
+        "hóa đơn id",
+        "tra cứu hóa đơn"
+      ],
+      "endpoint": "POST /internal/skills/view_invoice",
+      "input_schema": {
+        "type": "object",
+        "required": ["invoice_id"],
+        "properties": {
+          "invoice_id": { "type": "string", "description": "UUID hóa đơn" },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["items", "payments", "voucher", "card_deductions", "deposit_deductions", "commissions", "appointment"]
+            },
+            "default": ["items", "payments", "voucher", "appointment"],
+            "description": "Sections cần trả về"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "requires_approval": false
+    },
+    {
+      "name": "pos_complete_appointment",
+      "description": "Hoàn thành lịch hẹn + tạo invoice trong 1 bước (atomic). Dùng khi NV nói 'KH X hoàn thành DV, tính tiền'. Tự: (1) đổi appointment.status=COMPLETED, (2) tạo invoice từ appointment_services + items thêm, (3) optional add_payment ngay nếu KH thanh toán luôn. Fix bug cũ: bug_appointment_payment_context.",
+      "triggers": [
+        "hoàn thành lịch hẹn",
+        "hoàn thành lịch + thanh toán",
+        "kết thúc DV và tính tiền",
+        "complete appointment",
+        "checkout lịch hẹn",
+        "POS hoàn thành",
+        "kh xong DV"
+      ],
+      "endpoint": "POST /internal/skills/pos_complete_appointment",
+      "input_schema": {
+        "type": "object",
+        "required": ["appointment_id"],
+        "properties": {
+          "appointment_id": { "type": "string", "description": "UUID lịch hẹn" },
+          "extra_items": {
+            "type": "array",
+            "description": "Item thêm ngoài DV trong lịch (sản phẩm bán kèm, gói nâng cấp...)",
+            "items": {
+              "type": "object",
+              "required": ["kind", "qty", "unit_price"],
+              "properties": {
+                "kind": { "type": "string", "enum": ["SERVICE", "PRODUCT", "PACKAGE", "TREATMENT_SESSION", "BUNDLE"] },
+                "ref_id": { "type": "string" },
+                "name_snapshot": { "type": "string" },
+                "qty": { "type": "integer", "minimum": 1 },
+                "unit_price": { "type": "number" },
+                "staff_id": { "type": "string" }
+              }
+            }
+          },
+          "discount": { "type": "number", "default": 0 },
+          "voucher_code": { "type": "string" },
+          "payment": {
+            "type": "object",
+            "description": "Nếu có → tự ghi nhận thanh toán ngay sau khi tạo invoice (gộp 2 bước thành 1). Nếu null → tạo invoice DRAFT chờ thanh toán sau.",
+            "properties": {
+              "method": {
+                "type": "string",
+                "enum": ["CASH", "TRANSFER", "CARD", "SERVICE_CARD", "DEPOSIT", "LOYALTY_POINTS", "MOMO", "VIETQR"]
+              },
+              "amount": { "type": "number" },
+              "card_id": { "type": "string" },
+              "deposit_id": { "type": "string" },
+              "loyalty_points": { "type": "integer" }
+            }
+          },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action",
+      "risk_level": "high",
+      "requires_approval": false
+    },
+    {
+      "name": "apply_voucher_to_invoice",
+      "description": "Áp voucher cho 1 hóa đơn đã tồn tại (dùng khi quên áp lúc tạo bill). Validate: code còn hạn, KH đủ điều kiện, min_order_value đạt, chưa từng apply voucher khác. Tự tính lại discount + total + debt_amount.",
+      "triggers": [
+        "áp voucher",
+        "apply voucher",
+        "thêm mã giảm giá",
+        "dùng coupon",
+        "trừ voucher vào bill"
+      ],
+      "endpoint": "POST /internal/skills/apply_voucher_to_invoice",
+      "input_schema": {
+        "type": "object",
+        "required": ["invoice_id", "voucher_code"],
+        "properties": {
+          "invoice_id": { "type": "string", "description": "UUID hóa đơn (status phải != PAID, != VOID)" },
+          "voucher_code": { "type": "string", "description": "Mã voucher" },
+          "force": {
+            "type": "boolean",
+            "default": false,
+            "description": "true = ghi đè voucher cũ nếu invoice đã có voucher khác (cẩn thận)"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false
+    },
+    {
+      "name": "update_invoice",
+      "description": "Sửa hóa đơn (chỉ khi status != PAID/VOID). Có thể sửa items, discount, note. Tự tính lại total.",
+      "triggers": ["sửa hóa đơn", "edit invoice", "update HĐ"],
+      "endpoint": "POST /internal/skills/update_invoice",
+      "input_schema": {
+        "type": "object",
+        "required": ["invoice_id"],
+        "properties": {
+          "invoice_id": { "type": "string" },
+          "items": {
+            "type": "array",
+            "description": "Replace toàn bộ items. Để null để giữ nguyên.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": { "type": "string", "enum": ["SERVICE", "PRODUCT", "PACKAGE", "TREATMENT_SESSION", "BUNDLE"] },
+                "ref_id": { "type": "string" },
+                "name_snapshot": { "type": "string" },
+                "qty": { "type": "integer" },
+                "unit_price": { "type": "number" },
+                "staff_id": { "type": "string" }
+              }
+            }
+          },
+          "discount": { "type": "number" },
+          "voucher_code": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high", "requires_approval": false
+    },
+    {
+      "name": "void_invoice",
+      "description": "Hủy/xóa hóa đơn (status=VOID). Tự hoàn lại tồn kho, hoàn thẻ DV/deposit/điểm đã trừ, hủy commission.",
+      "triggers": ["hủy hóa đơn", "void invoice", "xóa HĐ"],
+      "endpoint": "POST /internal/skills/void_invoice",
+      "input_schema": {
+        "type": "object",
+        "required": ["invoice_id", "reason"],
+        "properties": {
+          "invoice_id": { "type": "string" },
+          "reason": { "type": "string", "description": "Lý do hủy bắt buộc để audit" },
+          "refund_method": { "type": "string", "enum": ["CASH", "TRANSFER", "SERVICE_CREDIT", "ORIGINAL"], "default": "ORIGINAL", "description": "ORIGINAL = hoàn về method thanh toán gốc" }
+        }
+      },
+      "type": "action", "risk_level": "high", "requires_approval": true
+    },
+    {
+      "name": "print_invoice",
+      "description": "In hóa đơn ra file (PDF/K80/K57/A4) hoặc gửi xuống máy in.",
+      "triggers": ["in hóa đơn", "print invoice", "xuất PDF HĐ"],
+      "endpoint": "POST /internal/skills/print_invoice",
+      "input_schema": {
+        "type": "object",
+        "required": ["invoice_id"],
+        "properties": {
+          "invoice_id": { "type": "string" },
+          "format": { "type": "string", "enum": ["pdf", "k80", "k57", "a4"], "default": "pdf" },
+          "delivery": { "type": "string", "enum": ["url", "base64", "printer"], "default": "url" },
+          "printer_id": { "type": "string", "description": "Bắt buộc khi delivery=printer" }
+        }
+      },
+      "type": "action", "risk_level": "read", "requires_approval": false
+    },
+    {
+      "name": "dashboard_overview",
+      "description": "Aggregate 1-call cho trang Bảng điều khiển: doanh thu hôm nay/tháng + công nợ + lịch hẹn + KH mới + top DV + top NV. Optimize 9 widget thành 1 query.",
+      "triggers": ["dashboard tổng quan", "bảng điều khiển", "overview"],
+      "endpoint": "POST /internal/skills/dashboard_overview",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month"], "default": "today" },
+          "branch_id": { "type": "string" },
+          "include": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["revenue", "debt", "appointments_today", "new_customers", "revenue_trend", "top_services", "top_staff", "kpi"] },
+            "default": ["revenue", "debt", "appointments_today", "new_customers", "revenue_trend", "top_services", "top_staff"]
+          }
+        }
+      },
+      "type": "action", "risk_level": "read", "requires_approval": false
+    }
+  ]
+}

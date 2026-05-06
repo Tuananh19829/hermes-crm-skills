@@ -1,0 +1,274 @@
+{
+  "app": "crm",
+  "module": "marketing",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": { "header_secret": "X-Internal-Secret", "header_user": "X-User-Id", "header_group": "X-Group-Id" },
+  "skills": [
+    {
+      "name": "voucher_campaigns_summary",
+      "description": "Tổng quan voucher campaigns: active, scheduled, ended.",
+      "triggers": ["tổng quan voucher campaign"],
+      "endpoint": "POST /internal/skills/voucher_campaigns_summary",
+      "input_schema": { "type": "object", "properties": {} },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_voucher_campaigns",
+      "description": "Liệt kê chiến dịch voucher.",
+      "triggers": ["danh sách voucher campaign"],
+      "endpoint": "POST /internal/skills/list_voucher_campaigns",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["DRAFT", "SCHEDULED", "ACTIVE", "ENDED", "PAUSED", "ALL"], "default": "ALL" },
+          "limit": { "type": "integer", "default": 30 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "get_voucher_campaign_detail",
+      "description": "Chi tiết campaign: settings + redemptions + stats.",
+      "triggers": ["chi tiết voucher campaign"],
+      "endpoint": "POST /internal/skills/get_voucher_campaign_detail",
+      "input_schema": { "type": "object", "required": ["campaign_id"], "properties": { "campaign_id": { "type": "string" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_voucher_campaign",
+      "description": "Tạo chiến dịch voucher.",
+      "triggers": ["tạo voucher campaign"],
+      "endpoint": "POST /internal/skills/create_voucher_campaign",
+      "input_schema": {
+        "type": "object", "required": ["name", "type", "value", "from_date", "to_date"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["percent", "fixed_amount"] },
+          "value": { "type": "number" },
+          "min_order_value": { "type": "number" },
+          "max_discount": { "type": "number" },
+          "from_date": { "type": "string", "format": "date-time" },
+          "to_date": { "type": "string", "format": "date-time" },
+          "target_segment": { "type": "string", "enum": ["all", "vip", "new", "no_visit", "birthday"] },
+          "limit_per_customer": { "type": "integer", "default": 1 },
+          "total_limit": { "type": "integer" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "update_voucher_campaign",
+      "description": "Sửa campaign (chỉ khi chưa active).",
+      "triggers": ["sửa voucher campaign"],
+      "endpoint": "POST /internal/skills/update_voucher_campaign",
+      "input_schema": { "type": "object", "required": ["campaign_id"], "properties": { "campaign_id": { "type": "string" } } },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "toggle_voucher_campaign",
+      "description": "Bật/tắt campaign.",
+      "triggers": ["bật tắt campaign"],
+      "endpoint": "POST /internal/skills/toggle_voucher_campaign",
+      "input_schema": { "type": "object", "required": ["campaign_id", "enabled"], "properties": { "campaign_id": { "type": "string" }, "enabled": { "type": "boolean" } } },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "delete_voucher_campaign",
+      "description": "Xóa campaign.",
+      "triggers": ["xóa voucher campaign"],
+      "endpoint": "POST /internal/skills/delete_voucher_campaign",
+      "input_schema": { "type": "object", "required": ["campaign_id"], "properties": { "campaign_id": { "type": "string" }, "reason": { "type": "string" } } },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "issue_vouchers",
+      "description": "Phát voucher cho danh sách KH cụ thể.",
+      "triggers": ["phát voucher"],
+      "endpoint": "POST /internal/skills/issue_vouchers",
+      "input_schema": {
+        "type": "object", "required": ["campaign_id", "person_ids"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "person_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 1000 },
+          "send_zalo": { "type": "boolean", "default": false }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "bulk_issue_vouchers",
+      "description": "Phát voucher hàng loạt cho segment (birthday/no-visit/...).",
+      "triggers": ["phát voucher segment"],
+      "endpoint": "POST /internal/skills/bulk_issue_vouchers",
+      "input_schema": {
+        "type": "object", "required": ["campaign_id", "segment"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "segment": { "type": "string", "enum": ["all", "vip", "new", "birthday", "no_visit"] },
+          "filter": { "type": "object" },
+          "send_zalo": { "type": "boolean", "default": true },
+          "dry_run": { "type": "boolean", "default": false }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "list_campaign_redemptions",
+      "description": "Danh sách voucher đã phát của campaign.",
+      "triggers": ["voucher đã phát"],
+      "endpoint": "POST /internal/skills/list_campaign_redemptions",
+      "input_schema": {
+        "type": "object", "required": ["campaign_id"],
+        "properties": {
+          "campaign_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["ISSUED", "USED", "EXPIRED", "ALL"], "default": "ALL" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "voucher_campaign_report",
+      "description": "Báo cáo ROI campaign (revenue attributed).",
+      "triggers": ["báo cáo ROI campaign"],
+      "endpoint": "POST /internal/skills/voucher_campaign_report",
+      "input_schema": {
+        "type": "object", "required": ["campaign_id"],
+        "properties": { "campaign_id": { "type": "string" }, "include_revenue_attributed": { "type": "boolean", "default": true } }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "duplicate_voucher_campaign",
+      "description": "Sao chép campaign.",
+      "triggers": ["sao chép campaign"],
+      "endpoint": "POST /internal/skills/duplicate_voucher_campaign",
+      "input_schema": { "type": "object", "required": ["campaign_id"], "properties": { "campaign_id": { "type": "string" }, "new_name": { "type": "string" } } },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "export_voucher_campaigns",
+      "description": "Export Excel campaigns.",
+      "triggers": ["export campaign"],
+      "endpoint": "POST /internal/skills/export_voucher_campaigns",
+      "input_schema": { "type": "object", "properties": { "filter": { "type": "object" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_marketing_qr",
+      "description": "Tạo QR code cho campaign (đính link landing page).",
+      "triggers": ["tạo QR campaign"],
+      "endpoint": "POST /internal/skills/create_marketing_qr",
+      "input_schema": {
+        "type": "object", "required": ["campaign_id", "landing_url"],
+        "properties": { "campaign_id": { "type": "string" }, "landing_url": { "type": "string" }, "size": { "type": "integer", "default": 256 } }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "campaign_revenue_attribution",
+      "description": "Doanh thu attributed từng campaign.",
+      "triggers": ["doanh thu campaign"],
+      "endpoint": "POST /internal/skills/campaign_revenue_attribution",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month", "quarter"], "default": "month" },
+          "campaign_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "manage_email_campaigns",
+      "description": "Hybrid CRUD chiến dịch email + send.",
+      "triggers": ["chiến dịch email"],
+      "endpoint": "POST /internal/skills/manage_email_campaigns",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "send", "delete"] },
+          "campaign_id": { "type": "string" },
+          "campaign_data": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "manage_sms_campaigns",
+      "description": "Hybrid CRUD chiến dịch SMS + send.",
+      "triggers": ["chiến dịch SMS"],
+      "endpoint": "POST /internal/skills/manage_sms_campaigns",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "send", "delete"] },
+          "campaign_id": { "type": "string" },
+          "campaign_data": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "manage_marketing_workflows",
+      "description": "Hybrid CRUD workflow MKT tự động (trigger + actions).",
+      "triggers": ["workflow MKT", "automation MKT"],
+      "endpoint": "POST /internal/skills/manage_marketing_workflows",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "toggle", "delete"] },
+          "workflow_id": { "type": "string" },
+          "workflow_data": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "manage_customer_segments",
+      "description": "Hybrid CRUD phân khúc KH (segment criteria).",
+      "triggers": ["phân khúc KH", "segment"],
+      "endpoint": "POST /internal/skills/manage_customer_segments",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "delete", "preview"] },
+          "segment_id": { "type": "string" },
+          "segment_data": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "manage_landing_pages",
+      "description": "Hybrid CRUD landing page MKT.",
+      "triggers": ["landing page"],
+      "endpoint": "POST /internal/skills/manage_landing_pages",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "publish", "unpublish", "delete"] },
+          "page_id": { "type": "string" },
+          "page_data": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "manage_referral_program",
+      "description": "Hybrid quản lý chương trình giới thiệu KH.",
+      "triggers": ["referral program"],
+      "endpoint": "POST /internal/skills/manage_referral_program",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "track", "redeem"] },
+          "program_id": { "type": "string" },
+          "program_data": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    }
+  ]
+}

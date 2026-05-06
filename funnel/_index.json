@@ -1,0 +1,166 @@
+{
+  "app": "crm",
+  "module": "funnel",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": { "header_secret": "X-Internal-Secret", "header_user": "X-User-Id", "header_group": "X-Group-Id" },
+  "skills": [
+    {
+      "name": "funnel_summary",
+      "description": "Tổng quan Funnel CRM: số deal mở mỗi stage (Lead/Qualified/Đã đặt lịch/Check-in/Won/Lost).",
+      "triggers": ["tổng quan funnel", "deal đang mở"],
+      "endpoint": "POST /internal/skills/funnel_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "staff_id": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_funnel_deals",
+      "description": "Liệt kê deals trong funnel. Wrapper trên list_ads_leads + filter funnel_stage.",
+      "triggers": ["danh sách deal", "list funnel deal"],
+      "endpoint": "POST /internal/skills/list_funnel_deals",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "stage": { "type": "string", "enum": ["LEAD", "QUALIFIED", "APPOINTMENT", "CHECKED_IN", "WON", "LOST", "ALL"], "default": "ALL" },
+          "staff_id": { "type": "string" },
+          "source": { "type": "string" },
+          "min_value": { "type": "number" },
+          "max_value": { "type": "number" },
+          "query": { "type": "string", "description": "Tìm theo tên/SĐT" },
+          "limit": { "type": "integer", "default": 50 },
+          "offset": { "type": "integer", "default": 0 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "get_funnel_deal_detail",
+      "description": "Chi tiết deal: thông tin person + stage_history + notes + follow-ups + value.",
+      "triggers": ["chi tiết deal"],
+      "endpoint": "POST /internal/skills/get_funnel_deal_detail",
+      "input_schema": {
+        "type": "object", "required": ["deal_id"],
+        "properties": {
+          "deal_id": { "type": "string" },
+          "include": { "type": "array", "items": { "type": "string", "enum": ["history", "notes", "follow_ups", "person"] }, "default": ["history", "notes", "follow_ups", "person"] }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "create_funnel_deal",
+      "description": "Tạo deal mới trong funnel (Lead/customer + stage + value).",
+      "triggers": ["tạo deal", "thêm cơ hội bán"],
+      "endpoint": "POST /internal/skills/create_funnel_deal",
+      "input_schema": {
+        "type": "object", "required": ["full_name", "phone"],
+        "properties": {
+          "full_name": { "type": "string" },
+          "phone": { "type": "string" },
+          "person_id": { "type": "string", "description": "Optional, nếu KH đã tồn tại" },
+          "stage": { "type": "string", "enum": ["LEAD", "QUALIFIED", "APPOINTMENT", "CHECKED_IN"], "default": "LEAD" },
+          "value": { "type": "number", "description": "Giá trị deal ước tính (VND)" },
+          "expected_close_date": { "type": "string", "format": "date" },
+          "source": { "type": "string" },
+          "assigned_to": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "delete_funnel_deal",
+      "description": "Xóa deal khỏi funnel (soft delete).",
+      "triggers": ["xóa deal"],
+      "endpoint": "POST /internal/skills/delete_funnel_deal",
+      "input_schema": {
+        "type": "object", "required": ["deal_id"],
+        "properties": { "deal_id": { "type": "string" }, "reason": { "type": "string" } }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "assign_funnel_deal",
+      "description": "Gán NV phụ trách deal.",
+      "triggers": ["gán deal cho NV", "assign deal"],
+      "endpoint": "POST /internal/skills/assign_funnel_deal",
+      "input_schema": {
+        "type": "object", "required": ["deal_id", "staff_id"],
+        "properties": { "deal_id": { "type": "string" }, "staff_id": { "type": "string" } }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "bulk_update_funnel_stage",
+      "description": "Cập nhật stage cho nhiều deal cùng lúc (drag-thả bulk).",
+      "triggers": ["bulk move stage", "chuyển nhiều deal"],
+      "endpoint": "POST /internal/skills/bulk_update_funnel_stage",
+      "input_schema": {
+        "type": "object", "required": ["deal_ids", "stage"],
+        "properties": {
+          "deal_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 100 },
+          "stage": { "type": "string", "enum": ["LEAD", "QUALIFIED", "APPOINTMENT", "CHECKED_IN", "WON", "LOST"] },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "get_funnel_deal_history",
+      "description": "Lịch sử chuyển stage của 1 deal.",
+      "triggers": ["lịch sử stage deal"],
+      "endpoint": "POST /internal/skills/get_funnel_deal_history",
+      "input_schema": { "type": "object", "required": ["deal_id"], "properties": { "deal_id": { "type": "string" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "funnel_conversion_report",
+      "description": "Báo cáo tỷ lệ chuyển đổi giữa các stage trong funnel.",
+      "triggers": ["báo cáo conversion funnel", "tỷ lệ chuyển đổi"],
+      "endpoint": "POST /internal/skills/funnel_conversion_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "period": { "type": "string", "enum": ["week", "month", "quarter"], "default": "month" },
+          "source": { "type": "string" },
+          "staff_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "manage_funnel_stages",
+      "description": "Hybrid CRUD cấu hình stages của funnel (đổi tên, thêm cột, reorder).",
+      "triggers": ["cấu hình stage", "thêm cột funnel"],
+      "endpoint": "POST /internal/skills/manage_funnel_stages",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "delete", "reorder"] },
+          "stage_id": { "type": "string" },
+          "stage_data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "color": { "type": "string" },
+              "is_won": { "type": "boolean" },
+              "is_lost": { "type": "boolean" }
+            }
+          },
+          "ordered_ids": { "type": "array", "items": { "type": "string" }, "description": "Dùng với action=reorder" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "app": "crm",
+  "module": "notifications",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": { "header_secret": "X-Internal-Secret", "header_user": "X-User-Id", "header_group": "X-Group-Id" },
+  "skills": [
+    {
+      "name": "list_my_notifications",
+      "description": "Inbox thông báo cá nhân của user, filter theo unread/category.",
+      "triggers": ["thông báo của tôi", "inbox notification"],
+      "endpoint": "POST /internal/skills/list_my_notifications",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "filter": { "type": "string", "enum": ["all", "unread", "read", "starred"], "default": "all" },
+          "category": { "type": "string", "enum": ["debt_reminder", "system", "appointment", "telesale", "customer", "inventory", "alert", "all"], "default": "all" },
+          "event_type": { "type": "string" },
+          "limit": { "type": "integer", "default": 30 },
+          "offset": { "type": "integer", "default": 0 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "unread_notifications_count",
+      "description": "Đếm thông báo chưa đọc, dùng cho badge icon chuông.",
+      "triggers": ["unread count", "đếm thông báo"],
+      "endpoint": "POST /internal/skills/unread_notifications_count",
+      "input_schema": { "type": "object", "properties": {} },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "mark_notification_read",
+      "description": "Đánh dấu đã đọc 1 hoặc tất cả thông báo.",
+      "triggers": ["đánh dấu đã đọc", "mark as read"],
+      "endpoint": "POST /internal/skills/mark_notification_read",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "notification_id": { "type": "string" },
+          "all": { "type": "boolean", "default": false, "description": "true = mark all current user's notifications as read" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "delete_notification",
+      "description": "Xóa 1 thông báo.",
+      "triggers": ["xóa thông báo"],
+      "endpoint": "POST /internal/skills/delete_notification",
+      "input_schema": { "type": "object", "required": ["notification_id"], "properties": { "notification_id": { "type": "string" } } },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "bulk_delete_notifications",
+      "description": "Xóa nhiều thông báo cùng lúc.",
+      "triggers": ["xóa nhiều thông báo"],
+      "endpoint": "POST /internal/skills/bulk_delete_notifications",
+      "input_schema": {
+        "type": "object", "required": ["notification_ids"],
+        "properties": { "notification_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 100 } }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "pin_notification",
+      "description": "Ghim thông báo quan trọng.",
+      "triggers": ["pin thông báo", "ghim notification"],
+      "endpoint": "POST /internal/skills/pin_notification",
+      "input_schema": {
+        "type": "object", "required": ["notification_id"],
+        "properties": { "notification_id": { "type": "string" }, "pinned": { "type": "boolean", "default": true } }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "snooze_notification",
+      "description": "Tạm ẩn thông báo đến giờ X.",
+      "triggers": ["snooze notification", "ẩn tạm thông báo"],
+      "endpoint": "POST /internal/skills/snooze_notification",
+      "input_schema": {
+        "type": "object", "required": ["notification_id", "snooze_until"],
+        "properties": {
+          "notification_id": { "type": "string" },
+          "snooze_until": { "type": "string", "format": "date-time" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "subscribe_notifications_stream",
+      "description": "SSE stream để client nhận thông báo real-time.",
+      "triggers": ["realtime notification stream"],
+      "endpoint": "POST /internal/skills/subscribe_notifications_stream",
+      "input_schema": { "type": "object", "properties": {} },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_sent_notifications",
+      "description": "Admin view: lịch sử thông báo đã gửi cho toàn workspace.",
+      "triggers": ["nhật ký thông báo đã gửi"],
+      "endpoint": "POST /internal/skills/list_sent_notifications",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "channel": { "type": "string", "enum": ["in_app", "email", "zalo", "telegram", "sms"] },
+          "template": { "type": "string" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "test_send_notification",
+      "description": "Admin test gửi thông báo (debug).",
+      "triggers": ["test notification"],
+      "endpoint": "POST /internal/skills/test_send_notification",
+      "input_schema": {
+        "type": "object", "required": ["user_id", "template"],
+        "properties": {
+          "user_id": { "type": "string" },
+          "template": { "type": "string" },
+          "payload": { "type": "object" },
+          "channel": { "type": "string", "enum": ["in_app", "email", "zalo", "telegram"], "default": "in_app" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "broadcast_notification",
+      "description": "Gửi thông báo broadcast cho nhiều NV trong workspace.",
+      "triggers": ["broadcast NV", "thông báo hàng loạt"],
+      "endpoint": "POST /internal/skills/broadcast_notification",
+      "input_schema": {
+        "type": "object", "required": ["title", "body"],
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "target_users": { "type": "array", "items": { "type": "string" }, "description": "Để trống = tất cả NV" },
+          "target_role": { "type": "string", "enum": ["owner", "manager", "staff", "viewer", "all"] },
+          "channel": { "type": "string", "enum": ["in_app", "email", "zalo", "telegram"], "default": "in_app" },
+          "deep_link": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "update_my_notification_preferences",
+      "description": "Cá nhân cấu hình bật/tắt loại thông báo nào.",
+      "triggers": ["cài đặt thông báo cá nhân"],
+      "endpoint": "POST /internal/skills/update_my_notification_preferences",
+      "input_schema": {
+        "type": "object", "required": ["preferences"],
+        "properties": {
+          "preferences": {
+            "type": "array",
+            "items": {
+              "type": "object", "required": ["event_type", "enabled"],
+              "properties": {
+                "event_type": { "type": "string" },
+                "enabled": { "type": "boolean" },
+                "channel": { "type": "string", "enum": ["in_app", "email", "zalo", "telegram"] }
+              }
+            }
+          }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    }
+  ]
+}

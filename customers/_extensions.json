@@ -1,0 +1,245 @@
+{
+  "app": "crm",
+  "module": "customers",
+  "version": "1.2.0-ext",
+  "merge_into": "_index.json",
+  "skills": [
+    {
+      "name": "customers_summary",
+      "description": "Tổng số KH + breakdown theo tier/group/status.",
+      "endpoint": "POST /internal/skills/customers_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "type": "action",
+      "risk_level": "read"
+    },
+    {
+      "name": "delete_customer",
+      "description": "Xóa mềm KH (giữ history).",
+      "endpoint": "POST /internal/skills/delete_customer",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "high"
+    },
+    {
+      "name": "merge_customers",
+      "description": "Gộp nhiều KH trùng vào 1 KH chính.",
+      "endpoint": "POST /internal/skills/merge_customers",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "keep_id",
+          "merge_ids"
+        ],
+        "properties": {
+          "keep_id": {
+            "type": "string"
+          },
+          "merge_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "high"
+    },
+    {
+      "name": "export_customers",
+      "description": "Export Excel KH.",
+      "endpoint": "POST /internal/skills/export_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "object"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "xlsx",
+              "csv"
+            ],
+            "default": "xlsx"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read"
+    },
+    {
+      "name": "import_customers",
+      "description": "Import Excel KH bulk.",
+      "endpoint": "POST /internal/skills/import_customers",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "file_url"
+        ],
+        "properties": {
+          "file_url": {
+            "type": "string"
+          },
+          "mapping": {
+            "type": "object"
+          },
+          "skip_duplicates": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "high"
+    },
+    {
+      "name": "customer_tier_distribution",
+      "description": "Phân bố KH theo tier (donut chart).",
+      "endpoint": "POST /internal/skills/customer_tier_distribution",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read"
+    },
+    {
+      "name": "customers_overview",
+      "description": "Aggregate 1-call cho trang Thống kê KH (Tổng/VIP/Hoạt động/Giữ chân/Tier/KH mới chart).",
+      "endpoint": "POST /internal/skills/customers_overview",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read"
+    },
+    {
+      "name": "list_customers",
+      "description": "Liệt kê khách hàng (alias của search_customers). Dùng khi user nói 'list customers', 'danh sách khách hàng', 'all customers'.",
+      "triggers": [
+        "list customers",
+        "danh sách khách hàng",
+        "all customers",
+        "tất cả KH",
+        "list KH"
+      ],
+      "endpoint": "POST /internal/skills/list_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "maximum": 200
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "NORMAL",
+              "VIP",
+              "ALL"
+            ],
+            "default": "ALL"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read"
+    },
+    {
+      "name": "top_sources",
+      "description": "Top nguồn khách hàng (Walk-in/Referral/Ads/Zalo/...) theo doanh thu hoặc số lượng KH trong kỳ. Dùng khi user hỏi 'nguồn nào nhiều khách nhất', 'top channel', 'KH đến từ đâu'.",
+      "triggers": [
+        "top nguồn",
+        "nguồn KH",
+        "top sources",
+        "channel nào hiệu quả",
+        "KH đến từ đâu",
+        "top channel"
+      ],
+      "endpoint": "POST /internal/skills/top_sources",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week",
+              "month",
+              "quarter",
+              "year"
+            ],
+            "default": "month"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "customer_count",
+              "revenue",
+              "ltv"
+            ],
+            "default": "customer_count"
+          },
+          "top_n": {
+            "type": "integer",
+            "default": 10,
+            "maximum": 50
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read"
+    }
+  ]
+}

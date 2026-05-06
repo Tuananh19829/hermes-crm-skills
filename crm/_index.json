@@ -1,0 +1,615 @@
+{
+  "app": "crm",
+  "version": "3.3.0-deduped",
+  "base_url": "https://crm.spaclaw.pro/api",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "secret_env_on_agent_server": "CRM_INTERNAL_SECRET",
+    "note": "workspace_id resolved server-side from X-User-Id + X-Group-Id. Agent server MUST send X-Internal-Secret header with value from its CRM_INTERNAL_SECRET env var (must match CRM backend INTERNAL_SECRET). Missing/wrong secret → HTTP 401."
+  },
+  "skills": [
+    {
+      "name": "find_customer",
+      "description": "Tìm khách hàng theo tên, SĐT, email hoặc tag. Dùng khi user hỏi 'tìm khách X', 'kh nào tên Mai', 'search customer 0901...'",
+      "triggers": [
+        "tìm khách",
+        "tìm kh",
+        "lookup customer",
+        "kh tên",
+        "search contact",
+        "tìm người dùng",
+        "kh nào"
+      ],
+      "endpoint": "POST /internal/skills/find_customer",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Tên, SĐT, email hoặc một phần thông tin"
+          },
+          "filter": {
+            "type": "object",
+            "properties": {
+              "tag": {
+                "type": "string"
+              },
+              "lead_status": {
+                "type": "string",
+                "enum": [
+                  "NEW",
+                  "CONTACTED",
+                  "QUALIFIED",
+                  "WON",
+                  "LOST"
+                ]
+              },
+              "last_order_after": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "default": 10,
+            "maximum": 50
+          }
+        }
+      }
+    },
+    {
+      "name": "create_lead",
+      "description": "Tạo lead mới từ thông tin user cung cấp. Dùng khi user muốn thêm khách tiềm năng mới.",
+      "triggers": [
+        "tạo lead",
+        "thêm khách mới",
+        "add lead",
+        "create lead",
+        "tạo khách tiềm năng"
+      ],
+      "endpoint": "POST /internal/skills/create_lead",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "full_name"
+        ],
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "lead_source": {
+            "type": "string",
+            "description": "Ví dụ: facebook, zalo, website, referral"
+          }
+        }
+      }
+    },
+    {
+      "name": "update_lead_status",
+      "description": "Cập nhật trạng thái lead. Dùng khi user nói 'đã gọi cho kh X', 'kh X chốt rồi', 'kh X bỏ'.",
+      "triggers": [
+        "đổi trạng thái",
+        "chốt lead",
+        "lead bỏ",
+        "update status",
+        "kh đã liên hệ"
+      ],
+      "endpoint": "POST /internal/skills/update_lead_status",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "CONTACTED",
+              "QUALIFIED",
+              "WON",
+              "LOST"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "add_note",
+      "description": "Thêm ghi chú cho khách hàng. Dùng khi user muốn ghi lại thông tin cuộc gọi, meeting, quan sát.",
+      "triggers": [
+        "ghi chú",
+        "add note",
+        "ghi lại",
+        "note cho kh",
+        "lưu ý khách"
+      ],
+      "endpoint": "POST /internal/skills/add_note",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "person_id",
+          "content"
+        ],
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "search_orders",
+      "description": "Tìm đơn hàng theo khách/thời gian/trạng thái. Dùng khi user hỏi về đơn, order.",
+      "triggers": [
+        "tìm đơn",
+        "đơn hàng",
+        "search order",
+        "đơn của kh",
+        "đơn tháng này"
+      ],
+      "endpoint": "POST /internal/skills/search_orders",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "COMPLETED",
+              "CANCELLED",
+              "DELIVERED"
+            ]
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "maximum": 50
+          }
+        }
+      }
+    },
+    {
+      "name": "report_revenue",
+      "description": "Báo cáo doanh thu theo kỳ. Dùng khi user hỏi doanh thu hôm nay/tuần/tháng.",
+      "triggers": [
+        "doanh thu",
+        "revenue",
+        "báo cáo",
+        "report",
+        "tổng thu",
+        "doanh số"
+      ],
+      "endpoint": "POST /internal/skills/report_revenue",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week",
+              "month"
+            ],
+            "default": "month"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Dùng kèm to_date cho kỳ tuỳ chỉnh"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    },
+    {
+      "name": "list_campaigns",
+      "description": "Liệt kê pipeline funnel CRM và khuyến mãi đang chạy. Dùng khi user hỏi về chiến dịch, funnel.",
+      "triggers": [
+        "chiến dịch",
+        "campaign",
+        "funnel",
+        "khuyến mãi",
+        "voucher",
+        "pipeline"
+      ],
+      "endpoint": "POST /internal/skills/list_campaigns",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 10,
+            "maximum": 30
+          }
+        }
+      }
+    },
+    {
+      "name": "link_ads_lead",
+      "description": "Gắn thông tin Ads/Facebook vào khách hàng CRM (campaign_id, adset, ad, lead_id).",
+      "triggers": [
+        "gắn ads",
+        "link facebook",
+        "link ads lead",
+        "fb campaign",
+        "ads lead"
+      ],
+      "endpoint": "POST /internal/skills/link_ads_lead",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "person_id"
+        ],
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "fb_campaign_id": {
+            "type": "string"
+          },
+          "fb_adset_id": {
+            "type": "string"
+          },
+          "fb_ad_id": {
+            "type": "string"
+          },
+          "fb_lead_id": {
+            "type": "string"
+          },
+          "lead_source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "bulk_tag",
+      "description": "Gắn tag cho nhiều khách cùng lúc. Dùng khi user muốn label/phân nhóm nhiều khách.",
+      "triggers": [
+        "gắn tag",
+        "bulk tag",
+        "tag nhiều khách",
+        "label khách",
+        "phân nhóm"
+      ],
+      "endpoint": "POST /internal/skills/bulk_tag",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "person_ids",
+          "tags"
+        ],
+        "properties": {
+          "person_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ],
+            "default": "merge",
+            "description": "merge: thêm vào tag cũ, replace: thay toàn bộ"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_appointment",
+      "description": "Tạo lịch hẹn cho khách. Tự động: tìm người theo phone, nếu chưa có thì tạo (cần full_name); resolve service theo tên; pick branch mặc định. Nếu user nói 'đặt lịch khách Mai 14h thứ 6', extract phone+full_name+start_at+service_name.",
+      "triggers": [
+        "đặt lịch",
+        "tạo lịch hẹn",
+        "book appointment",
+        "create appointment",
+        "thêm lịch hẹn",
+        "đặt cho khách"
+      ],
+      "endpoint": "POST /internal/skills/create_appointment",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "phone",
+          "start_at"
+        ],
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "SĐT khách (bắt buộc, dùng để find-or-create person)"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Họ tên — bắt buộc nếu khách chưa tồn tại"
+          },
+          "start_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Thời gian hẹn ISO 8601 (vd 2026-05-10T14:00:00+07:00)"
+          },
+          "duration_min": {
+            "type": "integer",
+            "default": 60,
+            "maximum": 600
+          },
+          "service_name": {
+            "type": "string",
+            "description": "Tên dịch vụ để link vào lịch hẹn (optional, ILIKE)"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false
+    },
+    {
+      "name": "update_appointment_status",
+      "description": "Đổi trạng thái lịch hẹn. Dùng khi 'lịch X đã check-in', 'hủy lịch X', 'hoàn thành lịch X'.",
+      "triggers": [
+        "check-in lịch",
+        "hủy lịch",
+        "hoàn thành lịch",
+        "no show",
+        "đổi status lịch",
+        "cancel appointment"
+      ],
+      "endpoint": "POST /internal/skills/update_appointment_status",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "UUID lịch hẹn"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "BOOKED",
+              "CHECKED_IN",
+              "COMPLETED",
+              "CANCELLED",
+              "NO_SHOW",
+              "WAITING"
+            ]
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false
+    },
+    {
+      "name": "create_bundle",
+      "description": "Tạo combo dịch vụ. Resolve N service theo tên (ILIKE), insert product_bundles + product_bundle_items. Dùng khi 'tạo gói combo X gồm massage + foot detox', 'set combo Y giá 1tr5'.",
+      "triggers": [
+        "tạo combo",
+        "tạo gói dịch vụ",
+        "create bundle",
+        "set combo",
+        "gộp dịch vụ"
+      ],
+      "endpoint": "POST /internal/skills/create_bundle",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "items"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tên combo"
+          },
+          "bundle_price": {
+            "type": "number",
+            "description": "Giá combo (VND)"
+          },
+          "description": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "description": "Danh sách dịch vụ trong combo",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Tên dịch vụ (ILIKE search)"
+                },
+                "qty": {
+                  "type": "integer",
+                  "default": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false
+    },
+    {
+      "name": "list_loyalty_tiers",
+      "description": "Liệt kê hạng thẻ thành viên trong workspace (NORMAL, VIP, GOLD, PLATINUM...), sort theo sort_order. Dùng khi user hỏi 'có những hạng nào', 'tier list', 'list loyalty tiers'.",
+      "triggers": [
+        "hạng thẻ",
+        "list loyalty",
+        "list_loyalty_tiers",
+        "có hạng nào",
+        "tier list"
+      ],
+      "endpoint": "POST /internal/skills/list_loyalty_tiers",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "active_only": {
+            "type": "boolean",
+            "default": true,
+            "description": "Chỉ lấy hạng đang active"
+          },
+          "include_member_count": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "requires_approval": false
+    },
+    {
+      "name": "create_loyalty_tier",
+      "description": "Tạo hạng thẻ thành viên mới (vd Bạc, Vàng, Kim cương). Dùng khi 'thêm hạng X', 'tạo hạng VIP với giảm 10%'.",
+      "triggers": [
+        "tạo hạng",
+        "thêm hạng thẻ",
+        "create loyalty tier",
+        "set hạng"
+      ],
+      "endpoint": "POST /internal/skills/create_loyalty_tier",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tên hạng (vd Bạc, Vàng, Kim cương)"
+          },
+          "min_points": {
+            "type": "integer",
+            "default": 0
+          },
+          "min_spent_amount": {
+            "type": "number",
+            "default": 0
+          },
+          "discount_percent": {
+            "type": "integer",
+            "default": 0
+          },
+          "benefits": {
+            "type": "string",
+            "description": "Mô tả ưu đãi"
+          },
+          "color": {
+            "type": "string",
+            "default": "#6b7280"
+          },
+          "free_service_count": {
+            "type": "integer",
+            "default": 0
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false
+    },
+    {
+      "name": "list_appointments",
+      "description": "Liệt kê lịch hẹn theo ngày/tuần/today, lọc theo status. Dùng khi user hỏi 'lịch hôm nay', 'ai đặt tuần này', 'lịch ngày X'.",
+      "triggers": [
+        "lịch hẹn",
+        "appointment",
+        "lịch hôm nay",
+        "lịch tuần",
+        "ai đặt",
+        "booking"
+      ],
+      "endpoint": "POST /internal/skills/list_appointments",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "YYYY-MM-DD (timezone Asia/Ho_Chi_Minh). Bỏ qua nếu dùng range."
+          },
+          "range": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week"
+            ],
+            "description": "today = ngày hôm nay (VN), week = ±7 ngày từ hiện tại"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "BOOKED",
+              "CHECKED_IN",
+              "COMPLETED",
+              "CANCELLED",
+              "NO_SHOW",
+              "WAITING"
+            ]
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "maximum": 100
+          }
+        }
+      }
+    }
+  ]
+}

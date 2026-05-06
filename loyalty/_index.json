@@ -1,0 +1,149 @@
+{
+  "app": "crm",
+  "module": "loyalty",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": { "header_secret": "X-Internal-Secret", "header_user": "X-User-Id", "header_group": "X-Group-Id" },
+  "skills": [
+    {
+      "name": "loyalty_summary",
+      "description": "Tổng quan loyalty: số hạng, KH có loyalty, nhãn, nguồn.",
+      "triggers": ["tổng quan loyalty", "thống kê loyalty"],
+      "endpoint": "POST /internal/skills/loyalty_summary",
+      "input_schema": { "type": "object", "properties": {} },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "update_loyalty_tier",
+      "description": "Sửa hạng thẻ thành viên.",
+      "triggers": ["sửa hạng thẻ", "update loyalty tier"],
+      "endpoint": "POST /internal/skills/update_loyalty_tier",
+      "input_schema": {
+        "type": "object", "required": ["tier_id"],
+        "properties": {
+          "tier_id": { "type": "string" },
+          "name": { "type": "string" },
+          "min_points": { "type": "integer" },
+          "min_spent_amount": { "type": "number" },
+          "discount_percent": { "type": "integer" },
+          "benefits": { "type": "string" },
+          "color": { "type": "string" },
+          "free_service_count": { "type": "integer" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "delete_loyalty_tier",
+      "description": "Xóa hạng thẻ (KH thuộc hạng sẽ chuyển về NORMAL).",
+      "triggers": ["xóa hạng thẻ"],
+      "endpoint": "POST /internal/skills/delete_loyalty_tier",
+      "input_schema": {
+        "type": "object", "required": ["tier_id"],
+        "properties": { "tier_id": { "type": "string" }, "reason": { "type": "string" } }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "assign_loyalty_tier",
+      "description": "Gán hạng thẻ cho 1 KH cụ thể (manual override, bỏ qua auto-tier).",
+      "triggers": ["gán hạng cho KH", "set tier khách"],
+      "endpoint": "POST /internal/skills/assign_loyalty_tier",
+      "input_schema": {
+        "type": "object", "required": ["customer_id", "tier_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "tier_id": { "type": "string" },
+          "expires_at": { "type": "string", "format": "date" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "count_loyalty_customers",
+      "description": "Đếm số KH có loyalty (tổng + breakdown theo tier).",
+      "triggers": ["đếm KH loyalty", "số KH có thẻ"],
+      "endpoint": "POST /internal/skills/count_loyalty_customers",
+      "input_schema": { "type": "object", "properties": { "tier_id": { "type": "string" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_loyalty_history",
+      "description": "Lịch sử tích/dùng điểm của 1 KH hoặc toàn workspace.",
+      "triggers": ["lịch sử điểm", "history loyalty"],
+      "endpoint": "POST /internal/skills/list_loyalty_history",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": { "type": "string" },
+          "action": { "type": "string", "enum": ["EARN", "REDEEM", "EXPIRE", "ADJUST", "ALL"], "default": "ALL" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "manage_loyalty_label",
+      "description": "Hybrid CRUD nhãn loyalty (vd 'Khách thân thiết', 'Khách mới'). Action: list/create/update/delete.",
+      "triggers": ["nhãn loyalty", "label loyalty"],
+      "endpoint": "POST /internal/skills/manage_loyalty_label",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "delete"] },
+          "label_id": { "type": "string" },
+          "label_data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "color": { "type": "string" },
+              "criteria": { "type": "object" }
+            }
+          }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "manage_loyalty_source",
+      "description": "Hybrid CRUD nguồn KH (Walk-in, Referral, Ads, Zalo). Action: list/create/update/delete.",
+      "triggers": ["nguồn KH loyalty", "source khách"],
+      "endpoint": "POST /internal/skills/manage_loyalty_source",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "delete"] },
+          "source_id": { "type": "string" },
+          "source_data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "icon": { "type": "string" },
+              "is_active": { "type": "boolean", "default": true }
+            }
+          }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "list_loyalty_labels",
+      "description": "Liệt kê nhãn loyalty.",
+      "triggers": ["danh sách nhãn loyalty"],
+      "endpoint": "POST /internal/skills/list_loyalty_labels",
+      "input_schema": { "type": "object", "properties": { "active_only": { "type": "boolean", "default": true } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_loyalty_sources",
+      "description": "Liệt kê nguồn KH.",
+      "triggers": ["danh sách nguồn KH"],
+      "endpoint": "POST /internal/skills/list_loyalty_sources",
+      "input_schema": { "type": "object", "properties": { "active_only": { "type": "boolean", "default": true } } },
+      "type": "action", "risk_level": "read"
+    }
+  ]
+}

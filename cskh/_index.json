@@ -1,0 +1,252 @@
+{
+  "app": "crm",
+  "module": "cskh",
+  "version": "1.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": { "header_secret": "X-Internal-Secret", "header_user": "X-User-Id", "header_group": "X-Group-Id" },
+  "skills": [
+    {
+      "name": "cskh_summary",
+      "description": "Tổng quan CSKH: số task theo từng tab (nhắc lịch / no-show / không làm DV / sinh nhật / hủy lịch).",
+      "triggers": ["tổng quan CSKH"],
+      "endpoint": "POST /internal/skills/cskh_summary",
+      "input_schema": { "type": "object", "properties": { "branch_id": { "type": "string" }, "staff_id": { "type": "string" } } },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "cskh_appointment_reminders",
+      "description": "Danh sách KH có lịch hẹn sắp tới cần nhắc xác nhận.",
+      "triggers": ["nhắc lịch hẹn", "appointment reminder"],
+      "endpoint": "POST /internal/skills/cskh_appointment_reminders",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "branch_id": { "type": "string" },
+          "staff_id": { "type": "string" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "cskh_no_show_list",
+      "description": "Danh sách KH no-show (đã hẹn nhưng không đến).",
+      "triggers": ["khách no-show", "không đến"],
+      "endpoint": "POST /internal/skills/cskh_no_show_list",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "branch_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "cskh_no_visit_list",
+      "description": "Danh sách KH lâu không quay lại làm DV.",
+      "triggers": ["khách lâu không đến"],
+      "endpoint": "POST /internal/skills/cskh_no_visit_list",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "days_since_last_visit": { "type": "integer", "default": 30 },
+          "branch_id": { "type": "string" },
+          "min_total_spent": { "type": "number" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "cskh_birthday_list",
+      "description": "Danh sách KH sinh nhật sắp tới (mặc định 7 ngày).",
+      "triggers": ["sinh nhật khách", "birthday list"],
+      "endpoint": "POST /internal/skills/cskh_birthday_list",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "days_ahead": { "type": "integer", "default": 7 },
+          "include_today": { "type": "boolean", "default": true }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "cskh_cancelled_appointments_list",
+      "description": "Danh sách lịch hẹn đã hủy cần follow-up.",
+      "triggers": ["lịch hẹn hủy", "cancelled appointments"],
+      "endpoint": "POST /internal/skills/cskh_cancelled_appointments_list",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "reason": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "send_appointment_reminder_zalo",
+      "description": "Gửi Zalo nhắc lịch hẹn cho KH.",
+      "triggers": ["gửi Zalo nhắc lịch"],
+      "endpoint": "POST /internal/skills/send_appointment_reminder_zalo",
+      "input_schema": {
+        "type": "object", "required": ["appointment_id"],
+        "properties": {
+          "appointment_id": { "type": "string" },
+          "template_id": { "type": "string" },
+          "custom_message": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "send_birthday_zalo",
+      "description": "Gửi Zalo chúc sinh nhật + voucher.",
+      "triggers": ["gửi Zalo sinh nhật"],
+      "endpoint": "POST /internal/skills/send_birthday_zalo",
+      "input_schema": {
+        "type": "object", "required": ["customer_id"],
+        "properties": {
+          "customer_id": { "type": "string" },
+          "template_id": { "type": "string" },
+          "voucher_code": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "mark_cskh_done",
+      "description": "Đánh dấu task CSKH đã xử lý (sau khi gọi/nhắn xong).",
+      "triggers": ["đánh dấu CSKH xong", "mark CSKH done"],
+      "endpoint": "POST /internal/skills/mark_cskh_done",
+      "input_schema": {
+        "type": "object", "required": ["cskh_task_id"],
+        "properties": {
+          "cskh_task_id": { "type": "string" },
+          "result": { "type": "string", "enum": ["CONTACTED", "NO_ANSWER", "CALLBACK", "WON", "LOST"] },
+          "note": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "bulk_send_cskh_zalo",
+      "description": "Gửi Zalo hàng loạt cho nhiều task CSKH.",
+      "triggers": ["bulk gửi Zalo CSKH"],
+      "endpoint": "POST /internal/skills/bulk_send_cskh_zalo",
+      "input_schema": {
+        "type": "object", "required": ["cskh_task_ids", "template_id"],
+        "properties": {
+          "cskh_task_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 100 },
+          "template_id": { "type": "string" },
+          "voucher_code": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "bulk_initiate_calls",
+      "description": "Tạo hàng loạt cuộc gọi cho nhiều KH (queue cho NV).",
+      "triggers": ["gọi hàng loạt"],
+      "endpoint": "POST /internal/skills/bulk_initiate_calls",
+      "input_schema": {
+        "type": "object", "required": ["person_ids", "staff_id"],
+        "properties": {
+          "person_ids": { "type": "array", "items": { "type": "string" }, "maxItems": 100 },
+          "staff_id": { "type": "string" },
+          "script_id": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "normal"
+    },
+    {
+      "name": "generate_cskh_tasks",
+      "description": "Cron job: tự sinh task CSKH từ rules (nhắc lịch sáng / sinh nhật / no-visit).",
+      "triggers": ["sinh task CSKH"],
+      "endpoint": "POST /internal/skills/generate_cskh_tasks",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "task_types": { "type": "array", "items": { "type": "string", "enum": ["appointment_reminder", "no_show", "no_visit", "birthday", "cancelled_followup"] } }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "manage_cskh_rules",
+      "description": "Hybrid CRUD rules CSKH (rule engine: trigger + condition + action).",
+      "triggers": ["cấu hình rule CSKH"],
+      "endpoint": "POST /internal/skills/manage_cskh_rules",
+      "input_schema": {
+        "type": "object", "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "enum": ["list", "create", "update", "delete", "toggle"] },
+          "rule_id": { "type": "string" },
+          "rule_data": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "trigger": { "type": "string" },
+              "conditions": { "type": "object" },
+              "actions": { "type": "array", "items": { "type": "object" } },
+              "enabled": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "type": "action", "risk_level": "high"
+    },
+    {
+      "name": "cskh_report",
+      "description": "Báo cáo hiệu quả CSKH: completion rate, conversion, top NV.",
+      "triggers": ["báo cáo CSKH"],
+      "endpoint": "POST /internal/skills/cskh_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": { "type": "string", "enum": ["today", "week", "month", "quarter"], "default": "month" },
+          "staff_id": { "type": "string" },
+          "task_type": { "type": "string" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "export_cskh_list",
+      "description": "Export Excel danh sách CSKH theo tab+filter.",
+      "triggers": ["export CSKH"],
+      "endpoint": "POST /internal/skills/export_cskh_list",
+      "input_schema": {
+        "type": "object", "required": ["tab"],
+        "properties": {
+          "tab": { "type": "string", "enum": ["appointment_reminders", "no_show", "no_visit", "birthday", "cancelled"] },
+          "format": { "type": "string", "enum": ["xlsx", "csv"], "default": "xlsx" },
+          "filter": { "type": "object" }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    },
+    {
+      "name": "list_cskh_history",
+      "description": "Lịch sử thao tác CSKH cho 1 KH hoặc 1 NV.",
+      "triggers": ["lịch sử CSKH"],
+      "endpoint": "POST /internal/skills/list_cskh_history",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": { "type": "string" },
+          "staff_id": { "type": "string" },
+          "from_date": { "type": "string", "format": "date" },
+          "to_date": { "type": "string", "format": "date" },
+          "limit": { "type": "integer", "default": 50 }
+        }
+      },
+      "type": "action", "risk_level": "read"
+    }
+  ]
+}

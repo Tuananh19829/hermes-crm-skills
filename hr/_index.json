@@ -1,0 +1,258 @@
+{
+  "app": "crm",
+  "module": "hr",
+  "version": "2.0.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id"
+  },
+  "skills": [
+    {
+      "name": "list_staff",
+      "description": "Lấy danh sách nhân viên, lọc theo phòng ban / ca / trạng thái",
+      "endpoint": "POST /internal/skills/list_staff",
+      "triggers": [
+        "danh sách nhân viên",
+        "list nhân viên",
+        "xem nhân viên",
+        "nhân viên phòng ban",
+        "nhân viên ca",
+        "tìm nhân viên",
+        "nhân viên đang làm",
+        "nhân viên nghỉ việc"
+      ],
+      "required_params": [],
+      "optional_params": ["department_id", "shift_id", "status", "search", "page", "limit"]
+    },
+    {
+      "name": "get_staff_detail",
+      "description": "Xem chi tiết NV: thông tin cá nhân, ca làm, KPI tháng, hoa hồng tích lũy",
+      "endpoint": "POST /internal/skills/get_staff_detail",
+      "triggers": [
+        "chi tiết nhân viên",
+        "thông tin nhân viên",
+        "hồ sơ nhân viên",
+        "kpi nhân viên",
+        "hoa hồng nhân viên"
+      ],
+      "required_params": ["staff_id"],
+      "optional_params": ["include_kpi", "include_commission", "month"]
+    },
+    {
+      "name": "get_shift_schedule",
+      "description": "Xem lịch phân ca theo ngày hoặc tuần, theo nhân viên hoặc phòng ban",
+      "endpoint": "POST /internal/skills/get_shift_schedule",
+      "triggers": [
+        "lịch ca",
+        "phân ca",
+        "ca làm việc",
+        "lịch làm việc",
+        "ai làm ca sáng",
+        "ai trực hôm nay",
+        "lịch trực"
+      ],
+      "required_params": [],
+      "optional_params": ["staff_id", "department_id", "date", "view", "week_start"]
+    },
+    {
+      "name": "get_timesheet",
+      "description": "Xem bảng chấm công NV theo tháng: đúng giờ, đi muộn, vắng mặt, về sớm",
+      "endpoint": "POST /internal/skills/get_timesheet",
+      "triggers": [
+        "chấm công",
+        "điểm danh",
+        "đi muộn",
+        "vắng mặt",
+        "bảng công",
+        "nghỉ không phép",
+        "nghỉ có phép"
+      ],
+      "required_params": [],
+      "optional_params": ["staff_id", "department_id", "month"]
+    },
+    {
+      "name": "get_payroll",
+      "description": "Xem bảng lương NV theo tháng: lương cơ bản, hoa hồng, thưởng/phạt, thực lĩnh",
+      "endpoint": "POST /internal/skills/get_payroll",
+      "triggers": [
+        "bảng lương",
+        "lương tháng",
+        "lương nhân viên",
+        "tính lương",
+        "lương thực lĩnh",
+        "payroll"
+      ],
+      "required_params": [],
+      "optional_params": ["staff_id", "department_id", "month", "status"]
+    },
+    {
+      "name": "get_commissions",
+      "description": "Xem hoa hồng NV theo dịch vụ và tháng, so sánh nhiều tháng, xếp hạng",
+      "endpoint": "POST /internal/skills/get_commissions",
+      "triggers": [
+        "hoa hồng",
+        "commission",
+        "hoa hồng tháng",
+        "hoa hồng dịch vụ",
+        "tiền hoa hồng"
+      ],
+      "required_params": [],
+      "optional_params": ["staff_id", "department_id", "month", "service_id", "compare_months"]
+    },
+    {
+      "name": "create_advance_salary",
+      "description": "Tạo phiếu tạm ứng lương cho NV, tự động trừ vào lương tháng được chỉ định",
+      "endpoint": "POST /internal/skills/create_advance_salary",
+      "triggers": [
+        "tạm ứng lương",
+        "ứng lương",
+        "tạo phiếu tạm ứng",
+        "nhân viên xin tạm ứng",
+        "ứng trước lương"
+      ],
+      "required_params": ["staff_id", "amount", "reason"],
+      "optional_params": ["advance_date", "deduct_month", "approved_by", "note"]
+    },
+    {
+      "name": "create_bonus_penalty",
+      "description": "Tạo phiếu thưởng hoặc phạt cho NV, cộng/trừ vào bảng lương tháng tương ứng",
+      "endpoint": "POST /internal/skills/create_bonus_penalty",
+      "triggers": [
+        "thưởng nhân viên",
+        "phạt nhân viên",
+        "tạo thưởng",
+        "khen thưởng",
+        "kỷ luật",
+        "bonus",
+        "penalty"
+      ],
+      "required_params": ["staff_id", "type", "amount", "reason", "category"],
+      "optional_params": ["apply_month", "issued_by", "note"]
+    },
+    {
+      "name": "get_staff_performance",
+      "description": "Đánh giá hiệu suất NV: KPI%, đánh giá KH, doanh thu, xếp hạng nhóm",
+      "endpoint": "POST /internal/skills/get_staff_performance",
+      "triggers": [
+        "hiệu suất nhân viên",
+        "đánh giá nhân viên",
+        "performance",
+        "kpi tháng",
+        "đánh giá khách hàng",
+        "xếp hạng nhân viên",
+        "nhân viên xuất sắc"
+      ],
+      "required_params": [],
+      "optional_params": ["staff_id", "department_id", "month", "compare_months", "sort_by", "sort_order"]
+    },
+    {
+      "name": "list_departments",
+      "description": "Danh sách phòng ban, số lượng NV, trưởng phòng — dùng để lấy department_id cho các skill khác",
+      "endpoint": "POST /internal/skills/list_departments",
+      "triggers": [
+        "danh sách phòng ban",
+        "phòng ban",
+        "bộ phận",
+        "trưởng phòng",
+        "số nhân viên phòng"
+      ],
+      "required_params": [],
+      "optional_params": ["status", "include_staff_count", "include_head"]
+    },
+    {
+      "name": "manage_shift_templates",
+      "description": "Tạo/sửa/xóa mẫu ca làm việc (tên ca, giờ bắt đầu, giờ kết thúc, ngày trong tuần, màu sắc)",
+      "endpoint": "POST /internal/skills/manage_shift_templates",
+      "triggers": [
+        "tạo ca",
+        "thêm ca làm",
+        "shift template",
+        "ca sáng",
+        "ca chiều",
+        "cấu hình ca",
+        "sửa ca làm việc",
+        "xóa ca làm",
+        "danh sách ca",
+        "quản lý ca"
+      ],
+      "required_params": ["action"],
+      "optional_params": ["shift_template_id", "name", "start_time", "end_time", "days_of_week", "color", "note"]
+    },
+    {
+      "name": "manage_salary_policy",
+      "description": "Xem/tạo/sửa chính sách lương (lương cơ bản, phụ cấp, quy tắc KPI, hệ số) áp dụng theo phòng ban hoặc cá nhân",
+      "endpoint": "POST /internal/skills/manage_salary_policy",
+      "triggers": [
+        "chính sách lương",
+        "cấu hình lương",
+        "salary policy",
+        "hệ số lương",
+        "phụ cấp",
+        "lương cơ bản",
+        "quy tắc kpi lương",
+        "thêm chính sách lương",
+        "sửa chính sách lương"
+      ],
+      "required_params": ["action"],
+      "optional_params": ["policy_id", "name", "base_salary", "allowances", "kpi_rules", "apply_to", "effective_from", "department_id", "note"]
+    },
+    {
+      "name": "manage_commission_rules",
+      "description": "Xem/tạo/sửa quy tắc hoa hồng (% doanh thu, số cố định/SP, áp dụng cho phòng ban hoặc dịch vụ cụ thể)",
+      "endpoint": "POST /internal/skills/manage_commission_rules",
+      "triggers": [
+        "quy tắc hoa hồng",
+        "commission rule",
+        "cấu hình HH",
+        "% hoa hồng DV",
+        "thêm quy tắc HH",
+        "sửa hoa hồng",
+        "xóa quy tắc hoa hồng",
+        "hoa hồng theo dịch vụ",
+        "cấu hình commission"
+      ],
+      "required_params": ["action"],
+      "optional_params": ["rule_id", "name", "type", "value", "apply_to", "min_revenue", "max_payout", "effective_from", "effective_to", "department_id", "service_id", "note"]
+    },
+    {
+      "name": "fix_timesheet_error",
+      "description": "Ghi nhận và sửa lỗi chấm công (vắng có phép, nghỉ bệnh, đi muộn có lý do, duyệt đơn nghỉ phép)",
+      "endpoint": "POST /internal/skills/fix_timesheet_error",
+      "triggers": [
+        "sửa chấm công",
+        "duyệt nghỉ phép",
+        "fix timesheet",
+        "NV xin nghỉ",
+        "đơn nghỉ phép",
+        "chấm công sai",
+        "điều chỉnh chấm công",
+        "vắng có phép",
+        "nghỉ bệnh",
+        "đi muộn có lý do"
+      ],
+      "required_params": ["action"],
+      "optional_params": ["request_id", "staff_id", "department_id", "status", "month", "request_type", "date", "session", "reason", "attachment_url", "note", "field", "new_value"]
+    },
+    {
+      "name": "get_my_income",
+      "description": "Nhân viên xem thu nhập bản thân theo tháng (lương cơ bản, hoa hồng, thưởng/phạt, tạm ứng đã trừ, thực lĩnh)",
+      "endpoint": "POST /internal/skills/get_my_income",
+      "triggers": [
+        "thu nhập của tôi",
+        "lương tháng này",
+        "my income",
+        "tôi được bao nhiêu",
+        "xem hoa hồng tôi",
+        "lương của tôi",
+        "tôi được lương bao nhiêu",
+        "hoa hồng tháng này của tôi",
+        "phiếu lương của tôi",
+        "tiền thưởng tôi được"
+      ],
+      "required_params": [],
+      "optional_params": ["month", "include_commission_detail", "include_bonus_penalty_detail", "compare_previous_month"]
+    }
+  ]
+}
