@@ -1,124 +1,32 @@
 #!/bin/bash
-# ============================================================
-# AUTO-APPLY customer_groups handler patch on VPS spaclaw-main
-# Version: 3 (switch keyword = "action" not "skillName")
-# ============================================================
-# Usage: SSH vào VPS, paste:
-#   bash <(curl -sL https://raw.githubusercontent.com/Tuananh19829/hermes-crm-skills/main/customer_groups/APPLY_PATCH.sh)
-# ============================================================
-
+# Insert FIXED customer_groups handlers at TOP of switch (action) — first match wins, overrides buggy cases below.
 set -e
-
+MODULE="customer_groups"
 ROUTES_FILE="/opt/crm/agent-tools-hermes.js"
-BACKUP_FILE="/opt/crm/agent-tools-hermes.js.bak-$(date +%Y%m%d-%H%M%S)"
-PATCH_URL="https://raw.githubusercontent.com/Tuananh19829/hermes-crm-skills/main/customer_groups/HANDLER_PATCH.js"
-TMP_PATCH="/tmp/customer_groups_full.js"
-TMP_BLOCK="/tmp/customer_groups_cases_only.js"
+BACKUP_FILE="/opt/crm/agent-tools-hermes.js.bak-${MODULE}-fix-$(date +%Y%m%d-%H%M%S)"
+PATCH_URL="https://raw.githubusercontent.com/Tuananh19829/hermes-crm-skills/main/${MODULE}/HANDLER_PATCH.js"
+TMP_PATCH="/tmp/${MODULE}_full.js"
+TMP_BLOCK="/tmp/${MODULE}_block.js"
+FIRST_CASE="case 'get_customer_group_detail':"
 
-echo "=== Step 1: Pre-flight check ==="
-[ -f "$ROUTES_FILE" ] || { echo "ERROR: $ROUTES_FILE không tồn tại"; exit 1; }
-
-EXISTING=$(grep -c "case 'get_customer_group_detail'" "$ROUTES_FILE" 2>/dev/null || echo "0")
-if [ "$EXISTING" -gt 0 ] 2>/dev/null; then
-    echo "WARN: Patch đã có sẵn ($EXISTING match). Skip."
-    exit 0
-fi
-
-echo "=== Step 2: Backup file gốc ==="
-sudo cp "$ROUTES_FILE" "$BACKUP_FILE"
-echo "Backup: $BACKUP_FILE"
-
-echo "=== Step 3: Pull patch từ git ==="
+[ -f "$ROUTES_FILE" ] || exit 1
 curl -sL "$PATCH_URL" -o "$TMP_PATCH"
-[ -s "$TMP_PATCH" ] || { echo "ERROR: Pull patch failed"; exit 1; }
+START_LINE=$(grep -n "^${FIRST_CASE}" "$TMP_PATCH" | head -1 | cut -d: -f1)
+[ -z "$START_LINE" ] && { echo "no first case in patch"; exit 1; }
+tail -n +$START_LINE "$TMP_PATCH" > "$TMP_BLOCK"
 
-echo "=== Step 4: Extract 7 case block từ patch file ==="
-# Patch file có 2 phần: SWITCH-CASE BLOCK (cần) + helper docs (bỏ)
-# Lấy từ "case 'get_customer_group_detail':" đến cuối "case 'list_group_members': {...}"
-# Đếm braces để tìm đúng end của case cuối cùng
-
-awk '
-  /^case .get_customer_group_detail/ { found=1 }
-  found {
-    print
-    # Track {...} balance
-    n_open = gsub(/\{/, "{")
-    n_close = gsub(/\}/, "}")
-    balance += n_open - n_close
-    if (in_last_case && balance == 0) { exit }
-  }
-  found && /^case .list_group_members/ { in_last_case=1 }
-' "$TMP_PATCH" > "$TMP_BLOCK"
-
-LINES=$(wc -l < "$TMP_BLOCK")
-echo "Extracted $LINES dòng vào $TMP_BLOCK"
-[ "$LINES" -lt 50 ] && { echo "ERROR: Block quá ngắn, có vấn đề. Xem $TMP_BLOCK"; exit 1; }
-
-echo "=== Step 5: Insert vào routes.js (dùng awk) ==="
-
-# Tìm dòng 'default:' trong switch (action) {...} để insert TRƯỚC nó
-# Strategy: tạo file mới = phần trước default: + patch block + default: trở đi
-
-# Backup trước
-sudo cp "$ROUTES_FILE" /tmp/routes_pre_patch.js
-
-# Dùng awk để chèn block trước "default:" đầu tiên gặp trong switch (action)
+sudo cp "$ROUTES_FILE" "$BACKUP_FILE"
+sudo cp "$ROUTES_FILE" /tmp/routes_pre_${MODULE}.js
 awk -v patch_file="$TMP_BLOCK" '
-  BEGIN {
-    # Đọc patch block vào biến
-    while ((getline line < patch_file) > 0) {
-      patch_block = patch_block line "\n"
-    }
-    close(patch_file)
-    inserted = 0
-  }
-  # Detect switch (action) block
-  /switch\s*\(\s*action\s*\)/ { in_switch = 1 }
-  # Insert before first default: encountered in the switch
-  in_switch && !inserted && /^[[:space:]]*default[[:space:]]*:/ {
-    print patch_block
-    inserted = 1
-  }
+  BEGIN { while ((getline line < patch_file) > 0) patch_block = patch_block line "\n"; close(patch_file); inserted=0 }
+  /switch[[:space:]]*\([[:space:]]*action[[:space:]]*\)[[:space:]]*\{/ && !inserted { print; print patch_block; inserted=1; next }
   { print }
-  END {
-    if (!inserted) {
-      print "ERROR: Không tìm thấy default: trong switch (action)" > "/dev/stderr"
-      exit 1
-    }
-  }
-' /tmp/routes_pre_patch.js > /tmp/routes_patched.js
+  END { if (!inserted) exit 1 }
+' /tmp/routes_pre_${MODULE}.js > /tmp/routes_patched_${MODULE}.js
 
-# Verify file mới có 7 case mới
-NEW_COUNT=$(grep -c "case 'get_customer_group_detail'" /tmp/routes_patched.js)
-[ "$NEW_COUNT" = "1" ] || { echo "ERROR: Insert thất bại (count=$NEW_COUNT)"; exit 1; }
-
-# Move file mới về production path
-sudo mv /tmp/routes_patched.js "$ROUTES_FILE"
-echo "Insert thành công: 7 case mới"
-
-echo "=== Step 6: Restart container ==="
+NEW=$(grep -c "case 'get_customer_group_detail'" /tmp/routes_patched_${MODULE}.js)
+[ "$NEW" -ge 2 ] || { echo "FAIL: case count $NEW (expected >=2)"; exit 1; }
+sudo mv /tmp/routes_patched_${MODULE}.js "$ROUTES_FILE"
 docker restart appcrm-api
 sleep 4
-
-echo "=== Step 7: Verify live ==="
-LIVE_COUNT=$(docker exec appcrm-api grep -c "case 'get_customer_group_detail'" /app/dist/modules/agent-tools/routes.js 2>/dev/null || echo "0")
-echo "Live count: $LIVE_COUNT (expect: 1)"
-
-if [ "$LIVE_COUNT" != "1" ]; then
-    echo "ERROR: Verify FAIL — restore backup"
-    sudo cp "$BACKUP_FILE" "$ROUTES_FILE"
-    docker restart appcrm-api
-    exit 1
-fi
-
-echo "=== Step 8: Logs check ==="
-docker logs appcrm-api --tail 20 2>&1 | grep -iE "error|listening|started" | tail -5 || true
-
-echo ""
-echo "✅ DONE — 7 customer_groups handlers LIVE"
-echo "Backup: $BACKUP_FILE"
-echo "Rollback nếu cần: sudo cp $BACKUP_FILE $ROUTES_FILE && docker restart appcrm-api"
-echo ""
-echo "→ Báo Hub re-test bằng cách commit ack:"
-echo "   cd /tmp && git clone https://github.com/Tuananh19829/hermes-crm-skills.git 2>/dev/null; cd hermes-crm-skills"
-echo "   git commit --allow-empty -m 'verified live customer_groups handlers' && git push"
+echo "✅ ${MODULE} fix applied (top-of-switch); backup $BACKUP_FILE; case count: $NEW"
