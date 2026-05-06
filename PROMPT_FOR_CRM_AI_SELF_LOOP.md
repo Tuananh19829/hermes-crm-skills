@@ -136,3 +136,141 @@ CRM AI tạo file `e2e_reports/customer_groups_AUTOLOOP_round<N>_<date>.md` ghi:
 - (Mỗi module có file `<module>_20260506.md` liệt kê skill lỗi)
 
 CRM AI lặp self-loop từng module. Hub chỉ ack cuối cùng + chạy round 2 (8 module mid) + round 3 (8 module lớn) khi 8 module nhỏ xanh.
+
+---
+
+## 🆕 Workflow B — THÊM SKILL MỚI vào agent CRM
+
+> Khi backend CRM có endpoint mới muốn agent gọi được, hoặc user yêu cầu skill chưa có trong 723 spec.
+
+### Bước 1 — Tạo handler backend
+
+Sửa `/opt/crm/agent-tools-hermes.js` thêm case mới trong `switch (skillName)`:
+
+```javascript
+case 'merge_customer_groups': {
+  const { source_group_id, target_group_id, delete_source = false } = body;
+  if (!source_group_id || !target_group_id) {
+    return res.status(400).json({ ok: false, error: { code: 'MISSING_PARAMS' } });
+  }
+  await prisma.$executeRawUnsafe(`
+    UPDATE customer_group_members SET group_id = $1::uuid
+    WHERE group_id = $2::uuid
+    ON CONFLICT (group_id, customer_id) DO NOTHING
+  `, target_group_id, source_group_id);
+  if (delete_source) {
+    await prisma.$executeRawUnsafe(`DELETE FROM customer_groups WHERE id = $1::uuid AND workspace_id = $2`, source_group_id, workspaceId);
+  }
+  return res.json({ ok: true, data: { merged: true, source_group_id, target_group_id, source_deleted: delete_source } });
+}
+```
+
+`docker restart appcrm-api`.
+
+### Bước 2 — Update `<module>/HANDLER_PATCH.js`
+
+Thêm snippet trên vào cuối file, để Hub có ground truth.
+
+### Bước 3 — Update `<module>/_index.json`
+
+Thêm entry skill mới (ví dụ vào `customer_groups/_index.json`):
+
+```json
+{
+  "skills": [
+    ...existing,
+    {
+      "name": "merge_customer_groups",
+      "description": "Gộp toàn bộ thành viên từ nhóm nguồn vào nhóm đích. Optional xoá nhóm nguồn sau khi gộp. Args mặc định khi user không cung cấp: hỏi lại user, KHÔNG tự sinh.",
+      "triggers": ["gộp 2 nhóm", "merge group", "chuyển thành viên"],
+      "backend_status": "implemented",
+      "handler_path": "/internal/agent-tools/merge_customer_groups",
+      "verified_at": "2026-05-06"
+    }
+  ]
+}
+```
+
+### Bước 4 — Update `_tool_spec_anthropic.json` + `_tool_spec_anthropic_implemented.json`
+
+Thêm tool definition (Anthropic format):
+
+```json
+{
+  "name": "merge_customer_groups",
+  "description": "Gộp 2 nhóm khách hàng — chuyển members từ source_group sang target_group, optional xoá source.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "source_group_id": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID nhóm nguồn"
+      },
+      "target_group_id": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID nhóm đích"
+      },
+      "delete_source": {
+        "type": "boolean",
+        "default": false,
+        "description": "Xoá nhóm nguồn sau khi gộp"
+      }
+    },
+    "required": ["source_group_id", "target_group_id"]
+  }
+}
+```
+
+Thêm vào CẢ 2 file (full + implemented).
+
+### Bước 5 — Bump `_implemented.json`
+
+```json
+{
+  "implemented": [..., "merge_customer_groups"],
+  "implemented_count": <count + 1>
+}
+```
+
+### Bước 6 — Commit với tag để Hub auto-deploy
+
+```bash
+git add customer_groups/ _tool_spec_anthropic*.json _implemented.json
+git commit -m "feat(customer_groups): add merge_customer_groups skill
+
+ADD_SKILL: merge_customer_groups in customer_groups
+REQUIRES HUB SPEC DEPLOY: customer_groups
+"
+git push
+```
+
+**Hub script** `scripts/hub_deploy_spec.sh --auto` sẽ đọc commit message, detect `REQUIRES HUB SPEC DEPLOY: customer_groups`, tự `docker cp` `customer_groups/_index.json` + tool_spec lên Hub VPS + restart hermes-api.
+
+### Bước 7 — CRM AI tự test skill mới
+
+Sau khi commit, đợi Hub script ack (commit `[hub-deploy]` từ Hub side hoặc message comment). Rồi CRM AI re-run E2E:
+
+```bash
+curl -s -X POST "https://api-core.spaclaw.pro/api/v1/hermes/companies/$GROUP/agents/crm/ask" \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"message":"Hãy gộp nhóm A vào nhóm B (merge_customer_groups)"}'
+```
+
+→ Verdict PASS thì xong. NO_SKILL thì coi commit Hub đã chạy chưa.
+
+---
+
+## 📝 Tag commit message convention
+
+Hub script `hub_deploy_spec.sh --auto` parse các tag sau:
+
+| Tag trong commit body | Hành động Hub |
+|---|---|
+| `REQUIRES HUB SPEC DEPLOY: <module>` | Deploy `<module>/_index.json` + tool_spec → Hub VPS, restart hermes-api |
+| `ADD_SKILL: <name> in <module>` | Đồng nghĩa REQUIRES HUB SPEC DEPLOY (auto detect cùng module) |
+| `REMOVE_SKILL: <name> in <module>` | Deploy + log skill name bị remove |
+| `REQUIRES HUB ACTION` (không tag module) | KHÔNG auto, ping anh xử tay |
+
+CRM AI ghi tag CHÍNH XÁC dòng nguyên (không nested trong block code), Hub regex grep từ `git log -1 --pretty=%B`.
