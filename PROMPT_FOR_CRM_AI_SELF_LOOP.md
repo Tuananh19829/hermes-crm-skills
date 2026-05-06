@@ -54,23 +54,46 @@ Script tự:
 
 ---
 
-## 4. Quy trình 1 module (làm tuần tự, KHÔNG tự sang module kế)
+## 4. Quy trình 1 module — SEED TRƯỚC, ĐỌC SAU
+
+**Quan trọng**: nếu chỉ test với sentinel UUID → chỉ verify handler có/không, KHÔNG verify data thật. Phải seed data trước rồi mới test READ trên data đó.
+
+### Bước 1 — Phân loại skill trong module thành 3 nhóm
+- **WRITE/SEED**: `create_*`, `add_*` (tạo data mới)
+- **UPDATE**: `update_*`, `bulk_*`, `assign_*` (cần id từ bước SEED)
+- **READ**: `list_*`, `get_*`, `search_*`, `find_*`, `count_*`, `report_*`, `*_detail` (đọc data đã seed)
+- **DELETE**: `delete_*`, `remove_*` (chạy CUỐI để dọn)
+
+### Bước 2 — Chạy theo thứ tự: SEED → UPDATE → READ → DELETE
 
 ```
-chọn 1 module (anh chỉ định, hoặc bắt đầu từ customer_groups)
-LẶP cho module này:
-  cho mỗi skill chưa xanh:
-    ask(prompt) — chờ tối đa 90s
-    sleep 15–30s
-    phân loại verdict
-    append vào e2e_reports/<module>_<YYYYMMDD>.md
+PHASE 1 (SEED): chạy WRITE skill, args mẫu data thật (vd name="VIP Test", color="#ff0000")
+                → lưu lại id trả về vào ENV/file tạm: SEEDED_GROUP_ID, SEEDED_CUSTOMER_ID, ...
+PHASE 2 (UPDATE): chạy UPDATE skill với id đã seed (KHÔNG dùng sentinel)
+PHASE 3 (READ):   chạy READ skill — list/get/search trên data vừa seed
+                → verify response CHỨA tên/id seeded (vd "VIP Test" phải xuất hiện trong list)
+PHASE 4 (DELETE): xoá data seed để dọn workspace
+```
+
+### Bước 3 — Loop fix cho cả 4 phase
+
+```
+LẶP:
+  cho mỗi phase 1→4:
+    cho mỗi skill chưa xanh:
+      ask(prompt) — chờ tối đa 90s, sleep 15–30s
+      phân loại verdict
+      nếu PASS + có data → lưu id seed (phase 1), tick xanh
+      nếu PHASE 3 (READ) "PASS" nhưng KHÔNG thấy seeded data → BUG, đánh dấu DATA_MISSING
+      append vào e2e_reports/<module>_<YYYYMMDD>.md
   nếu có fail:
-    NO_SKILL → wire handler + cập nhật _index.json + _tool_spec_anthropic_implemented.json
-    ERROR    → fix code /opt/crm/agent-tools-hermes.js
-    DECLINE  → sửa description _index.json
-    restart appcrm-api, chạy lại module
-  nếu 100% xanh → push report lên git → BÁO ANH "module X: X/Y PASS, xong" → DỪNG, chờ lệnh
-  nếu 5 vòng không tiến triển → ghi <module>_BLOCKED.md → BÁO ANH lý do → DỪNG, chờ lệnh
+    NO_SKILL    → wire handler + cập nhật _index.json + _tool_spec_anthropic_implemented.json
+    ERROR       → fix code /opt/crm/agent-tools-hermes.js
+    DECLINE     → sửa description _index.json
+    DATA_MISSING → kiểm tra handler READ có filter đúng workspace/group không
+    restart appcrm-api, chạy lại
+  nếu 100% xanh + READ thấy được seed data → push report → BÁO ANH "module X: X/Y PASS, seed verified" → DỪNG
+  nếu 5 vòng không tiến triển → ghi <module>_BLOCKED.md → BÁO ANH → DỪNG
 ```
 
 **Tuyệt đối không tự nhảy sang module khác. Báo cáo xong, đợi anh.**
@@ -103,4 +126,10 @@ Push lên repo này sau mỗi module.
 
 ---
 
-**Bắt đầu**: chạy `node scripts/test_via_hermes.mjs --module=customer_groups` → đọc report → fix bug → chạy lại đến khi xanh → push report → báo anh "customer_groups: X/Y PASS, xong" → DỪNG.
+**Bắt đầu** với module `customer_groups`:
+
+1. Phân loại 7 skill: SEED=`create_customer_group`; UPDATE=`update_customer_group`,`add_member_to_group`,`remove_member_from_group`; READ=`get_customer_group_detail`,`list_group_members`; DELETE=`delete_customer_group`
+2. **Sửa script `test_via_hermes.mjs`** để hỗ trợ 4 phase + lưu seed id (hoặc viết wrapper `test_seed_then_read.mjs`)
+3. Chạy lần lượt 4 phase
+4. Fix bug đến khi: SEED tạo được, READ thấy data vừa seed, DELETE xoá được
+5. Push report → báo anh "customer_groups: 7/7 PASS, seed verified" → DỪNG.
