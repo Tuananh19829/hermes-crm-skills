@@ -1,0 +1,86 @@
+name: Deploy spec to Hub Hermes
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    if: contains(github.event.head_commit.message, 'REQUIRES HUB SPEC DEPLOY')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Parse modules from commit
+        id: parse
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          MODULES=$(echo "$MSG" | grep -oE 'REQUIRES HUB SPEC DEPLOY: [a-z_,[:space:]]+' \
+            | sed 's/REQUIRES HUB SPEC DEPLOY: //' | tr ',' '\n' | tr -s ' ' '\n' \
+            | grep -v '^$' | sort -u | tr '\n' ' ')
+          echo "modules=$MODULES" >> $GITHUB_OUTPUT
+          echo "Detected modules: $MODULES"
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HUB_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 34.142.240.11 >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy to Hub Hermes
+        env:
+          HUB_USER: ${{ secrets.HUB_SSH_USER }}
+          HUB_HOST: 34.142.240.11
+          MODULES: ${{ steps.parse.outputs.modules }}
+        run: |
+          set -e
+          [ -z "$MODULES" ] && { echo "No modules detected — abort"; exit 1; }
+
+          # Tar bundle: 2 module dirs + 3 root spec files
+          TAR_FILES=""
+          for m in $MODULES; do
+            [ -d "$m" ] || { echo "Module dir $m not found"; exit 1; }
+            TAR_FILES="$TAR_FILES $m"
+          done
+          for f in _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
+            [ -f "$f" ] && TAR_FILES="$TAR_FILES $f"
+          done
+          tar czf /tmp/spec-bundle.tgz $TAR_FILES
+          ls -lh /tmp/spec-bundle.tgz
+
+          scp -i ~/.ssh/id_ed25519 /tmp/spec-bundle.tgz $HUB_USER@$HUB_HOST:/tmp/spec-bundle.tgz
+
+          ssh -i ~/.ssh/id_ed25519 $HUB_USER@$HUB_HOST bash -s <<EOSSH
+            set -e
+            HERMES=\$(docker ps --format '{{.Names}}' | grep -i hermes-api | head -1)
+            echo "Hermes container: \$HERMES"
+            [ -z "\$HERMES" ] && { echo "FATAL: hermes container not found"; exit 1; }
+
+            rm -rf /tmp/hcs-deploy
+            mkdir -p /tmp/hcs-deploy
+            tar xzf /tmp/spec-bundle.tgz -C /tmp/hcs-deploy
+
+            cd /tmp/hcs-deploy
+            for m in $MODULES; do
+              docker exec \$HERMES rm -rf /opt/hermes/skills/crm/\$m 2>/dev/null || true
+              docker cp \$m \$HERMES:/opt/hermes/skills/crm/
+              echo "  deployed module: \$m"
+            done
+            for f in _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
+              if [ -f \$f ]; then
+                docker cp \$f \$HERMES:/opt/hermes/skills/crm/\$f
+                echo "  deployed root: \$f"
+              fi
+            done
+
+            docker restart \$HERMES
+            sleep 6
+            docker ps --filter name=\$HERMES --format 'table {{.Names}}\t{{.Status}}'
+            for m in $MODULES; do
+              echo "==> \$m skills:"
+              docker exec \$HERMES ls /opt/hermes/skills/crm/\$m/ | head
+            done
+            echo "==> DONE: deployed $MODULES"
+          EOSSH
