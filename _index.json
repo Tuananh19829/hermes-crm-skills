@@ -9,7 +9,7 @@
     "secret_env_on_agent_server": "CRM_INTERNAL_SECRET"
   },
   "_generated_by": "scripts/build_top_index.mjs",
-  "_generated_at": "2026-05-07T00:27:36.045Z",
+  "_generated_at": "2026-05-07T02:53:47.593Z",
   "_whitelist": "_tool_spec_anthropic_implemented.json",
   "_module_hits": {
     "crm/_index.json": 15,
@@ -851,7 +851,7 @@
     },
     {
       "name": "create_customer_group",
-      "description": "[CRM app] Tạo nhóm phân loại khách hàng mới (vd 'VIP Q1', 'Khách thân thiết'). Tự auto-assign KH thoả criteria nếu auto_assign=true. RETEST2 PASS. Endpoint /internal/skills/create_customer_group.",
+      "description": "[CRM app] Tạo nhóm phân loại khách hàng mới (vd 'VIP Q1', 'Khách thân thiết'). BẮT BUỘC: name. Args mẫu: name=\"VIP Q1\", color=\"#3B82F6\". Tự auto-assign KH thoả criteria nếu auto_assign=true. Endpoint /internal/skills/create_customer_group.",
       "triggers": [
         "tạo nhóm KH",
         "thêm nhóm khách hàng",
@@ -1171,7 +1171,7 @@
     },
     {
       "name": "create_customer",
-      "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead).",
+      "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead). BẮT BUỘC: full_name + phone (10 số, đầu 0). Args mẫu: full_name=\"Nguyễn Thị A\", phone=\"0900000001\", gender=\"FEMALE\".",
       "triggers": [
         "tạo khách hàng",
         "thêm khách mới",
@@ -1184,7 +1184,8 @@
       "input_schema": {
         "type": "object",
         "required": [
-          "full_name"
+          "full_name",
+          "phone"
         ],
         "properties": {
           "full_name": {

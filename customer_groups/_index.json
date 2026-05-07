@@ -42,7 +42,7 @@
     },
     {
       "name": "create_customer_group",
-      "description": "[CRM app] Tạo nhóm phân loại khách hàng mới (vd 'VIP Q1', 'Khách thân thiết'). Tự auto-assign KH thoả criteria nếu auto_assign=true. RETEST2 PASS. Endpoint /internal/skills/create_customer_group.",
+      "description": "[CRM app] Tạo nhóm phân loại khách hàng mới (vd 'VIP Q1', 'Khách thân thiết'). BẮT BUỘC: name. Args mẫu: name=\"VIP Q1\", color=\"#3B82F6\". Tự auto-assign KH thoả criteria nếu auto_assign=true. Endpoint /internal/skills/create_customer_group.",
       "triggers": [
         "tạo nhóm KH",
         "thêm nhóm khách hàng",
