@@ -22,6 +22,19 @@ jobs:
           echo "modules=$MODULES" >> $GITHUB_OUTPUT
           echo "Detected modules: $MODULES"
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build top-level _index.json
+        run: |
+          node scripts/build_top_index.mjs
+          echo "=== generated _index.json (head) ==="
+          head -30 _index.json
+          echo "=== skill count ==="
+          node -e "console.log(require('./_index.json').skills.length)"
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -50,7 +63,7 @@ jobs:
             [ -d "$m" ] || { echo "Module dir $m not found"; exit 1; }
             TAR_FILES="$TAR_FILES $m"
           done
-          for f in _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
+          for f in _index.json _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
             [ -f "$f" ] && TAR_FILES="$TAR_FILES $f"
           done
           tar czf /tmp/spec-bundle.tgz $TAR_FILES
@@ -87,7 +100,7 @@ jobs:
                 docker cp \$m \$HERMES:\$SKILLS_PATH/
                 echo "  deployed module: \$m"
               done
-              for f in _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
+              for f in _index.json _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
                 if [ -f \$f ]; then
                   docker cp \$f \$HERMES:\$SKILLS_PATH/\$f
                   echo "  deployed root: \$f"
@@ -98,5 +111,12 @@ jobs:
             docker restart \$HERMES
             sleep 6
             docker ps --filter name=\$HERMES --format 'table {{.Names}}\t{{.Status}}'
+
+            echo "=== Verify top-level _index.json post-deploy ==="
+            for SKILLS_PATH in /opt/hermes/skills/crm /app/hermes/skills/crm; do
+              docker exec \$HERMES test -f \$SKILLS_PATH/_index.json 2>/dev/null || continue
+              echo "--- \$SKILLS_PATH/_index.json ---"
+              docker exec \$HERMES python3 -c "import json; d=json.load(open('\$SKILLS_PATH/_index.json')); print('skills:', len(d.get('skills',[]))); print('names:', [s['name'] for s in d.get('skills',[])])"
+            done
             echo "==> DONE: deployed $MODULES"
           EOSSH

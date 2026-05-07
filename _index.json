@@ -1,0 +1,1437 @@
+{
+  "app": "crm",
+  "version": "3.3.0",
+  "base_url": "https://crm.spaclaw.pro",
+  "auth": {
+    "header_secret": "X-Internal-Secret",
+    "header_user": "X-User-Id",
+    "header_group": "X-Group-Id",
+    "secret_env_on_agent_server": "CRM_INTERNAL_SECRET"
+  },
+  "_generated_by": "scripts/build_top_index.mjs",
+  "_generated_at": "2026-05-07T00:27:36.045Z",
+  "_whitelist": "_tool_spec_anthropic_implemented.json",
+  "_module_hits": {
+    "crm/_index.json": 15,
+    "crm/_extensions.json": 5,
+    "customer_groups/_index.json": 7,
+    "customers/_index.json": 2,
+    "customers/_extensions.json": 2,
+    "services/_index.json": 1
+  },
+  "_missing_implemented": [],
+  "skills": [
+    {
+      "name": "find_customer",
+      "description": "Tìm khách hàng theo tên, SĐT, email hoặc tag. Dùng khi user hỏi 'tìm khách X', 'kh nào tên Mai', 'search customer 0901...'",
+      "triggers": [
+        "tìm khách",
+        "tìm kh",
+        "lookup customer",
+        "kh tên",
+        "search contact",
+        "tìm người dùng",
+        "kh nào"
+      ],
+      "endpoint": "POST /internal/skills/find_customer",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Tên, SĐT, email hoặc một phần thông tin"
+          },
+          "filter": {
+            "type": "object",
+            "properties": {
+              "tag": {
+                "type": "string"
+              },
+              "lead_status": {
+                "type": "string",
+                "enum": [
+                  "NEW",
+                  "CONTACTED",
+                  "QUALIFIED",
+                  "WON",
+                  "LOST"
+                ]
+              },
+              "last_order_after": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "default": 10,
+            "maximum": 50
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "create_lead",
+      "description": "Tạo lead mới từ thông tin user cung cấp. Dùng khi user muốn thêm khách tiềm năng mới.",
+      "triggers": [
+        "tạo lead",
+        "thêm khách mới",
+        "add lead",
+        "create lead",
+        "tạo khách tiềm năng"
+      ],
+      "endpoint": "POST /internal/skills/create_lead",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "full_name"
+        ],
+        "properties": {
+          "full_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "lead_source": {
+            "type": "string",
+            "description": "Ví dụ: facebook, zalo, website, referral"
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "update_lead_status",
+      "description": "Cập nhật trạng thái lead. Dùng khi user nói 'đã gọi cho kh X', 'kh X chốt rồi', 'kh X bỏ'.",
+      "triggers": [
+        "đổi trạng thái",
+        "chốt lead",
+        "lead bỏ",
+        "update status",
+        "kh đã liên hệ"
+      ],
+      "endpoint": "POST /internal/skills/update_lead_status",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "CONTACTED",
+              "QUALIFIED",
+              "WON",
+              "LOST"
+            ]
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "add_note",
+      "description": "Thêm ghi chú cho khách hàng. Dùng khi user muốn ghi lại thông tin cuộc gọi, meeting, quan sát.",
+      "triggers": [
+        "ghi chú",
+        "add note",
+        "ghi lại",
+        "note cho kh",
+        "lưu ý khách"
+      ],
+      "endpoint": "POST /internal/skills/add_note",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "person_id",
+          "content"
+        ],
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "search_orders",
+      "description": "Tìm đơn hàng theo khách/thời gian/trạng thái. Dùng khi user hỏi về đơn, order.",
+      "triggers": [
+        "tìm đơn",
+        "đơn hàng",
+        "search order",
+        "đơn của kh",
+        "đơn tháng này"
+      ],
+      "endpoint": "POST /internal/skills/search_orders",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "COMPLETED",
+              "CANCELLED",
+              "DELIVERED"
+            ]
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "maximum": 50
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "report_revenue",
+      "description": "Báo cáo doanh thu theo kỳ. Dùng khi user hỏi doanh thu hôm nay/tuần/tháng.",
+      "triggers": [
+        "doanh thu",
+        "revenue",
+        "báo cáo",
+        "report",
+        "tổng thu",
+        "doanh số"
+      ],
+      "endpoint": "POST /internal/skills/report_revenue",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week",
+              "month"
+            ],
+            "default": "month"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Dùng kèm to_date cho kỳ tuỳ chỉnh"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "list_campaigns",
+      "description": "Liệt kê pipeline funnel CRM và khuyến mãi đang chạy. Dùng khi user hỏi về chiến dịch, funnel.",
+      "triggers": [
+        "chiến dịch",
+        "campaign",
+        "funnel",
+        "khuyến mãi",
+        "voucher",
+        "pipeline"
+      ],
+      "endpoint": "POST /internal/skills/list_campaigns",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 10,
+            "maximum": 30
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "link_ads_lead",
+      "description": "Gắn thông tin Ads/Facebook vào khách hàng CRM (campaign_id, adset, ad, lead_id).",
+      "triggers": [
+        "gắn ads",
+        "link facebook",
+        "link ads lead",
+        "fb campaign",
+        "ads lead"
+      ],
+      "endpoint": "POST /internal/skills/link_ads_lead",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "person_id"
+        ],
+        "properties": {
+          "person_id": {
+            "type": "string"
+          },
+          "fb_campaign_id": {
+            "type": "string"
+          },
+          "fb_adset_id": {
+            "type": "string"
+          },
+          "fb_ad_id": {
+            "type": "string"
+          },
+          "fb_lead_id": {
+            "type": "string"
+          },
+          "lead_source": {
+            "type": "string"
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "bulk_tag",
+      "description": "Gắn tag cho nhiều khách cùng lúc. Dùng khi user muốn label/phân nhóm nhiều khách.",
+      "triggers": [
+        "gắn tag",
+        "bulk tag",
+        "tag nhiều khách",
+        "label khách",
+        "phân nhóm"
+      ],
+      "endpoint": "POST /internal/skills/bulk_tag",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "person_ids",
+          "tags"
+        ],
+        "properties": {
+          "person_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ],
+            "default": "merge",
+            "description": "merge: thêm vào tag cũ, replace: thay toàn bộ"
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "create_appointment",
+      "description": "Tạo lịch hẹn cho khách. Tự động: tìm người theo phone, nếu chưa có thì tạo (cần full_name); resolve service theo tên; pick branch mặc định. Nếu user nói 'đặt lịch khách Mai 14h thứ 6', extract phone+full_name+start_at+service_name.",
+      "triggers": [
+        "đặt lịch",
+        "tạo lịch hẹn",
+        "book appointment",
+        "create appointment",
+        "thêm lịch hẹn",
+        "đặt cho khách"
+      ],
+      "endpoint": "POST /internal/skills/create_appointment",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "phone",
+          "start_at"
+        ],
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "SĐT khách (bắt buộc, dùng để find-or-create person)"
+          },
+          "full_name": {
+            "type": "string",
+            "description": "Họ tên — bắt buộc nếu khách chưa tồn tại"
+          },
+          "start_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Thời gian hẹn ISO 8601 (vd 2026-05-10T14:00:00+07:00)"
+          },
+          "duration_min": {
+            "type": "integer",
+            "default": 60,
+            "maximum": 600
+          },
+          "service_name": {
+            "type": "string",
+            "description": "Tên dịch vụ để link vào lịch hẹn (optional, ILIKE)"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false,
+      "module": "crm"
+    },
+    {
+      "name": "update_appointment_status",
+      "description": "Đổi trạng thái lịch hẹn. Dùng khi 'lịch X đã check-in', 'hủy lịch X', 'hoàn thành lịch X'.",
+      "triggers": [
+        "check-in lịch",
+        "hủy lịch",
+        "hoàn thành lịch",
+        "no show",
+        "đổi status lịch",
+        "cancel appointment"
+      ],
+      "endpoint": "POST /internal/skills/update_appointment_status",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "UUID lịch hẹn"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "BOOKED",
+              "CHECKED_IN",
+              "COMPLETED",
+              "CANCELLED",
+              "NO_SHOW",
+              "WAITING"
+            ]
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false,
+      "module": "crm"
+    },
+    {
+      "name": "create_bundle",
+      "description": "Tạo combo dịch vụ. Resolve N service theo tên (ILIKE), insert product_bundles + product_bundle_items. Dùng khi 'tạo gói combo X gồm massage + foot detox', 'set combo Y giá 1tr5'.",
+      "triggers": [
+        "tạo combo",
+        "tạo gói dịch vụ",
+        "create bundle",
+        "set combo",
+        "gộp dịch vụ"
+      ],
+      "endpoint": "POST /internal/skills/create_bundle",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "items"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tên combo"
+          },
+          "bundle_price": {
+            "type": "number",
+            "description": "Giá combo (VND)"
+          },
+          "description": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "description": "Danh sách dịch vụ trong combo",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Tên dịch vụ (ILIKE search)"
+                },
+                "qty": {
+                  "type": "integer",
+                  "default": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false,
+      "module": "crm"
+    },
+    {
+      "name": "list_loyalty_tiers",
+      "description": "Liệt kê hạng thẻ thành viên trong workspace (NORMAL, VIP, GOLD, PLATINUM...), sort theo sort_order. Dùng khi user hỏi 'có những hạng nào', 'tier list', 'list loyalty tiers'.",
+      "triggers": [
+        "hạng thẻ",
+        "list loyalty",
+        "list_loyalty_tiers",
+        "có hạng nào",
+        "tier list"
+      ],
+      "endpoint": "POST /internal/skills/list_loyalty_tiers",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "active_only": {
+            "type": "boolean",
+            "default": true,
+            "description": "Chỉ lấy hạng đang active"
+          },
+          "include_member_count": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "requires_approval": false,
+      "module": "crm"
+    },
+    {
+      "name": "create_loyalty_tier",
+      "description": "Tạo hạng thẻ thành viên mới (vd Bạc, Vàng, Kim cương). Dùng khi 'thêm hạng X', 'tạo hạng VIP với giảm 10%'.",
+      "triggers": [
+        "tạo hạng",
+        "thêm hạng thẻ",
+        "create loyalty tier",
+        "set hạng"
+      ],
+      "endpoint": "POST /internal/skills/create_loyalty_tier",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tên hạng (vd Bạc, Vàng, Kim cương)"
+          },
+          "min_points": {
+            "type": "integer",
+            "default": 0
+          },
+          "min_spent_amount": {
+            "type": "number",
+            "default": 0
+          },
+          "discount_percent": {
+            "type": "integer",
+            "default": 0
+          },
+          "benefits": {
+            "type": "string",
+            "description": "Mô tả ưu đãi"
+          },
+          "color": {
+            "type": "string",
+            "default": "#6b7280"
+          },
+          "free_service_count": {
+            "type": "integer",
+            "default": 0
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "requires_approval": false,
+      "module": "crm"
+    },
+    {
+      "name": "list_appointments",
+      "description": "Liệt kê lịch hẹn theo ngày/tuần/today, lọc theo status. Dùng khi user hỏi 'lịch hôm nay', 'ai đặt tuần này', 'lịch ngày X'.",
+      "triggers": [
+        "lịch hẹn",
+        "appointment",
+        "lịch hôm nay",
+        "lịch tuần",
+        "ai đặt",
+        "booking"
+      ],
+      "endpoint": "POST /internal/skills/list_appointments",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "YYYY-MM-DD (timezone Asia/Ho_Chi_Minh). Bỏ qua nếu dùng range."
+          },
+          "range": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week"
+            ],
+            "description": "today = ngày hôm nay (VN), week = ±7 ngày từ hiện tại"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "BOOKED",
+              "CHECKED_IN",
+              "COMPLETED",
+              "CANCELLED",
+              "NO_SHOW",
+              "WAITING"
+            ]
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "maximum": 100
+          }
+        }
+      },
+      "module": "crm"
+    },
+    {
+      "name": "count_leads_today",
+      "description": "Đếm số leads tạo trong ngày hôm nay (today, theo timezone Asia/Ho_Chi_Minh). App: crm.",
+      "triggers": [
+        "lead hôm nay",
+        "đếm lead today",
+        "leads hôm nay bao nhiêu",
+        "count leads today"
+      ],
+      "endpoint": "POST /internal/skills/count_leads_today",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Lọc theo nguồn (facebook/google/zalo/...)"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'count_leads_today'",
+      "module": "crm"
+    },
+    {
+      "name": "list_leads",
+      "description": "Liệt kê leads trong CRM (paginated). Khác list_ads_leads ở chỗ list_leads bao gồm cả leads thủ công + ads.",
+      "triggers": [
+        "danh sách lead",
+        "list leads",
+        "all leads",
+        "leads trong CRM"
+      ],
+      "endpoint": "POST /internal/skills/list_leads",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "CONTACTED",
+              "QUALIFIED",
+              "WON",
+              "LOST",
+              "ALL"
+            ],
+            "default": "ALL"
+          },
+          "source": {
+            "type": "string"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 30,
+            "maximum": 200
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'list_leads'",
+      "module": "crm"
+    },
+    {
+      "name": "lead_detail",
+      "description": "Chi tiết 1 lead: thông tin + lịch sử contact + ads source nếu có.",
+      "triggers": [
+        "chi tiết lead",
+        "xem lead",
+        "lead detail",
+        "thông tin lead"
+      ],
+      "endpoint": "POST /internal/skills/lead_detail",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "lead_id"
+        ],
+        "properties": {
+          "lead_id": {
+            "type": "string",
+            "description": "UUID lead"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'lead_detail'",
+      "module": "crm"
+    },
+    {
+      "name": "sales_summary",
+      "description": "Tổng quan doanh số (sales): tổng đơn + doanh thu + AOV + conversion. Khác report_revenue ở chỗ tập trung sales pipeline + KH mới.",
+      "triggers": [
+        "sales summary",
+        "tổng quan sale",
+        "doanh số",
+        "tóm tắt bán hàng"
+      ],
+      "endpoint": "POST /internal/skills/sales_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week",
+              "month",
+              "quarter",
+              "year"
+            ],
+            "default": "month"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "branch_id": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'sales_summary'",
+      "module": "crm"
+    },
+    {
+      "name": "list_services",
+      "description": "Liệt kê dịch vụ active của spa/salon (alias cho search_services). KHÔNG phải tools coding/debug. Dùng khi user hỏi 'spa có dịch vụ gì', 'list DV'.",
+      "triggers": [
+        "list services",
+        "danh sách dịch vụ",
+        "dịch vụ gì",
+        "spa có gì"
+      ],
+      "endpoint": "POST /internal/skills/list_services",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Lọc theo tên DV (ILIKE)"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 30,
+            "maximum": 100
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented",
+      "handler_path": "agent-tools-hermes.js:case 'list_services'",
+      "module": "crm"
+    },
+    {
+      "name": "get_customer_group_detail",
+      "description": "[CRM app] Lấy chi tiết 1 nhóm phân loại khách hàng (CustomerGroup): tên + criteria + thành viên + thống kê. NHÓM = phân loại KH (vd 'KH VIP', 'KH thân thiết'), KHÔNG phải Zalo OA group. Args mẫu nếu test: group_id='00000000-0000-0000-0000-000000000000' (handler trả GROUP_NOT_FOUND để verify validate). Endpoint /internal/skills/get_customer_group_detail.",
+      "triggers": [
+        "chi tiết nhóm KH",
+        "xem nhóm khách hàng",
+        "thông tin nhóm KH",
+        "group detail",
+        "xem nhóm phân loại",
+        "get customer group",
+        "view customer group",
+        "nhóm KH ID"
+      ],
+      "endpoint": "POST /internal/skills/get_customer_group_detail",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "description": "UUID nhóm KH (lấy từ list_customer_groups). Test: '00000000-0000-0000-0000-000000000000'"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented_and_verified",
+      "handler_path": "agent-tools-hermes.js:case 'get_customer_group_detail'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "create_customer_group",
+      "description": "[CRM app] Tạo nhóm phân loại khách hàng mới (vd 'VIP Q1', 'Khách thân thiết'). Tự auto-assign KH thoả criteria nếu auto_assign=true. RETEST2 PASS. Endpoint /internal/skills/create_customer_group.",
+      "triggers": [
+        "tạo nhóm KH",
+        "thêm nhóm khách hàng",
+        "create customer group",
+        "phân nhóm khách",
+        "tạo nhóm phân loại KH",
+        "new customer group",
+        "thêm CustomerGroup"
+      ],
+      "endpoint": "POST /internal/skills/create_customer_group",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tên nhóm KH (bắt buộc)"
+          },
+          "description": {
+            "type": "string"
+          },
+          "criteria": {
+            "type": "object",
+            "description": "Tiêu chí phân loại tự động (optional)",
+            "properties": {
+              "min_spent_amount": {
+                "type": "number"
+              },
+              "min_visits": {
+                "type": "integer"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "joined_within_days": {
+                "type": "integer"
+              }
+            }
+          },
+          "auto_assign": {
+            "type": "boolean",
+            "default": false
+          },
+          "color": {
+            "type": "string",
+            "default": "#6b7280"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "backend_status": "implemented_and_verified_PASS",
+      "handler_path": "agent-tools-hermes.js:case 'create_customer_group'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "update_customer_group",
+      "description": "[CRM app] Sửa thông tin nhóm phân loại KH CRM (đổi tên, criteria, màu). KHÔNG phải Zalo group. Args mẫu nếu test: group_id='00000000-0000-0000-0000-000000000000', name='test rename'. Khi user không cung cấp group_id, hỏi user lấy từ list_customer_groups trước. Endpoint /internal/skills/update_customer_group.",
+      "triggers": [
+        "sửa nhóm KH",
+        "cập nhật nhóm khách hàng",
+        "update customer group",
+        "đổi tên nhóm KH",
+        "edit customer group",
+        "modify CustomerGroup",
+        "change group name"
+      ],
+      "endpoint": "POST /internal/skills/update_customer_group",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "description": "UUID nhóm KH cần sửa. Test: '00000000-0000-0000-0000-000000000000'"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "criteria": {
+            "type": "object"
+          },
+          "color": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "backend_status": "implemented_and_verified",
+      "handler_path": "agent-tools-hermes.js:case 'update_customer_group'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "delete_customer_group",
+      "description": "[CRM app] Xóa nhóm phân loại KH CRM. Chỉ xóa nhóm + quan hệ thành viên, KHÔNG xóa khách hàng. Yêu cầu lý do để audit. RETEST2 PASS. Endpoint /internal/skills/delete_customer_group.",
+      "triggers": [
+        "xóa nhóm KH",
+        "delete customer group",
+        "remove group",
+        "xoá nhóm khách hàng",
+        "drop customer group"
+      ],
+      "endpoint": "POST /internal/skills/delete_customer_group",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Lý do xóa (audit)"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "high",
+      "backend_status": "implemented_and_verified_PASS",
+      "handler_path": "agent-tools-hermes.js:case 'delete_customer_group'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "add_member_to_group",
+      "description": "[CRM app] Thêm 1 khách hàng vào nhóm phân loại KH CRM. KHÔNG phải Zalo OA group, KHÔNG phải workspace member. Default role=MEMBER. Args mẫu nếu test: group_id='00000000-0000-0000-0000-000000000000', customer_id='00000000-0000-0000-0000-000000000000' (handler trả GROUP_NOT_FOUND/CUSTOMER_NOT_FOUND để verify validate). Endpoint /internal/skills/add_member_to_group.",
+      "triggers": [
+        "thêm KH vào nhóm",
+        "add customer to group",
+        "gán KH vào nhóm",
+        "thêm thành viên nhóm KH",
+        "add member CustomerGroup",
+        "thêm khách vào group",
+        "assign customer to group"
+      ],
+      "endpoint": "POST /internal/skills/add_member_to_group",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "group_id",
+          "customer_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "description": "UUID nhóm KH"
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "UUID khách hàng"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "MEMBER",
+              "VIP",
+              "PARTNER"
+            ],
+            "default": "MEMBER"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "backend_status": "implemented_and_verified",
+      "handler_path": "agent-tools-hermes.js:case 'add_member_to_group'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "remove_member_from_group",
+      "description": "[CRM app] Xóa 1 khách hàng khỏi nhóm phân loại KH CRM (giữ lại KH, chỉ remove quan hệ). KHÔNG phải Zalo group. Args mẫu nếu test: group_id='00000000-0000-0000-0000-000000000000', customer_id='00000000-0000-0000-0000-000000000000'. Endpoint /internal/skills/remove_member_from_group.",
+      "triggers": [
+        "xóa KH khỏi nhóm",
+        "remove customer from group",
+        "loại bỏ KH khỏi nhóm",
+        "xoá thành viên nhóm KH",
+        "remove member CustomerGroup",
+        "tách KH khỏi nhóm",
+        "remove customer from CustomerGroup"
+      ],
+      "endpoint": "POST /internal/skills/remove_member_from_group",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "group_id",
+          "customer_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "normal",
+      "backend_status": "implemented_and_verified",
+      "handler_path": "agent-tools-hermes.js:case 'remove_member_from_group'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "list_group_members",
+      "description": "[CRM app] Liệt kê thành viên (KH) trong 1 nhóm phân loại KH CRM. Paginated, sort theo added_at desc. KHÔNG phải Zalo group members. Args mẫu nếu test: group_id='00000000-0000-0000-0000-000000000000', limit=50. Endpoint /internal/skills/list_group_members.",
+      "triggers": [
+        "thành viên nhóm KH",
+        "list group members",
+        "danh sách KH trong nhóm",
+        "ai trong nhóm",
+        "members of customer group",
+        "list customers in group",
+        "danh sách thành viên CustomerGroup"
+      ],
+      "endpoint": "POST /internal/skills/list_group_members",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "MEMBER",
+              "VIP",
+              "PARTNER",
+              "ALL"
+            ],
+            "default": "ALL"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "maximum": 200
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "backend_status": "implemented_and_verified",
+      "handler_path": "agent-tools-hermes.js:case 'list_group_members'",
+      "verified_at": "2026-05-06T20:13",
+      "module": "customer_groups"
+    },
+    {
+      "name": "get_customer_detail",
+      "description": "Xem chi tiết khách hàng: thông tin cá nhân, lịch sử mua hàng, điểm loyalty, thẻ thành viên, công nợ. Dùng khi đã có ID hoặc user muốn tra toàn bộ hồ sơ khách.",
+      "triggers": [
+        "chi tiết khách hàng",
+        "hồ sơ khách",
+        "xem thông tin kh",
+        "lịch sử khách",
+        "kh id",
+        "tra cứu khách",
+        "điểm khách",
+        "thẻ khách"
+      ],
+      "endpoint": "POST /internal/skills/get_customer_detail",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "UUID của khách hàng"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "orders",
+                "notes",
+                "loyalty",
+                "vouchers",
+                "debt",
+                "cards"
+              ]
+            },
+            "default": [
+              "orders",
+              "notes",
+              "loyalty"
+            ],
+            "description": "Chọn sections cần trả về để tối ưu payload"
+          }
+        }
+      },
+      "module": "customers"
+    },
+    {
+      "name": "create_customer",
+      "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead).",
+      "triggers": [
+        "tạo khách hàng",
+        "thêm khách mới",
+        "đăng ký khách",
+        "create customer",
+        "thêm kh mới",
+        "nhập thông tin kh"
+      ],
+      "endpoint": "POST /internal/skills/create_customer",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "full_name"
+        ],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "description": "Họ và tên đầy đủ"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Số điện thoại (định dạng 10 số, bắt đầu 0)"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE",
+              "OTHER"
+            ]
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date",
+            "description": "Ngày sinh dạng YYYY-MM-DD"
+          },
+          "address": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "description": "Ghi chú ban đầu về khách"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tag gắn ngay khi tạo, ví dụ: ['vip', 'referral']"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "Gán vào nhóm khách hàng ngay khi tạo"
+          },
+          "source": {
+            "type": "string",
+            "description": "Nguồn khách: zalo, facebook, walk_in, referral, v.v."
+          }
+        }
+      },
+      "module": "customers"
+    },
+    {
+      "name": "list_customers",
+      "description": "Liệt kê khách hàng (alias của search_customers). Dùng khi user nói 'list customers', 'danh sách khách hàng', 'all customers'.",
+      "triggers": [
+        "list customers",
+        "danh sách khách hàng",
+        "all customers",
+        "tất cả KH",
+        "list KH"
+      ],
+      "endpoint": "POST /internal/skills/list_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 50,
+            "maximum": 200
+          },
+          "offset": {
+            "type": "integer",
+            "default": 0
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "NORMAL",
+              "VIP",
+              "ALL"
+            ],
+            "default": "ALL"
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "module": "customers"
+    },
+    {
+      "name": "top_sources",
+      "description": "Top nguồn khách hàng (Walk-in/Referral/Ads/Zalo/...) theo doanh thu hoặc số lượng KH trong kỳ. Dùng khi user hỏi 'nguồn nào nhiều khách nhất', 'top channel', 'KH đến từ đâu'.",
+      "triggers": [
+        "top nguồn",
+        "nguồn KH",
+        "top sources",
+        "channel nào hiệu quả",
+        "KH đến từ đâu",
+        "top channel"
+      ],
+      "endpoint": "POST /internal/skills/top_sources",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "enum": [
+              "today",
+              "week",
+              "month",
+              "quarter",
+              "year"
+            ],
+            "default": "month"
+          },
+          "from_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "to_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "customer_count",
+              "revenue",
+              "ltv"
+            ],
+            "default": "customer_count"
+          },
+          "top_n": {
+            "type": "integer",
+            "default": 10,
+            "maximum": 50
+          }
+        }
+      },
+      "type": "action",
+      "risk_level": "read",
+      "module": "customers"
+    },
+    {
+      "name": "create_service",
+      "description": "Tạo dịch vụ mới hoặc cập nhật dịch vụ hiện có (tên, danh mục, giá, thời gian, vật tư cần dùng, hoa hồng nhân viên). Dùng khi user muốn thêm hoặc sửa thông tin dịch vụ.",
+      "triggers": [
+        "tạo dịch vụ",
+        "thêm dịch vụ",
+        "cập nhật dịch vụ",
+        "sửa dịch vụ",
+        "create service",
+        "thêm dv mới",
+        "dịch vụ mới",
+        "cập nhật giá dv",
+        "vật tư dịch vụ",
+        "hoa hồng dịch vụ"
+      ],
+      "endpoint": "POST /internal/skills/create_service",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "create",
+              "update"
+            ],
+            "description": "create: tạo dịch vụ mới; update: cập nhật dịch vụ hiện có"
+          },
+          "service_id": {
+            "type": "string",
+            "description": "UUID dịch vụ (bắt buộc khi action=update)"
+          },
+          "service_data": {
+            "type": "object",
+            "description": "Thông tin dịch vụ",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Tên dịch vụ"
+              },
+              "category_id": {
+                "type": "string",
+                "description": "UUID danh mục dịch vụ"
+              },
+              "category_name": {
+                "type": "string",
+                "description": "Tên danh mục (tạo mới nếu chưa có)"
+              },
+              "price": {
+                "type": "number",
+                "description": "Giá niêm yết (VND)"
+              },
+              "duration_minutes": {
+                "type": "integer",
+                "description": "Thời gian thực hiện (phút)"
+              },
+              "commission_rate": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Tỷ lệ hoa hồng (0–1), ví dụ: 0.15 = 15%"
+              },
+              "description": {
+                "type": "string",
+                "description": "Mô tả dịch vụ"
+              },
+              "is_active": {
+                "type": "boolean",
+                "default": true
+              },
+              "materials": {
+                "type": "array",
+                "description": "Vật tư tiêu hao cần dùng mỗi buổi",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "product_id",
+                    "quantity_per_session"
+                  ],
+                  "properties": {
+                    "product_id": {
+                      "type": "string",
+                      "description": "UUID sản phẩm vật tư"
+                    },
+                    "quantity_per_session": {
+                      "type": "number",
+                      "description": "Lượng dùng mỗi buổi"
+                    },
+                    "unit": {
+                      "type": "string",
+                      "description": "Đơn vị (ml, g, cái...)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "module": "services"
+    }
+  ]
+}
