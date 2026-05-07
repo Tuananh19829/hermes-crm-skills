@@ -76,7 +76,7 @@
     },
     {
       "name": "create_customer",
-      "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead).",
+      "description": "Tạo khách hàng mới với họ tên, SĐT, ngày sinh, địa chỉ, ghi chú. Dùng khi user muốn thêm KH mới vào hệ thống (không phải lead). BẮT BUỘC: full_name + phone (10 số, đầu 0). Args mẫu: full_name=\"Nguyễn Thị A\", phone=\"0900000001\", gender=\"FEMALE\".",
       "triggers": [
         "tạo khách hàng",
         "thêm khách mới",
@@ -88,7 +88,7 @@
       "endpoint": "POST /internal/skills/create_customer",
       "input_schema": {
         "type": "object",
-        "required": ["full_name"],
+        "required": ["full_name", "phone"],
         "properties": {
           "full_name": { "type": "string", "description": "Họ và tên đầy đủ" },
           "phone": { "type": "string", "description": "Số điện thoại (định dạng 10 số, bắt đầu 0)" },
