@@ -64,29 +64,39 @@ jobs:
             echo "Hermes container: \$HERMES"
             [ -z "\$HERMES" ] && { echo "FATAL: hermes container not found"; exit 1; }
 
+            echo "=== Discover skill paths inside Hermes container ==="
+            docker exec \$HERMES find / -name "_index.json" -path "*crm*" 2>/dev/null | head -5
+            echo "=== /app/hermes/skills/ tree ==="
+            docker exec \$HERMES ls -la /app/hermes/skills/ 2>/dev/null || echo "no /app/hermes/skills"
+            echo "=== /opt/hermes/skills/ tree ==="
+            docker exec \$HERMES ls -la /opt/hermes/skills/ 2>/dev/null || echo "no /opt/hermes/skills"
+            echo "=== spaclaw_skills.py SKILLS_ROOT ==="
+            docker exec \$HERMES python3 -c "from hermes.tools.spaclaw_skills import SKILLS_ROOT; print('SKILLS_ROOT=', SKILLS_ROOT)" 2>&1 | tail -3 || true
+
             rm -rf /tmp/hcs-deploy
             mkdir -p /tmp/hcs-deploy
             tar xzf /tmp/spec-bundle.tgz -C /tmp/hcs-deploy
 
             cd /tmp/hcs-deploy
-            for m in $MODULES; do
-              docker exec \$HERMES rm -rf /opt/hermes/skills/crm/\$m 2>/dev/null || true
-              docker cp \$m \$HERMES:/opt/hermes/skills/crm/
-              echo "  deployed module: \$m"
-            done
-            for f in _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
-              if [ -f \$f ]; then
-                docker cp \$f \$HERMES:/opt/hermes/skills/crm/\$f
-                echo "  deployed root: \$f"
-              fi
+            # Deploy to BOTH paths so we always hit the right one
+            for SKILLS_PATH in /opt/hermes/skills/crm /app/hermes/skills/crm; do
+              docker exec \$HERMES test -d \$SKILLS_PATH 2>/dev/null || { echo "skip \$SKILLS_PATH (not exist)"; continue; }
+              echo "==> deploying to \$SKILLS_PATH"
+              for m in $MODULES; do
+                docker exec \$HERMES rm -rf \$SKILLS_PATH/\$m 2>/dev/null || true
+                docker cp \$m \$HERMES:\$SKILLS_PATH/
+                echo "  deployed module: \$m"
+              done
+              for f in _tool_spec_anthropic.json _tool_spec_anthropic_implemented.json _master_manifest.json; do
+                if [ -f \$f ]; then
+                  docker cp \$f \$HERMES:\$SKILLS_PATH/\$f
+                  echo "  deployed root: \$f"
+                fi
+              done
             done
 
             docker restart \$HERMES
             sleep 6
             docker ps --filter name=\$HERMES --format 'table {{.Names}}\t{{.Status}}'
-            for m in $MODULES; do
-              echo "==> \$m skills:"
-              docker exec \$HERMES ls /opt/hermes/skills/crm/\$m/ | head
-            done
             echo "==> DONE: deployed $MODULES"
           EOSSH
