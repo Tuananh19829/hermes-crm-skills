@@ -28,6 +28,12 @@ jobs:
           echo "${{ secrets.HUB_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H 34.142.240.11 >> ~/.ssh/known_hosts 2>/dev/null
+          echo "=== Key file size ==="
+          wc -l ~/.ssh/id_ed25519
+          echo "=== Key fingerprint (should match: SHA256:... ed25519) ==="
+          ssh-keygen -lf ~/.ssh/id_ed25519 || echo "INVALID KEY FORMAT"
+          echo "=== Test SSH with -v ==="
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o ConnectTimeout=10 -v ${{ secrets.HUB_SSH_USER }}@34.142.240.11 "whoami; hostname" 2>&1 | tail -30 || true
 
       - name: Deploy to Hub Hermes
         env:
