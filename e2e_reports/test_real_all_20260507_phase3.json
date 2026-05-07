@@ -1,0 +1,4457 @@
+[
+  {
+    "name": "academy_progress_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"course_id\":\"89547b68-f12e-493d-931b-f436546290bf\",\"course_name\":\"academy_cours",
+    "count": 1,
+    "ms": 192
+  },
+  {
+    "name": "academy_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_courses\":1,\"active_courses\":1,\"total_enrollments\":0,\"active_enrollments\":0,\"total_cohorts\":0",
+    "count": 1,
+    "ms": 117
+  },
+  {
+    "name": "add_member_to_group",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "group_id và customer_id required",
+    "ms": 99
+  },
+  {
+    "name": "add_note",
+    "args": {
+      "note_id": "placeholder-no-note"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Thiếu person_id hoặc content",
+    "ms": 105
+  },
+  {
+    "name": "add_shipping_provider",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "carrier + token required",
+    "ms": 105
+  },
+  {
+    "name": "ads_dashboard",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_records\":0,\"total_spend\":\"0\",\"total_impressions\":0,\"total_clicks\":0,\"total_leads\":0,\"campaig",
+    "count": 1,
+    "ms": 113
+  },
+  {
+    "name": "ai_analyze_call_recording",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_RECORDING_ID\"}",
+    "ms": 104
+  },
+  {
+    "name": "ai_analyze_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"1fb9efe4-66dc-47ed-9686-b62f3adcbb67\",\"status\":\"QUEUED\",\"note\":\"AI sẽ phân tích KH và",
+    "count": 1,
+    "ms": 110
+  },
+  {
+    "name": "ai_assistant_chat",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_MESSAGE\"}",
+    "ms": 28
+  },
+  {
+    "name": "ai_assistant_chat_stream",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"stream_url\":\"/internal/skills/ai_chat_stream/sse\",\"session_id\":\"auto\",\"note\":\"SSE stream endpoint ",
+    "count": 1,
+    "ms": 36
+  },
+  {
+    "name": "ai_assistant_chat_with_attachment",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_MESSAGE\"}",
+    "ms": 35
+  },
+  {
+    "name": "ai_assistant_intro",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"greeting\":\"Xin chào! Tôi là AI assistant CRM Spaclaw. Tôi có thể giúp bạn xem báo cáo, quản lý KH,",
+    "count": 1,
+    "ms": 36
+  },
+  {
+    "name": "ai_assistant_status",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"online\":true,\"queue_depth\":0,\"quota_remaining\":1000,\"model\":\"cx/gpt-5.4\",\"note\":\"Status từ Core AI",
+    "count": 1,
+    "ms": 36
+  },
+  {
+    "name": "ai_get_capabilities",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"capabilities\":[{\"module\":\"reports\",\"skills\":16,\"sample\":\"revenue_report, customer_report, kpi_over",
+    "count": 1,
+    "ms": 37
+  },
+  {
+    "name": "ai_skill_executor",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_SKILL_NAME\"}",
+    "ms": 38
+  },
+  {
+    "name": "ai_speech_to_text",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_AUDIO_URL\"}",
+    "ms": 39
+  },
+  {
+    "name": "ai_suggest_followup",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PERSON_ID\"}",
+    "ms": 13
+  },
+  {
+    "name": "ai_text_to_speech",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_TEXT\"}",
+    "ms": 13
+  },
+  {
+    "name": "apply_deposit_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "package_id": "placeholder-no-package",
+      "amount": 1000
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 15
+  },
+  {
+    "name": "apply_manual_discount_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "amount": 1000
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVOICE_NOT_FOUND\"}",
+    "ms": 28
+  },
+  {
+    "name": "apply_promotion_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "amount": 1000
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "invoice_id + voucher_code (or promotion_code) required",
+    "ms": 18
+  },
+  {
+    "name": "apply_voucher_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "amount": 1000
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"VOUCHER_NOT_FOUND\"}",
+    "ms": 27
+  },
+  {
+    "name": "assign_funnel_deal",
+    "args": {
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e",
+      "assigned_to": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 19
+  },
+  {
+    "name": "assign_lead_to_staff",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1",
+      "assigned_to": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 23
+  },
+  {
+    "name": "assign_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "assigned_to": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 9
+  },
+  {
+    "name": "booking_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-01-01\",\"to\":\"2026-12-31\",\"branch_id\":null},\"summary\":{\"total\":0,\"booked\":0,\"",
+    "count": 1,
+    "ms": 27
+  },
+  {
+    "name": "broadcast_notification",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"97c9f949-6401-4b05-9f15-1fa7fe30d76b\",\"status\":\"QUEUED\",\"note\":\"Worker INSERT 1 notif",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "bulk_delete_notifications",
+    "args": {
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_IDS\"}",
+    "ms": 13
+  },
+  {
+    "name": "bulk_initiate_calls",
+    "args": {
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 14
+  },
+  {
+    "name": "bulk_issue_vouchers",
+    "args": {
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CAMPAIGN_ID\"}",
+    "ms": 16
+  },
+  {
+    "name": "bulk_send_cskh_zalo",
+    "args": {
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "bulk_tag",
+    "args": {
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Thiếu person_ids hoặc tags",
+    "ms": 21
+  },
+  {
+    "name": "bulk_update_funnel_stage",
+    "args": {
+      "stage_id": "LEAD",
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 10
+  },
+  {
+    "name": "bulk_update_leads",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 11
+  },
+  {
+    "name": "calculate_shipping_fee",
+    "args": {
+      "weight": 1000,
+      "from_district": "Q1",
+      "to_district": "Q3"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CARRIER\"}",
+    "ms": 19
+  },
+  {
+    "name": "campaign_revenue_attribution",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"campaign_id\":\"84cfa64a-03a7-456d-b78b-b046f7e6a272\",\"name\":\"Test create_promot",
+    "count": 2,
+    "ms": 33
+  },
+  {
+    "name": "cancel_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CARD_NOT_FOUND\"}",
+    "ms": 34
+  },
+  {
+    "name": "cancel_service_refund",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_INVOICE_ID\"}",
+    "ms": 27
+  },
+  {
+    "name": "cancel_shipping_order",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_TRACKING_CODE\"}",
+    "ms": 27
+  },
+  {
+    "name": "card_movements_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_movements\":0,\"total_amount\":0,\"movements_30d\":0,\"amount_30d\":0}",
+    "count": 1,
+    "ms": 34
+  },
+  {
+    "name": "card_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"summary\":{\"total_cards\":0,\"active_cards\":0,\"total_charged\":0,\"total_remaining\":0,\"total_used\":0},\"",
+    "count": 1,
+    "ms": 29
+  },
+  {
+    "name": "cashbook_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"month\",\"total_income\":0,\"total_expense\":0,\"net\":0,\"tx_count\":0}",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "close_sales_opportunity",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "id": "19791eec-9b72-488a-9639-e1125105832e",
+      "outcome": "WON"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "opportunity_id + result (WON|LOST)",
+    "ms": 11
+  },
+  {
+    "name": "collect_debt",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 12
+  },
+  {
+    "name": "commission_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-01-01\",\"to\":\"2026-12-31\"},\"summary\":{\"total\":0,\"recognized\":0},\"by_staff\":[]",
+    "count": 1,
+    "ms": 28
+  },
+  {
+    "name": "connect_aitrucpage",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 14
+  },
+  {
+    "name": "consume_card_session",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 18
+  },
+  {
+    "name": "convert_lead_to_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "lead_id": "265aadcb-0dde-4789-bcf8-410c4319a03d"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"265aadcb-0dde-4789-bcf8-410c4319a03d\",\"full_name\":\"Test Lead Real 1778141109879\",\"phone\":\"090",
+    "count": 1,
+    "ms": 29
+  },
+  {
+    "name": "count_leads_today",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"count\":4}",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "count_loyalty_customers",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":0,\"tier_id\":\"507c38b7-fce2-4086-9c21-640e719676e4\"}",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "create_academy_course",
+    "args": {
+      "name": "academy_course-test-1778144162551"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=647ee9c8-bb4c-42dd-b63b-b1f3b1249465",
+    "created_id": "647ee9c8-bb4c-42dd-b63b-b1f3b1249465",
+    "ms": 26
+  },
+  {
+    "name": "create_academy_lesson",
+    "args": {
+      "name": "academy_lesson-test-1778144162551"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Lessons table chưa có ở source schema CRM. Tính năng này chờ migration.",
+    "ms": 11
+  },
+  {
+    "name": "create_advance_salary",
+    "args": {
+      "name": "advance_salary-test-1778144162552"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "staff_id và amount > 0 required",
+    "ms": 16
+  },
+  {
+    "name": "create_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv",
+      "name": "ai_conversation-test-1778144162552"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"conversation_id\":\"thread-mov94gsl-6omzxh\",\"status\":\"CREATED\",\"note\":\"Thread mới. Gửi message đầu t",
+    "count": 1,
+    "ms": 17
+  },
+  {
+    "name": "create_appointment",
+    "args": {
+      "appointment_id": "placeholder-no-appt",
+      "scheduled_at": "2026-06-01T09:00:00Z",
+      "duration_minutes": 60,
+      "name": "appointment-test-1778144162553"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Thiếu phone (SĐT khách)",
+    "ms": 17
+  },
+  {
+    "name": "create_bonus_penalty",
+    "args": {
+      "name": "bonus_penalty-test-1778144162553"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "staff_id, type (BONUS|PENALTY) và amount > 0 required",
+    "ms": 20
+  },
+  {
+    "name": "create_bundle",
+    "args": {
+      "bundle_id": "501909fa-b352-40b6-992d-3e8e63eedfd8",
+      "name": "bundle-test-1778144162578"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=8a678d46-20a2-4972-8ccf-7feadfde2a18",
+    "created_id": "8a678d46-20a2-4972-8ccf-7feadfde2a18",
+    "ms": 21
+  },
+  {
+    "name": "create_cashbook_entry",
+    "args": {
+      "name": "cashbook_entry-test-1778144162578"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_PARAMS\"}",
+    "ms": 10
+  },
+  {
+    "name": "create_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "full_name": "KH Test 1778144162579",
+      "phone": "09019616"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=85d57f9c-0003-4e6e-95d5-8bef98483a46",
+    "created_id": "85d57f9c-0003-4e6e-95d5-8bef98483a46",
+    "ms": 21
+  },
+  {
+    "name": "create_customer_group",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8",
+      "name": "Nhóm Test 1778144162579"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=758fd195-69f9-458e-bcc7-48a6896b29c6",
+    "created_id": "758fd195-69f9-458e-bcc7-48a6896b29c6",
+    "ms": 23
+  },
+  {
+    "name": "create_deposit",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "name": "deposit-test-1778144162580"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "person_id và amount > 0 required",
+    "ms": 14
+  },
+  {
+    "name": "create_discount_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "name": "discount_campaign-test-1778144162581"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 13
+  },
+  {
+    "name": "create_document_folder",
+    "args": {
+      "document_id": "placeholder-no-doc",
+      "name": "document_folder-test-1778144162581"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Folders chưa có bảng riêng. CRM dùng documents.entity_type làm folder.",
+    "ms": 15
+  },
+  {
+    "name": "create_export_stock",
+    "args": {
+      "name": "export_stock-test-1778144162582"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 16
+  },
+  {
+    "name": "create_funnel_deal",
+    "args": {
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e",
+      "name": "funnel_deal-test-1778144162602"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "full_name và phone required",
+    "ms": 9
+  },
+  {
+    "name": "create_import_stock",
+    "args": {
+      "name": "import_stock-test-1778144162603"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 10
+  },
+  {
+    "name": "create_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "full_name": "Test Lead Real 1778144162604",
+      "phone": "09001356",
+      "source": "AI Test",
+      "note": "Tạo từ test data thật"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=8910b2d0-a295-4dcc-a932-e6ecfbf541b8",
+    "created_id": "8910b2d0-a295-4dcc-a932-e6ecfbf541b8",
+    "ms": 35
+  },
+  {
+    "name": "create_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "name": "loyalty_tier-test-1778144162604"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=9e4efa0c-7f64-416e-a69e-9758a1889005",
+    "created_id": "9e4efa0c-7f64-416e-a69e-9758a1889005",
+    "ms": 30
+  },
+  {
+    "name": "create_marketing_qr",
+    "args": {
+      "name": "marketing_qr-test-1778144162605"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Marketing QR table chưa có ở source schema CRM. Tính năng cần migration mới.",
+    "ms": 14
+  },
+  {
+    "name": "create_order",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "items": [
+        {
+          "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+          "quantity": 1,
+          "price": 100000
+        }
+      ],
+      "name": "order-test-1778144162606"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "person_id và items required",
+    "ms": 14
+  },
+  {
+    "name": "create_product",
+    "args": {
+      "product_id": "148c329b-e4c4-4500-b834-3f2594c38491",
+      "name": "product-test-1778144162606"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=2ea4cb22-4053-4040-abbc-9ac99a533399",
+    "created_id": "2ea4cb22-4053-4040-abbc-9ac99a533399",
+    "ms": 23
+  },
+  {
+    "name": "create_promotion",
+    "args": {
+      "name": "promotion-test-1778144162607"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "name + discount_value > 0 required",
+    "ms": 16
+  },
+  {
+    "name": "create_sales_opportunity",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "name": "sales_opportunity-test-1778144162639"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "full_name và phone required",
+    "ms": 8
+  },
+  {
+    "name": "create_service",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "name": "DV Test 1778144162640",
+      "price": 100000
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=55fd15cc-23a4-4e79-98c9-46e13718b949",
+    "created_id": "55fd15cc-23a4-4e79-98c9-46e13718b949",
+    "ms": 30
+  },
+  {
+    "name": "create_shipping_order",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "name": "shipping_order-test-1778144162640"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "order_id + carrier required",
+    "ms": 11
+  },
+  {
+    "name": "create_stock_transfer",
+    "args": {
+      "name": "stock_transfer-test-1778144162641"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 12
+  },
+  {
+    "name": "create_stocktake",
+    "args": {
+      "name": "stocktake-test-1778144162641"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PRODUCT_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "create_telegram_subscription",
+    "args": {
+      "name": "telegram_subscription-test-1778144162641"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "event_type + chat_id required",
+    "ms": 16
+  },
+  {
+    "name": "create_telesale_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "name": "telesale_campaign-test-1778144162642"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=3003ceae-4f9b-4a33-94bb-a796442e1f9c",
+    "created_id": "3003ceae-4f9b-4a33-94bb-a796442e1f9c",
+    "ms": 21
+  },
+  {
+    "name": "create_treatment",
+    "args": {
+      "treatment_id": "9b3423ca-3d7e-41b9-aeda-74ede4e952ef",
+      "name": "treatment-test-1778144162642"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=c54d2a6f-547f-4b42-90bf-8a7009a23ac8",
+    "created_id": "c54d2a6f-547f-4b42-90bf-8a7009a23ac8",
+    "ms": 27
+  },
+  {
+    "name": "create_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "name": "voucher_campaign-test-1778144162671"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 7
+  },
+  {
+    "name": "cskh_appointment_reminders",
+    "args": {
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 25
+  },
+  {
+    "name": "cskh_birthday_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"6a55a0e8-a484-442b-8acf-84ea88dde824\",\"full_name\":\"hồng \",\"phone\":\"096589",
+    "count": 1,
+    "ms": 26
+  },
+  {
+    "name": "cskh_cancelled_appointments_list",
+    "args": {
+      "limit": 5,
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 28
+  },
+  {
+    "name": "cskh_no_show_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 28
+  },
+  {
+    "name": "cskh_no_visit_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"09827554-324b-4e54-a4cb-8b0a754b1f03\",\"full_name\":\"AUTOTEST_lead_17780372",
+    "count": 5,
+    "ms": 29
+  },
+  {
+    "name": "cskh_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"30d\",\"call_dispositions\":[],\"appointment_status\":[]}",
+    "count": 1,
+    "ms": 32
+  },
+  {
+    "name": "cskh_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"no_show_30d\":0,\"cancelled_30d\":0,\"no_visit_30d\":27,\"birthday_this_month\":1,\"upcoming_24h\":0}",
+    "count": 1,
+    "ms": 29
+  },
+  {
+    "name": "customer_care_list",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"5a4983ae-ebb9-4e9d-963d-29a4efb04b51\",\"full_name\":\"Nguyen Test Bug Fix\",\"",
+    "count": 5,
+    "ms": 30
+  },
+  {
+    "name": "customer_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-01-01\",\"to\":\"2026-12-31\"},\"summary\":{\"total_customers\":27,\"new_30d\":27,\"vip_",
+    "count": 1,
+    "ms": 37
+  },
+  {
+    "name": "customers_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":27,\"vip_count\":2,\"new_30d\":27}",
+    "count": 1,
+    "ms": 28
+  },
+  {
+    "name": "dashboard_overview",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"today\",\"revenue\":{\"revenue\":0,\"invoice_count\":0},\"debt\":{\"total_debt\":0},\"appointments\":{",
+    "count": 1,
+    "ms": 36
+  },
+  {
+    "name": "debt_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 31
+  },
+  {
+    "name": "deduct_card_value",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "delete_academy_course",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_COURSE_ID\"}",
+    "ms": 19
+  },
+  {
+    "name": "delete_academy_lesson",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"status\":\"NOT_AVAILABLE\",\"note\":\"Lessons table chưa có ở source schema.\"}",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "delete_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted_messages\":0,\"conversation_id\":\"placeholder-no-conv\"}",
+    "count": 1,
+    "ms": 36
+  },
+  {
+    "name": "delete_call_log",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CALL_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "delete_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"archived\":false,\"id\":\"6a55a0e8-a484-442b-8acf-84ea88dde824\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 35
+  },
+  {
+    "name": "delete_customer_group",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"GROUP_NOT_FOUND\"}",
+    "ms": 38
+  },
+  {
+    "name": "delete_deposit",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_DEPOSIT_ID\"}",
+    "ms": 23
+  },
+  {
+    "name": "delete_document",
+    "args": {
+      "document_id": "placeholder-no-doc",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":false,\"document_id\":\"placeholder-no-doc\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 38
+  },
+  {
+    "name": "delete_funnel_deal",
+    "args": {
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":false,\"deal_id\":\"19791eec-9b72-488a-9639-e1125105832e\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 40
+  },
+  {
+    "name": "delete_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_LEAD_ID\"}",
+    "ms": 30
+  },
+  {
+    "name": "delete_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":false,\"tier_id\":\"507c38b7-fce2-4086-9c21-640e719676e4\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 30
+  },
+  {
+    "name": "delete_notification",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_NOTIFICATION_ID\"}",
+    "ms": 13
+  },
+  {
+    "name": "delete_promotion",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PROMOTION_ID\"}",
+    "ms": 16
+  },
+  {
+    "name": "delete_telegram_subscription",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_SUBSCRIPTION_ID\"}",
+    "ms": 17
+  },
+  {
+    "name": "delete_telesale_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":true,\"campaign_id\":\"f46ad648-e5ed-48eb-9d7a-6df73c374429\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 28
+  },
+  {
+    "name": "delete_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":false,\"campaign_id\":\"f46ad648-e5ed-48eb-9d7a-6df73c374429\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 30
+  },
+  {
+    "name": "deposit_card",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 23
+  },
+  {
+    "name": "deposits_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_deposits\":1,\"active\":1,\"used\":0,\"refunded\":0,\"total_amount\":1000000,\"total_remaining\":100000",
+    "count": 1,
+    "ms": 31
+  },
+  {
+    "name": "disconnect_aitrucpage",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CONNECTION_ID\"}",
+    "ms": 8
+  },
+  {
+    "name": "disconnect_shipping_provider",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CONNECTION_ID\"}",
+    "ms": 7
+  },
+  {
+    "name": "disconnect_telegram_chat",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CHAT_ID\"}",
+    "ms": 10
+  },
+  {
+    "name": "documents_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":0,\"entity_types\":0,\"uploaded_30d\":0,\"total_size_bytes\":0}",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "duplicate_promotion",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PROMOTION_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "duplicate_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CAMPAIGN_NOT_FOUND\"}",
+    "ms": 22
+  },
+  {
+    "name": "enroll_staff_to_course",
+    "args": {
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 18
+  },
+  {
+    "name": "export_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"4c02709e-d69a-457b-bf76-9468dbe20530\",\"status\":\"QUEUED\"}",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "export_cskh_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"031d873e-32a1-4b4e-a19a-da16194e6cb3\",\"status\":\"QUEUED\"}",
+    "count": 1,
+    "ms": 19
+  },
+  {
+    "name": "export_leads",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"f43f3afb-9678-43d7-94fa-c1fea231be63\",\"status\":\"QUEUED\",\"message\":\"Export queued, fil",
+    "count": 1,
+    "ms": 20
+  },
+  {
+    "name": "export_voucher_campaigns",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"21f083c5-6b32-4b2b-9f8f-72b8ccc6e32f\",\"status\":\"QUEUED\"}",
+    "count": 1,
+    "ms": 20
+  },
+  {
+    "name": "extend_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 12
+  },
+  {
+    "name": "find_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "10 item(s) {\"id\":\"8910b2d0-a295-4dcc-a932-e6ecfbf541b8\",\"name\":\"Test Lead Real 177814416260",
+    "count": 10,
+    "ms": 26
+  },
+  {
+    "name": "fix_timesheet_error",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_ERROR_ID\"}",
+    "ms": 13
+  },
+  {
+    "name": "funnel_conversion_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"stages\":[{\"stage\":\"LEAD\",\"count\":11},{\"stage\":\"QUALIFIED\",\"count\":0},{\"stage\":\"BOOKED\",\"count\":0},",
+    "count": 1,
+    "ms": 20
+  },
+  {
+    "name": "funnel_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"stages\":[{\"stage\":\"LEAD\",\"count\":11},{\"stage\":\"QUALIFIED\",\"count\":0},{\"stage\":\"BOOKED\",\"count\":0},",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "generate_cskh_tasks",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"date\":\"2026-05-07\",\"birthdays\":{\"count\":0,\"items\":[]},\"upcoming_24h\":{\"count\":0,\"items\":[]},\"recen",
+    "count": 1,
+    "ms": 30
+  },
+  {
+    "name": "get_academy_course_detail",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_COURSE_ID\"}",
+    "ms": 9
+  },
+  {
+    "name": "get_account_profile",
+    "args": {},
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"PROFILE_NOT_FOUND\"}",
+    "ms": 21
+  },
+  {
+    "name": "get_ai_call_review",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_REVIEW_ID\"}",
+    "ms": 12
+  },
+  {
+    "name": "get_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CONVERSATION_NOT_FOUND\"}",
+    "ms": 25
+  },
+  {
+    "name": "get_ai_usage",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_messages\":0,\"assistant_messages\":0,\"messages_mtd\":0,\"conversations\":0}",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "get_aitrucpage_stats",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_connections\":0,\"active\":0,\"auto_sync_enabled\":0,\"healthy\":0,\"failed\":0,\"last_synced_at\":null",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "get_audit_log",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "26 item(s) {\"id\":\"f43f3afb-9678-43d7-94fa-c1fea231be63\",\"table_name\":\"people\",\"record_id\":n",
+    "count": 26,
+    "ms": 26
+  },
+  {
+    "name": "get_call_detail",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CALL_ID\"}",
+    "ms": 7
+  },
+  {
+    "name": "get_card_detail",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CARD_NOT_FOUND\"}",
+    "ms": 17
+  },
+  {
+    "name": "get_card_movement_detail",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_MOVEMENT_ID\"}",
+    "ms": 10
+  },
+  {
+    "name": "get_commissions",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 18
+  },
+  {
+    "name": "get_customer_detail",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"6a55a0e8-a484-442b-8acf-84ea88dde824\",\"workspace_id\":\"fc11aab9-c954-4846-8b08-5f9159739e3d\",\"",
+    "count": 1,
+    "ms": 19
+  },
+  {
+    "name": "get_customer_group_detail",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "Nhóm KH không tồn tại",
+    "ms": 20
+  },
+  {
+    "name": "get_deposit_detail",
+    "args": {
+      "package_id": "placeholder-no-package"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_DEPOSIT_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "get_document_signature_status",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"DOCUMENT_NOT_FOUND\"}",
+    "ms": 20
+  },
+  {
+    "name": "get_document_url",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"DOCUMENT_NOT_FOUND\"}",
+    "ms": 22
+  },
+  {
+    "name": "get_funnel_deal_detail",
+    "args": {
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"DEAL_NOT_FOUND\"}",
+    "ms": 22
+  },
+  {
+    "name": "get_funnel_deal_history",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "get_kpi_by_staff",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"staff\":{\"id\":\"d9116fd5-5c36-45ac-8b97-06ac08b88af1\",\"name\":\"Anh Tuấn\",\"title\":null,\"monthly_target",
+    "count": 1,
+    "ms": 27
+  },
+  {
+    "name": "get_loyalty_points",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_ID\"}",
+    "ms": 12
+  },
+  {
+    "name": "get_my_income",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_STAFF_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "get_order_detail",
+    "args": {
+      "order_id": "placeholder-no-order"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"ORDER_NOT_FOUND\"}",
+    "ms": 20
+  },
+  {
+    "name": "get_payroll",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"periods\":[],\"total\":0}",
+    "count": 1,
+    "ms": 20
+  },
+  {
+    "name": "get_pickup_address",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"addresses\":[{\"carrier\":\"GHN\",\"from_name\":null,\"from_phone\":null,\"from_address\":null,\"from_province",
+    "count": 1,
+    "ms": 19
+  },
+  {
+    "name": "get_plan_usage",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"active_staff\":1,\"total_staff\":1,\"active_branches\":1,\"total_customers\":27,\"active_products\":3,\"acti",
+    "count": 1,
+    "ms": 18
+  },
+  {
+    "name": "get_promotion_detail",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PROMOTION_ID\"}",
+    "ms": 8
+  },
+  {
+    "name": "get_sales_target_progress",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-05-01T00:00:00.000Z\",\"to\":\"now\"},\"total_target\":0,\"revenue_mtd\":0,\"progress_",
+    "count": 1,
+    "ms": 19
+  },
+  {
+    "name": "get_service_detail",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"4dcada8c-bb91-469f-a45a-871bf9825b73\",\"workspace_id\":\"fc11aab9-c954-4846-8b08-5f9159739e3d\",\"",
+    "count": 1,
+    "ms": 19
+  },
+  {
+    "name": "get_shift_schedule",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 19
+  },
+  {
+    "name": "get_staff_detail",
+    "args": {
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"d9116fd5-5c36-45ac-8b97-06ac08b88af1\",\"name\":\"Anh Tuấn\",\"title\":null,\"phone\":null,\"email\":nul",
+    "count": 1,
+    "ms": 20
+  },
+  {
+    "name": "get_staff_performance",
+    "args": {
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"staff\":{\"id\":\"d9116fd5-5c36-45ac-8b97-06ac08b88af1\",\"name\":\"Anh Tuấn\",\"title\":null,\"monthly_target",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "get_stock_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "3 item(s) {\"id\":\"148c329b-e4c4-4500-b834-3f2594c38491\",\"code\":\"P-1778141109900\",\"name\":\"pr",
+    "count": 3,
+    "ms": 23
+  },
+  {
+    "name": "get_telegram_chat_detail",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "Telegram chat detail phải gọi Core API thay vì CRM.",
+    "ms": 18
+  },
+  {
+    "name": "get_telesale_campaign_detail",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CAMPAIGN_NOT_FOUND\"}",
+    "ms": 24
+  },
+  {
+    "name": "get_timesheet",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 35
+  },
+  {
+    "name": "get_voucher_campaign_detail",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CAMPAIGN_NOT_FOUND\"}",
+    "ms": 24
+  },
+  {
+    "name": "get_workspace_info",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"workspace\":{\"id\":\"fc11aab9-c954-4846-8b08-5f9159739e3d\",\"name\":\"Cơ sở chính\",\"owner_user_id\":\"daot",
+    "count": 1,
+    "ms": 35
+  },
+  {
+    "name": "import_leads",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_FILE_URL\"}",
+    "ms": 18
+  },
+  {
+    "name": "initiate_call",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 19
+  },
+  {
+    "name": "initiate_callback",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CALLBACK_ID\"}",
+    "ms": 10
+  },
+  {
+    "name": "inventory_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"products\":{\"total_products\":3,\"active_products\":3,\"with_variants\":0,\"total_min_stock\":0},\"movement",
+    "count": 1,
+    "ms": 45
+  },
+  {
+    "name": "issue_certificate",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 11
+  },
+  {
+    "name": "issue_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 12
+  },
+  {
+    "name": "issue_vouchers",
+    "args": {
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 14
+  },
+  {
+    "name": "kpi_by_branch",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "branch_id": "31d6c8cb-185f-4d4f-b3fe-d44f769387bf"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-05-01T00:00:00.000Z\",\"to\":\"now\"},\"branches\":[{\"branch_id\":\"31d6c8cb-185f-4d4",
+    "count": 1,
+    "ms": 28
+  },
+  {
+    "name": "kpi_config",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 31
+  },
+  {
+    "name": "kpi_overview",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-05-01T00:00:00.000Z\",\"to\":\"now\"},\"revenue_mtd\":0,\"new_customers_mtd\":26,\"app",
+    "count": 1,
+    "ms": 36
+  },
+  {
+    "name": "lead_detail",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "args.id required",
+    "ms": 13
+  },
+  {
+    "name": "link_ads_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Không có trường nào cần cập nhật",
+    "ms": 17
+  },
+  {
+    "name": "link_app_workspace",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "list_academy_courses",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"647ee9c8-bb4c-42dd-b63b-b1f3b1249465\",\"name\":\"academy_course-test-1778144",
+    "count": 2,
+    "ms": 27
+  },
+  {
+    "name": "list_academy_lessons",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "list_active_promotions_for_invoice",
+    "args": {
+      "limit": 5,
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f\",\"name\":\"Test DC Final\",\"discount_ty",
+    "count": 2,
+    "ms": 30
+  },
+  {
+    "name": "list_ads_leads",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 35
+  },
+  {
+    "name": "list_ai_call_reviews",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 49
+  },
+  {
+    "name": "list_ai_conversations",
+    "args": {
+      "limit": 5,
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 26
+  },
+  {
+    "name": "list_ai_prompt_suggestions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "8 item(s) {\"id\":\"top_customers\",\"label\":\"Top khách hàng tháng này\",\"prompt\":\"Cho tôi xem t",
+    "count": 8,
+    "ms": 11
+  },
+  {
+    "name": "list_aitrucpage_connections",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 21
+  },
+  {
+    "name": "list_aitrucpage_sync_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 12
+  },
+  {
+    "name": "list_app_integrations",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "3 item(s) {\"id\":\"72b427be-4b19-4144-aac8-d22845f1bfa7\",\"partner_app\":\"ads\",\"partner_worksp",
+    "count": 3,
+    "ms": 20
+  },
+  {
+    "name": "list_appointments",
+    "args": {
+      "limit": 5,
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "list_branches",
+    "args": {
+      "limit": 5,
+      "branch_id": "31d6c8cb-185f-4d4f-b3fe-d44f769387bf"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"31d6c8cb-185f-4d4f-b3fe-d44f769387bf\",\"name\":\"Chi nhánh chính\",\"address\":",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "list_call_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 21
+  },
+  {
+    "name": "list_callbacks",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "list_campaign_redemptions",
+    "args": {
+      "limit": 5,
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "list_campaigns",
+    "args": {
+      "limit": 5,
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"crm_pipeline\":[{\"step\":\"LEAD\",\"active\":11,\"won\":0,\"lost\":0,\"total\":11}],\"active_promotions\":[]}",
+    "count": 1,
+    "ms": 29
+  },
+  {
+    "name": "list_card_movements",
+    "args": {
+      "limit": 5,
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "list_connected_shipping_providers",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"7fea7f30-f0cf-4699-b073-1fbfa8883fac\",\"carrier\":\"GHN\",\"shop_id\":null,\"act",
+    "count": 1,
+    "ms": 23
+  },
+  {
+    "name": "list_consumed_events",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"event_id\":\"evt_b3cebb96578fdca1c6b051e8\",\"entry_id\":\"1776052623401-0\",\"type\":\"",
+    "count": 2,
+    "ms": 23
+  },
+  {
+    "name": "list_course_enrollments",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 25
+  },
+  {
+    "name": "list_cskh_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 26
+  },
+  {
+    "name": "list_customer_groups",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"758fd195-69f9-458e-bcc7-48a6896b29c6\",\"name\":\"Nhóm Test 1778144162579\",\"d",
+    "count": 5,
+    "ms": 36
+  },
+  {
+    "name": "list_customers",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"85d57f9c-0003-4e6e-95d5-8bef98483a46\",\"full_name\":\"KH Test 1778144162579\"",
+    "count": 5,
+    "ms": 36
+  },
+  {
+    "name": "list_debts",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 36
+  },
+  {
+    "name": "list_departments",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 36
+  },
+  {
+    "name": "list_deposit_movements",
+    "args": {
+      "limit": 5,
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 38
+  },
+  {
+    "name": "list_deposits",
+    "args": {
+      "limit": 5,
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"09a7dcfd-a51f-49e8-9475-067448f445c8\",\"code\":\"DEP-MOV5Q980\",\"person_id\":\"",
+    "count": 1,
+    "ms": 37
+  },
+  {
+    "name": "list_discount_campaigns",
+    "args": {
+      "limit": 5,
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f\",\"name\":\"Test DC Final\",\"description",
+    "count": 2,
+    "ms": 38
+  },
+  {
+    "name": "list_document_folders",
+    "args": {
+      "limit": 5,
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 38
+  },
+  {
+    "name": "list_document_versions",
+    "args": {
+      "limit": 5,
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 7
+  },
+  {
+    "name": "list_documents",
+    "args": {
+      "limit": 5,
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "list_funnel_deals",
+    "args": {
+      "limit": 5,
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"eeef558e-16b7-435a-8fe9-d036e79be429\",\"person_id\":\"8910b2d0-a295-4dcc-a93",
+    "count": 5,
+    "ms": 22
+  },
+  {
+    "name": "list_group_members",
+    "args": {
+      "limit": 5,
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "Nhóm KH không tồn tại",
+    "ms": 23
+  },
+  {
+    "name": "list_input_invoices",
+    "args": {
+      "limit": 5,
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 24
+  },
+  {
+    "name": "list_invoices",
+    "args": {
+      "limit": 5,
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_leads",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"8910b2d0-a295-4dcc-a932-e6ecfbf541b8\",\"full_name\":\"Test Lead Real 1778144",
+    "count": 5,
+    "ms": 24
+  },
+  {
+    "name": "list_loyalty_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 24
+  },
+  {
+    "name": "list_loyalty_labels",
+    "args": {
+      "limit": 5,
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "list_loyalty_sources",
+    "args": {
+      "limit": 5,
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "list_loyalty_tiers",
+    "args": {
+      "limit": 5,
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "6 item(s) {\"id\":\"41e4e5df-ff65-4710-9cf3-7592bc916edc\",\"name\":\"AI_TEST_DRY_RUN\",\"min_point",
+    "count": 6,
+    "ms": 23
+  },
+  {
+    "name": "list_members",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"b865ab44-4fdd-43b6-ab46-416ce5f856fa\",\"user_id\":\"daotaokinhdoanhspa@gmail",
+    "count": 1,
+    "ms": 23
+  },
+  {
+    "name": "list_my_notifications",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"c529111f-6fc6-4020-a66c-6aa5dad9270e\",\"type\":\"SYSTEM\",\"title\":\"Test Notif",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "list_orders",
+    "args": {
+      "limit": 5,
+      "order_id": "placeholder-no-order"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_promotions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f\",\"name\":\"Test DC Final\",\"description",
+    "count": 2,
+    "ms": 23
+  },
+  {
+    "name": "list_published_events",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_remote_workspaces",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "3 item(s) {\"partner_app\":\"ads\",\"partner_workspace_id\":\"d6c24170-bb94-4743-ad28-1bc5ee5daff",
+    "count": 3,
+    "ms": 20
+  },
+  {
+    "name": "list_rooms",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "list_sales_pipelines",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"default\",\"name\":\"Default Pipeline\",\"stages\":[{\"stage\":\"LEAD\",\"label\":\"Lea",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "list_sent_notifications",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 21
+  },
+  {
+    "name": "list_service_cards",
+    "args": {
+      "limit": 5,
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 21
+  },
+  {
+    "name": "list_service_categories",
+    "args": {
+      "limit": 5,
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "32 item(s) {\"id\":\"d3249512-181e-4bba-9a7c-b713fab2a3a4\",\"name\":\"Trị mụn\",\"description\":null",
+    "count": 32,
+    "ms": 22
+  },
+  {
+    "name": "list_services",
+    "args": {
+      "limit": 5,
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"10396419-0cdc-471b-b97a-4d8c460cb727\",\"name\":\"Ấn huyệt chuyên sâu\",\"price",
+    "count": 5,
+    "ms": 22
+  },
+  {
+    "name": "list_shipping_providers",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"code\":\"GHN\",\"name\":\"Giao hàng nhanh\",\"supported\":true}",
+    "count": 5,
+    "ms": 15
+  },
+  {
+    "name": "list_staff",
+    "args": {
+      "limit": 5,
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"d9116fd5-5c36-45ac-8b97-06ac08b88af1\",\"name\":\"Anh Tuấn\",\"title\":null,\"pho",
+    "count": 1,
+    "ms": 23
+  },
+  {
+    "name": "list_staff_certificates",
+    "args": {
+      "limit": 5,
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 24
+  },
+  {
+    "name": "list_telegram_chats",
+    "args": {
+      "limit": 5,
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 10
+  },
+  {
+    "name": "list_telegram_event_types",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "8 item(s) {\"type\":\"invoice.created\",\"label\":\"Hoá đơn tạo mới\"}",
+    "count": 8,
+    "ms": 12
+  },
+  {
+    "name": "list_telegram_push_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 13
+  },
+  {
+    "name": "list_telegram_subscriptions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 16
+  },
+  {
+    "name": "list_telesale_campaigns",
+    "args": {
+      "limit": 5,
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"3003ceae-4f9b-4a33-94bb-a796442e1f9c\",\"name\":\"telesale_campaign-test-1778",
+    "count": 2,
+    "ms": 22
+  },
+  {
+    "name": "list_telesale_queue",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_uncalled_leads",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_voucher_campaigns",
+    "args": {
+      "limit": 5,
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f\",\"name\":\"Test DC Final\",\"description",
+    "count": 2,
+    "ms": 23
+  },
+  {
+    "name": "list_zalo_templates",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 10
+  },
+  {
+    "name": "loyalty_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "6 item(s) {\"id\":\"41e4e5df-ff65-4710-9cf3-7592bc916edc\",\"name\":\"AI_TEST_DRY_RUN\",\"min_point",
+    "count": 6,
+    "ms": 30
+  },
+  {
+    "name": "loyalty_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"tiers_count\":6,\"customers\":{\"total\":27,\"active\":0}}",
+    "count": 1,
+    "ms": 24
+  },
+  {
+    "name": "manage_academy_quiz",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 12
+  },
+  {
+    "name": "manage_ads_settings",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "manage_ai_knowledge_base",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 21
+  },
+  {
+    "name": "manage_ai_persona",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"persona\":{\"name\":\"CRM Assistant\",\"tone\":\"professional\",\"expertise\":\"spa/salon CRM\"},\"note\":\"Defaul",
+    "count": 1,
+    "ms": 8
+  },
+  {
+    "name": "manage_automation",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 9
+  },
+  {
+    "name": "manage_bank_accounts",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "manage_billing",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 11
+  },
+  {
+    "name": "manage_brands",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 25
+  },
+  {
+    "name": "manage_business_hours",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"business_hours\":{\"mon_fri\":\"09:00-21:00\",\"sat\":\"09:00-22:00\",\"sun\":\"10:00-20:00\"},\"branch_id\":null",
+    "count": 1,
+    "ms": 26
+  },
+  {
+    "name": "manage_commission_rules",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 25
+  },
+  {
+    "name": "manage_cskh_rules",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "4 item(s) {\"id\":\"birthday_zalo\",\"label\":\"Tự gửi Zalo chúc sinh nhật\",\"enabled\":true,\"defau",
+    "count": 4,
+    "ms": 17
+  },
+  {
+    "name": "manage_customer_segments",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 7
+  },
+  {
+    "name": "manage_email_campaigns",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 9
+  },
+  {
+    "name": "manage_finance_categories",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 9
+  },
+  {
+    "name": "manage_fixed_assets",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 9
+  },
+  {
+    "name": "manage_flash_sale",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 16
+  },
+  {
+    "name": "manage_funnel_stages",
+    "args": {
+      "stage_id": "LEAD",
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 11
+  },
+  {
+    "name": "manage_landing_pages",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 12
+  },
+  {
+    "name": "manage_loyalty_label",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "action must be list/create/delete",
+    "ms": 14
+  },
+  {
+    "name": "manage_loyalty_source",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 6
+  },
+  {
+    "name": "manage_marketing_cost",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 8
+  },
+  {
+    "name": "manage_marketing_workflows",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 10
+  },
+  {
+    "name": "manage_notifications",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 27
+  },
+  {
+    "name": "manage_payment_methods",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 16
+  },
+  {
+    "name": "manage_print_settings",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 28
+  },
+  {
+    "name": "manage_referral_program",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 18
+  },
+  {
+    "name": "manage_roles",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "4 item(s) {\"code\":\"OWNER\",\"label\":\"Chủ\",\"perms\":\"all\"}",
+    "count": 4,
+    "ms": 21
+  },
+  {
+    "name": "manage_salary_policy",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 18
+  },
+  {
+    "name": "manage_security",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"mfa_enabled\":false,\"password_policy\":\"CORE_SSO\",\"note\":\"Security policy enforced by Core SSO. CRM ",
+    "count": 1,
+    "ms": 10
+  },
+  {
+    "name": "manage_shift_templates",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 10
+  },
+  {
+    "name": "manage_sms_campaigns",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 10
+  },
+  {
+    "name": "manage_suppliers",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 11
+  },
+  {
+    "name": "manage_telesale_scripts",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 17
+  },
+  {
+    "name": "manage_units",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 14
+  },
+  {
+    "name": "manage_vouchers",
+    "args": {
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 16
+  },
+  {
+    "name": "manage_webhooks",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 8
+  },
+  {
+    "name": "manage_zalo_mini_app",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 10
+  },
+  {
+    "name": "mark_callback_done",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CALLBACK_ID\"}",
+    "ms": 12
+  },
+  {
+    "name": "mark_cskh_done",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PERSON_ID\"}",
+    "ms": 13
+  },
+  {
+    "name": "mark_lesson_completed",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"status\":\"NOT_AVAILABLE\",\"note\":\"Lessons table chưa có, tính năng cần migration.\"}",
+    "count": 1,
+    "ms": 16
+  },
+  {
+    "name": "mark_notification_read",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_NOTIFICATION_ID\"}",
+    "ms": 18
+  },
+  {
+    "name": "marketing_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"campaigns\":{\"total_campaigns\":2,\"active_campaigns\":2},\"redemptions\":{\"total_redemptions\":0,\"total_",
+    "count": 1,
+    "ms": 27
+  },
+  {
+    "name": "move_document",
+    "args": {
+      "document_id": "placeholder-no-doc",
+      "from_stage": "LEAD",
+      "to_stage": "QUALIFIED"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 21
+  },
+  {
+    "name": "orders_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "order_id": "placeholder-no-order"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":0,\"delivered\":0,\"cancelled\":0,\"total_revenue\":0,\"total_debt\":0}",
+    "count": 1,
+    "ms": 16
+  },
+  {
+    "name": "pin_ai_message",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_MESSAGE_ID\"}",
+    "ms": 8
+  },
+  {
+    "name": "pin_notification",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"pinned\":true,\"note\":\"Pinned notifications use ref_id field. Implementation pending.\"}",
+    "count": 1,
+    "ms": 8
+  },
+  {
+    "name": "pos_add_payment",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 9
+  },
+  {
+    "name": "pos_complete_appointment",
+    "args": {
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"APPOINTMENT_NOT_FOUND\"}",
+    "ms": 16
+  },
+  {
+    "name": "pos_create_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 11
+  },
+  {
+    "name": "prepaid_cards_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total_cards\":0,\"active\":0,\"expired\":0,\"expiring_soon\":0,\"total_charged\":0,\"total_remaining\":0,\"tot",
+    "count": 1,
+    "ms": 15
+  },
+  {
+    "name": "print_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"invoice_id\":\"placeholder-no-invoice\",\"format\":\"pdf\",\"file_url\":\"https://crm.spaclaw.pro/api/invoic",
+    "count": 1,
+    "ms": 13
+  },
+  {
+    "name": "promotion_redemption_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-01-01\",\"to\":\"2026-12-31\"},\"summary\":{\"total_redemptions\":0,\"total_discount\":",
+    "count": 1,
+    "ms": 28
+  },
+  {
+    "name": "push_event_to_app",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 11
+  },
+  {
+    "name": "rate_ai_response",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 13
+  },
+  {
+    "name": "rate_call_review",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 13
+  },
+  {
+    "name": "refund_deposit",
+    "args": {
+      "package_id": "placeholder-no-package"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_DEPOSIT_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "register_zns_template",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"status\":\"REDIRECT_TO_ZALO_APP\",\"note\":\"ZNS template registration phải gọi Zalo VPS app /zalo/proxy",
+    "count": 1,
+    "ms": 15
+  },
+  {
+    "name": "remove_member_from_group",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "group_id và customer_id required",
+    "ms": 16
+  },
+  {
+    "name": "remove_promotion_from_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"invoice_id\":\"placeholder-no-invoice\",\"vouchers_voided\":0}",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "rename_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 23
+  },
+  {
+    "name": "rename_document",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 33
+  },
+  {
+    "name": "report_revenue",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"Tháng này\",\"invoice_revenue\":0,\"invoice_count\":0,\"order_revenue\":0,\"order_count\":0,\"total",
+    "count": 1,
+    "ms": 50
+  },
+  {
+    "name": "request_document_signature",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 32
+  },
+  {
+    "name": "reschedule_callback",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 31
+  },
+  {
+    "name": "restore_document_version",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Document versioning chưa có schema CRM.",
+    "ms": 31
+  },
+  {
+    "name": "revenue_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-01-01\",\"to\":\"2026-12-31\",\"branch_id\":null},\"summary\":{\"invoices\":0,\"paid_cou",
+    "count": 1,
+    "ms": 42
+  },
+  {
+    "name": "revert_card_consumption",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_USAGE_ID\"}",
+    "ms": 34
+  },
+  {
+    "name": "sale_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-05-01T00:00:00.000Z\",\"to\":\"now\"},\"revenue_mtd\":0,\"invoices_mtd\":0,\"active_pr",
+    "count": 1,
+    "ms": 23
+  },
+  {
+    "name": "sales_leaderboard",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-05-01T00:00:00.000Z\",\"to\":\"now\"},\"leaderboard\":[{\"staff_id\":\"d9116fd5-5c36-4",
+    "count": 1,
+    "ms": 23
+  },
+  {
+    "name": "sales_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"range\":\"7d\",\"total_paid\":0,\"invoice_count\":0}",
+    "count": 1,
+    "ms": 24
+  },
+  {
+    "name": "search_customers",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "20 item(s) {\"id\":\"8910b2d0-a295-4dcc-a932-e6ecfbf541b8\",\"full_name\":\"Test Lead Real 1778144",
+    "count": 20,
+    "ms": 24
+  },
+  {
+    "name": "search_documents",
+    "args": {
+      "document_id": "placeholder-no-doc",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 25
+  },
+  {
+    "name": "search_orders",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 24
+  },
+  {
+    "name": "search_products",
+    "args": {
+      "product_id": "148c329b-e4c4-4500-b834-3f2594c38491",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"148c329b-e4c4-4500-b834-3f2594c38491\",\"code\":\"P-1778141109900\",\"name\":\"pr",
+    "count": 2,
+    "ms": 25
+  },
+  {
+    "name": "search_services",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "6 item(s) {\"id\":\"3e928ac0-0478-42e8-bc6d-8468c7733577\",\"name\":\"DV Test 1778131553199\",\"pri",
+    "count": 6,
+    "ms": 24
+  },
+  {
+    "name": "search_treatments",
+    "args": {
+      "treatment_id": "9b3423ca-3d7e-41b9-aeda-74ede4e952ef",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "3 item(s) {\"id\":\"9702d1d6-5fe6-4e16-9a0a-e194391c5a96\",\"name\":\"treatment-test-177813155323",
+    "count": 3,
+    "ms": 17
+  },
+  {
+    "name": "send_appointment_reminder_zalo",
+    "args": {
+      "appointment_id": "placeholder-no-appt",
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"request_id\":\"5d5cc216-2d55-4535-b915-24d376adc2d2\",\"status\":\"QUEUED\",\"message\":\"Yêu cầu gửi nhắc l",
+    "count": 1,
+    "ms": 18
+  },
+  {
+    "name": "send_birthday_zalo",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PERSON_ID\"}",
+    "ms": 9
+  },
+  {
+    "name": "send_telegram_verification_code",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CHAT_ID\"}",
+    "ms": 10
+  },
+  {
+    "name": "send_test_telegram",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CHAT_ID\"}",
+    "ms": 11
+  },
+  {
+    "name": "send_zalo_broadcast",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 11
+  },
+  {
+    "name": "send_zalo_message",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PERSON_ID\"}",
+    "ms": 13
+  },
+  {
+    "name": "service_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 18
+  },
+  {
+    "name": "set_default_app_workspace",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 9
+  },
+  {
+    "name": "set_document_permissions",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"document_id\":\"placeholder-no-doc\",\"permissions_set\":true,\"note\":\"Permissions lưu qua audit_logs (r",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "set_sales_target",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 12
+  },
+  {
+    "name": "share_document",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"document_id\":\"placeholder-no-doc\",\"share_url\":\"https://crm.spaclaw.pro/documents/placeholder-no-do",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "shipping_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"summary\":{\"total_orders_shipping\":0,\"with_tracking\":0,\"delivered\":0,\"cancelled\":0,\"total_shipping_",
+    "count": 1,
+    "ms": 24
+  },
+  {
+    "name": "shipping_webhook",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"received\":true,\"audit_id\":\"80ce2664-1950-408e-b318-aba198c5705f\"}",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "snooze_notification",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "staff_performance_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"staff_id\":\"d9116fd5-5c36-45ac-8b97-06ac08b88af1\",\"name\":\"Anh Tuấn\",\"title\":nul",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "submit_telegram_chat_id",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CHAT_ID\"}",
+    "ms": 12
+  },
+  {
+    "name": "subscribe_notifications_stream",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"stream_url\":\"/api/notifications/sse\",\"note\":\"SSE endpoint for real-time notif updates.\"}",
+    "count": 1,
+    "ms": 16
+  },
+  {
+    "name": "sync_aitrucpage_now",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CONNECTION_ID\"}",
+    "ms": 16
+  },
+  {
+    "name": "sync_app_data",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "tag_document",
+    "args": {
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag",
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 18
+  },
+  {
+    "name": "telesale_call_log",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "telesale_campaign_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CAMPAIGN_NOT_FOUND\"}",
+    "ms": 24
+  },
+  {
+    "name": "telesale_hub_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"active_campaigns\":0,\"total_targets\":0,\"pending\":0,\"closed\":0,\"calls_7d\":0}",
+    "count": 1,
+    "ms": 24
+  },
+  {
+    "name": "telesale_leads_breakdown",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"summary\":{\"total_leads\":10,\"new_7d\":9},\"by_status\":[{\"lead_status\":\"NEW\",\"count\":10}]}",
+    "count": 1,
+    "ms": 45
+  },
+  {
+    "name": "telesale_overdue_callbacks",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"overdue\":0,\"oldest\":null}",
+    "count": 1,
+    "ms": 38
+  },
+  {
+    "name": "telesale_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":{\"from\":\"2026-01-01\",\"to\":\"2026-12-31\"},\"calls\":{\"total_calls\":0,\"outbound\":0,\"inbound\":0,",
+    "count": 1,
+    "ms": 45
+  },
+  {
+    "name": "test_send_notification",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"notification_id\":\"71e18eb0-02c7-48e1-b554-dbf0d62fca86\",\"status\":\"CREATED\"}",
+    "count": 1,
+    "ms": 42
+  },
+  {
+    "name": "test_shipping_connection",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CONNECTION_ID\"}",
+    "ms": 23
+  },
+  {
+    "name": "toggle_academy_course",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_COURSE_ID\"}",
+    "ms": 24
+  },
+  {
+    "name": "toggle_aitrucpage_auto_sync",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CONNECTION_ID\"}",
+    "ms": 28
+  },
+  {
+    "name": "toggle_auto_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CAMPAIGN_NOT_FOUND\"}",
+    "ms": 38
+  },
+  {
+    "name": "toggle_promotion",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PROMOTION_ID\"}",
+    "ms": 10
+  },
+  {
+    "name": "toggle_telegram_subscription",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_SUBSCRIPTION_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "toggle_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"CAMPAIGN_NOT_FOUND\"}",
+    "ms": 38
+  },
+  {
+    "name": "top_sources",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"count\":1,\"sources\":[{\"source\":\"facebook\",\"total\":2,\"won\":0,\"won_rate\":0}]}",
+    "count": 1,
+    "ms": 40
+  },
+  {
+    "name": "track_academy_attendance",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 41
+  },
+  {
+    "name": "track_shipping_order",
+    "args": {
+      "order_id": "placeholder-no-order"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_TRACKING_CODE\"}",
+    "ms": 26
+  },
+  {
+    "name": "transfer_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 29
+  },
+  {
+    "name": "unlink_app_workspace",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 30
+  },
+  {
+    "name": "unread_notifications_count",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"unread\":2}",
+    "count": 1,
+    "ms": 23
+  },
+  {
+    "name": "update_academy_course",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_COURSE_ID\"}",
+    "ms": 10
+  },
+  {
+    "name": "update_academy_lesson",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"status\":\"NOT_AVAILABLE\",\"note\":\"Lessons table chưa có ở source schema.\"}",
+    "count": 1,
+    "ms": 10
+  },
+  {
+    "name": "update_aitrucpage_sync_interval",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 12
+  },
+  {
+    "name": "update_appointment_status",
+    "args": {
+      "appointment_id": "placeholder-no-appt",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "status phải là 1 trong: BOOKED, CHECKED_IN, COMPLETED, CANCELLED, NO_SHOW, WAITING",
+    "ms": 14
+  },
+  {
+    "name": "update_call_log",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CALL_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "update_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 16
+  },
+  {
+    "name": "update_customer_group",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Không có field nào để update",
+    "ms": 18
+  },
+  {
+    "name": "update_deposit",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_DEPOSIT_ID\"}",
+    "ms": 14
+  },
+  {
+    "name": "update_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 15
+  },
+  {
+    "name": "update_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 16
+  },
+  {
+    "name": "update_lead_funnel",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "update_lead_status",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "status phải là một trong: NEW, CONTACTED, QUALIFIED, WON, LOST",
+    "ms": 18
+  },
+  {
+    "name": "update_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 18
+  },
+  {
+    "name": "update_my_notification_preferences",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"updated\":true}",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "update_order_status",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_PARAMS\"}",
+    "ms": 18
+  },
+  {
+    "name": "update_promotion",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 15
+  },
+  {
+    "name": "update_sales_opportunity",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 15
+  },
+  {
+    "name": "update_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 15
+  },
+  {
+    "name": "update_shipping_shop_settings",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_CONNECTION_ID\"}",
+    "ms": 16
+  },
+  {
+    "name": "update_telegram_subscription",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_SUBSCRIPTION_ID\"}",
+    "ms": 15
+  },
+  {
+    "name": "update_telesale_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 17
+  },
+  {
+    "name": "update_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 19
+  },
+  {
+    "name": "update_workspace_info",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 22
+  },
+  {
+    "name": "upload_academy_material",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 8
+  },
+  {
+    "name": "upload_call_recording",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 8
+  },
+  {
+    "name": "upload_document",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 10
+  },
+  {
+    "name": "upload_lead_recording",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 10
+  },
+  {
+    "name": "verify_app_integration",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_APP\"}",
+    "ms": 11
+  },
+  {
+    "name": "view_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVOICE_NOT_FOUND\"}",
+    "ms": 17
+  },
+  {
+    "name": "void_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"voided\":false,\"invoice_id\":\"placeholder-no-invoice\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 18
+  },
+  {
+    "name": "voucher_campaign_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "2 item(s) {\"id\":\"84cfa64a-03a7-456d-b78b-b046f7e6a272\",\"name\":\"Test create_promotion\",\"dis",
+    "count": 2,
+    "ms": 18
+  },
+  {
+    "name": "voucher_campaigns_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":2,\"active\":2,\"total_uses\":0,\"total_quantity\":0}",
+    "count": 1,
+    "ms": 10
+  },
+  {
+    "name": "zalo_config",
+    "args": {},
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"connected\":false,\"note\":\"Zalo config managed by Zalo VPS standalone app. Call /zalo/proxy.\"}",
+    "count": 1,
+    "ms": 6
+  },
+  {
+    "name": "zalo_live_chat",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 7
+  }
+]

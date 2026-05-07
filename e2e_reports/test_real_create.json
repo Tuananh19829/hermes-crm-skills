@@ -1,0 +1,379 @@
+[
+  {
+    "name": "add_member_to_group",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "group_id và customer_id required",
+    "ms": 476
+  },
+  {
+    "name": "add_note",
+    "args": {
+      "note_id": "fake-note"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Thiếu person_id hoặc content",
+    "ms": 821
+  },
+  {
+    "name": "add_shipping_provider",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 397
+  },
+  {
+    "name": "create_academy_course",
+    "args": {
+      "name": "academy_course-test-1778131552279"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 823
+  },
+  {
+    "name": "create_academy_lesson",
+    "args": {
+      "name": "academy_lesson-test-1778131552280"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 404
+  },
+  {
+    "name": "create_advance_salary",
+    "args": {
+      "name": "advance_salary-test-1778131552281"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 810
+  },
+  {
+    "name": "create_ai_conversation",
+    "args": {
+      "name": "ai_conversation-test-1778131552283"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 403
+  },
+  {
+    "name": "create_appointment",
+    "args": {
+      "appointment_id": "placeholder-no-appt",
+      "scheduled_at": "2026-06-01T09:00:00Z",
+      "duration_minutes": 60,
+      "name": "appointment-test-1778131552284"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Thiếu phone (SĐT khách)",
+    "ms": 407
+  },
+  {
+    "name": "create_bonus_penalty",
+    "args": {
+      "name": "bonus_penalty-test-1778131553102"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 24
+  },
+  {
+    "name": "create_bundle",
+    "args": {
+      "name": "bundle-test-1778131553104"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=5e41238b-19b8-4998-ba2a-05dcd3026500",
+    "created_id": "5e41238b-19b8-4998-ba2a-05dcd3026500",
+    "ms": 43
+  },
+  {
+    "name": "create_cashbook_entry",
+    "args": {
+      "name": "cashbook_entry-test-1778131553105"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_PARAMS\"}",
+    "ms": 24
+  },
+  {
+    "name": "create_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "full_name": "KH Test 1778131553106",
+      "phone": "09019675"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=381ba056-9aa5-402f-a203-b5100c1beb86",
+    "created_id": "381ba056-9aa5-402f-a203-b5100c1beb86",
+    "ms": 46
+  },
+  {
+    "name": "create_customer_group",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8",
+      "name": "Nhóm Test 1778131553107"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=416af782-4926-4e9e-9a63-a1dae7706e83",
+    "created_id": "416af782-4926-4e9e-9a63-a1dae7706e83",
+    "ms": 43
+  },
+  {
+    "name": "create_deposit",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "name": "deposit-test-1778131553108"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 34
+  },
+  {
+    "name": "create_discount_campaign",
+    "args": {
+      "name": "discount_campaign-test-1778131553108"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 36
+  },
+  {
+    "name": "create_document_folder",
+    "args": {
+      "name": "document_folder-test-1778131553109"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 45
+  },
+  {
+    "name": "create_export_stock",
+    "args": {
+      "name": "export_stock-test-1778131553156"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 13
+  },
+  {
+    "name": "create_funnel_deal",
+    "args": {
+      "deal_id": "fake-deal-id-test",
+      "name": "funnel_deal-test-1778131553157"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "full_name và phone required",
+    "ms": 14
+  },
+  {
+    "name": "create_import_stock",
+    "args": {
+      "name": "import_stock-test-1778131553160"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 13
+  },
+  {
+    "name": "create_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "full_name": "Test Lead Real 1778131553161",
+      "phone": "09002554",
+      "source": "AI Test",
+      "note": "Tạo từ test data thật"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=bbed63f2-533c-4870-8553-dca534f1a924",
+    "created_id": "bbed63f2-533c-4870-8553-dca534f1a924",
+    "ms": 36
+  },
+  {
+    "name": "create_loyalty_tier",
+    "args": {
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account",
+      "name": "loyalty_tier-test-1778131553162"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=0725b3ef-bd33-4cbb-88bf-d8ec1daf5c2c",
+    "created_id": "0725b3ef-bd33-4cbb-88bf-d8ec1daf5c2c",
+    "ms": 32
+  },
+  {
+    "name": "create_marketing_qr",
+    "args": {
+      "name": "marketing_qr-test-1778131553162"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 19
+  },
+  {
+    "name": "create_order",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "items": [
+        {
+          "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+          "quantity": 1,
+          "price": 100000
+        }
+      ],
+      "name": "order-test-1778131553163"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "person_id và items required",
+    "ms": 19
+  },
+  {
+    "name": "create_product",
+    "args": {
+      "name": "product-test-1778131553164"
+    },
+    "status": 500,
+    "v": "BUG",
+    "detail": "Lỗi hệ thống, vui lòng thử lại",
+    "ms": 24
+  },
+  {
+    "name": "create_promotion",
+    "args": {
+      "name": "promotion-test-1778131553198"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 12
+  },
+  {
+    "name": "create_sales_opportunity",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "name": "sales_opportunity-test-1778131553198"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 14
+  },
+  {
+    "name": "create_service",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "name": "DV Test 1778131553199",
+      "price": 100000
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=3e928ac0-0478-42e8-bc6d-8468c7733577",
+    "created_id": "3e928ac0-0478-42e8-bc6d-8468c7733577",
+    "ms": 35
+  },
+  {
+    "name": "create_shipping_order",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "name": "shipping_order-test-1778131553199"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 15
+  },
+  {
+    "name": "create_stock_transfer",
+    "args": {
+      "name": "stock_transfer-test-1778131553200"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 16
+  },
+  {
+    "name": "create_stocktake",
+    "args": {
+      "name": "stocktake-test-1778131553201"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PRODUCT_ID\"}",
+    "ms": 16
+  },
+  {
+    "name": "create_telegram_subscription",
+    "args": {
+      "name": "telegram_subscription-test-1778131553201"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 17
+  },
+  {
+    "name": "create_telesale_campaign",
+    "args": {
+      "name": "telesale_campaign-test-1778131553205"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 15
+  },
+  {
+    "name": "create_treatment",
+    "args": {
+      "name": "treatment-test-1778131553234"
+    },
+    "status": 200,
+    "v": "CREATED",
+    "detail": "id=9702d1d6-5fe6-4e16-9a0a-e194391c5a96",
+    "created_id": "9702d1d6-5fe6-4e16-9a0a-e194391c5a96",
+    "ms": 12
+  },
+  {
+    "name": "create_voucher_campaign",
+    "args": {
+      "name": "voucher_campaign-test-1778131553235"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 5
+  }
+]

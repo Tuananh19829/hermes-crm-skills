@@ -1,0 +1,2207 @@
+[
+  {
+    "name": "ai_analyze_call_recording",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 178
+  },
+  {
+    "name": "ai_analyze_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 95
+  },
+  {
+    "name": "ai_assistant_chat",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 96
+  },
+  {
+    "name": "ai_assistant_chat_stream",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 96
+  },
+  {
+    "name": "ai_assistant_chat_with_attachment",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 100
+  },
+  {
+    "name": "ai_assistant_intro",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 100
+  },
+  {
+    "name": "ai_assistant_status",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 100
+  },
+  {
+    "name": "ai_get_capabilities",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 100
+  },
+  {
+    "name": "ai_skill_executor",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 25
+  },
+  {
+    "name": "ai_speech_to_text",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 24
+  },
+  {
+    "name": "ai_suggest_followup",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 24
+  },
+  {
+    "name": "ai_text_to_speech",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 29
+  },
+  {
+    "name": "apply_deposit_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "package_id": "placeholder-no-package",
+      "amount": 1000
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 26
+  },
+  {
+    "name": "apply_manual_discount_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "amount": 1000
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 29
+  },
+  {
+    "name": "apply_promotion_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "amount": 1000
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 29
+  },
+  {
+    "name": "apply_voucher_to_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "amount": 1000
+    },
+    "status": 500,
+    "v": "BUG",
+    "detail": "Lỗi hệ thống, vui lòng thử lại",
+    "ms": 43
+  },
+  {
+    "name": "assign_funnel_deal",
+    "args": {
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e",
+      "assigned_to": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 10
+  },
+  {
+    "name": "assign_lead_to_staff",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1",
+      "assigned_to": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "assign_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "assigned_to": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 14
+  },
+  {
+    "name": "broadcast_notification",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 14
+  },
+  {
+    "name": "bulk_delete_notifications",
+    "args": {
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 16
+  },
+  {
+    "name": "bulk_initiate_calls",
+    "args": {
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 18
+  },
+  {
+    "name": "bulk_issue_vouchers",
+    "args": {
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 19
+  },
+  {
+    "name": "bulk_send_cskh_zalo",
+    "args": {
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 20
+  },
+  {
+    "name": "bulk_tag",
+    "args": {
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Thiếu person_ids hoặc tags",
+    "ms": 14
+  },
+  {
+    "name": "bulk_update_funnel_stage",
+    "args": {
+      "stage_id": "LEAD",
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 14
+  },
+  {
+    "name": "bulk_update_leads",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "customer_ids": [
+        "6a55a0e8-a484-442b-8acf-84ea88dde824"
+      ],
+      "lead_ids": [
+        "265aadcb-0dde-4789-bcf8-410c4319a03d"
+      ]
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 15
+  },
+  {
+    "name": "calculate_shipping_fee",
+    "args": {
+      "weight": 1000,
+      "from_district": "Q1",
+      "to_district": "Q3"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 15
+  },
+  {
+    "name": "campaign_revenue_attribution",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 13
+  },
+  {
+    "name": "cancel_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 14
+  },
+  {
+    "name": "cancel_service_refund",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_INVOICE_ID\"}",
+    "ms": 18
+  },
+  {
+    "name": "cancel_shipping_order",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 18
+  },
+  {
+    "name": "close_sales_opportunity",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "id": "19791eec-9b72-488a-9639-e1125105832e",
+      "outcome": "WON"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 7
+  },
+  {
+    "name": "collect_debt",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 9
+  },
+  {
+    "name": "connect_aitrucpage",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 10
+  },
+  {
+    "name": "consume_card_session",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 12
+  },
+  {
+    "name": "convert_lead_to_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "lead_id": "265aadcb-0dde-4789-bcf8-410c4319a03d"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 13
+  },
+  {
+    "name": "cskh_appointment_reminders",
+    "args": {
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 14
+  },
+  {
+    "name": "cskh_birthday_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 15
+  },
+  {
+    "name": "cskh_cancelled_appointments_list",
+    "args": {
+      "limit": 5,
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 16
+  },
+  {
+    "name": "cskh_no_show_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 12
+  },
+  {
+    "name": "cskh_no_visit_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 17
+  },
+  {
+    "name": "customer_care_list",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"5a4983ae-ebb9-4e9d-963d-29a4efb04b51\",\"full_name\":\"Nguyen Test Bug Fix\",\"",
+    "count": 5,
+    "ms": 27
+  },
+  {
+    "name": "dashboard_overview",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"today\",\"revenue\":{\"revenue\":0,\"invoice_count\":0},\"debt\":{\"total_debt\":0},\"appointments\":{",
+    "count": 1,
+    "ms": 32
+  },
+  {
+    "name": "deduct_card_value",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 14
+  },
+  {
+    "name": "delete_academy_course",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 16
+  },
+  {
+    "name": "delete_academy_lesson",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 18
+  },
+  {
+    "name": "delete_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 21
+  },
+  {
+    "name": "delete_call_log",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 8
+  },
+  {
+    "name": "delete_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"archived\":true,\"id\":\"6a55a0e8-a484-442b-8acf-84ea88dde824\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 28
+  },
+  {
+    "name": "delete_customer_group",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":true,\"group_id\":\"8e333016-94b6-40c2-9c62-83d3b7ceb2c8\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 32
+  },
+  {
+    "name": "delete_deposit",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 14
+  },
+  {
+    "name": "delete_document",
+    "args": {
+      "document_id": "placeholder-no-doc",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 16
+  },
+  {
+    "name": "delete_funnel_deal",
+    "args": {
+      "deal_id": "19791eec-9b72-488a-9639-e1125105832e",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":true,\"deal_id\":\"19791eec-9b72-488a-9639-e1125105832e\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "delete_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 16
+  },
+  {
+    "name": "delete_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"deleted\":true,\"tier_id\":\"507c38b7-fce2-4086-9c21-640e719676e4\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 27
+  },
+  {
+    "name": "delete_notification",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 11
+  },
+  {
+    "name": "delete_promotion",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 11
+  },
+  {
+    "name": "delete_telegram_subscription",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 13
+  },
+  {
+    "name": "delete_telesale_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 15
+  },
+  {
+    "name": "delete_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 17
+  },
+  {
+    "name": "deposit_card",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 17
+  },
+  {
+    "name": "disconnect_aitrucpage",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 19
+  },
+  {
+    "name": "disconnect_shipping_provider",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 21
+  },
+  {
+    "name": "disconnect_telegram_chat",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 10
+  },
+  {
+    "name": "duplicate_promotion",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 11
+  },
+  {
+    "name": "duplicate_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 15
+  },
+  {
+    "name": "enroll_staff_to_course",
+    "args": {
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 20
+  },
+  {
+    "name": "export_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 24
+  },
+  {
+    "name": "export_cskh_list",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 24
+  },
+  {
+    "name": "export_leads",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 26
+  },
+  {
+    "name": "export_voucher_campaigns",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 26
+  },
+  {
+    "name": "extend_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 11
+  },
+  {
+    "name": "fix_timesheet_error",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 12
+  },
+  {
+    "name": "generate_cskh_tasks",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 12
+  },
+  {
+    "name": "import_leads",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 13
+  },
+  {
+    "name": "initiate_call",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 13
+  },
+  {
+    "name": "initiate_callback",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "issue_certificate",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 14
+  },
+  {
+    "name": "issue_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 16
+  },
+  {
+    "name": "issue_vouchers",
+    "args": {
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 7
+  },
+  {
+    "name": "lead_detail",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "args.id required",
+    "ms": 7
+  },
+  {
+    "name": "link_ads_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Không có trường nào cần cập nhật",
+    "ms": 8
+  },
+  {
+    "name": "link_app_workspace",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 10
+  },
+  {
+    "name": "manage_academy_quiz",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 10
+  },
+  {
+    "name": "manage_ads_settings",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 11
+  },
+  {
+    "name": "manage_ai_knowledge_base",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 13
+  },
+  {
+    "name": "manage_ai_persona",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 13
+  },
+  {
+    "name": "manage_automation",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 11
+  },
+  {
+    "name": "manage_bank_accounts",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 11
+  },
+  {
+    "name": "manage_billing",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 12
+  },
+  {
+    "name": "manage_brands",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "manage_business_hours",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 12
+  },
+  {
+    "name": "manage_commission_rules",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 13
+  },
+  {
+    "name": "manage_cskh_rules",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 15
+  },
+  {
+    "name": "manage_customer_segments",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 16
+  },
+  {
+    "name": "manage_email_campaigns",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 7
+  },
+  {
+    "name": "manage_finance_categories",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 8
+  },
+  {
+    "name": "manage_fixed_assets",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=undefined",
+    "ms": 12
+  },
+  {
+    "name": "manage_flash_sale",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 13
+  },
+  {
+    "name": "manage_funnel_stages",
+    "args": {
+      "stage_id": "LEAD",
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 14
+  },
+  {
+    "name": "manage_landing_pages",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 14
+  },
+  {
+    "name": "manage_loyalty_label",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "action must be list/create/delete",
+    "ms": 15
+  },
+  {
+    "name": "manage_loyalty_source",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 15
+  },
+  {
+    "name": "manage_marketing_cost",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 8
+  },
+  {
+    "name": "manage_marketing_workflows",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 9
+  },
+  {
+    "name": "manage_notifications",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 10
+  },
+  {
+    "name": "manage_payment_methods",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 10
+  },
+  {
+    "name": "manage_print_settings",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 12
+  },
+  {
+    "name": "manage_referral_program",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 12
+  },
+  {
+    "name": "manage_roles",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 13
+  },
+  {
+    "name": "manage_salary_policy",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 15
+  },
+  {
+    "name": "manage_security",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 7
+  },
+  {
+    "name": "manage_shift_templates",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 9
+  },
+  {
+    "name": "manage_sms_campaigns",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 9
+  },
+  {
+    "name": "manage_suppliers",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_ACTION\"}",
+    "ms": 10
+  },
+  {
+    "name": "manage_telesale_scripts",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 11
+  },
+  {
+    "name": "manage_units",
+    "args": {},
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 18
+  },
+  {
+    "name": "manage_vouchers",
+    "args": {
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 17
+  },
+  {
+    "name": "manage_webhooks",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 16
+  },
+  {
+    "name": "manage_zalo_mini_app",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 6
+  },
+  {
+    "name": "mark_callback_done",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 7
+  },
+  {
+    "name": "mark_cskh_done",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 10
+  },
+  {
+    "name": "mark_lesson_completed",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 11
+  },
+  {
+    "name": "mark_notification_read",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 13
+  },
+  {
+    "name": "move_document",
+    "args": {
+      "document_id": "placeholder-no-doc",
+      "from_stage": "LEAD",
+      "to_stage": "QUALIFIED"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 15
+  },
+  {
+    "name": "pin_ai_message",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 15
+  },
+  {
+    "name": "pin_notification",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 18
+  },
+  {
+    "name": "pos_add_payment",
+    "args": {},
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 9
+  },
+  {
+    "name": "pos_complete_appointment",
+    "args": {
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"APPOINTMENT_NOT_FOUND\"}",
+    "ms": 22
+  },
+  {
+    "name": "pos_create_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_PARAMS\"}",
+    "ms": 9
+  },
+  {
+    "name": "print_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"invoice_id\":\"placeholder-no-invoice\",\"format\":\"pdf\",\"file_url\":\"https://crm.spaclaw.pro/api/invoic",
+    "count": 1,
+    "ms": 14
+  },
+  {
+    "name": "push_event_to_app",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 15
+  },
+  {
+    "name": "rate_ai_response",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 16
+  },
+  {
+    "name": "rate_call_review",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 18
+  },
+  {
+    "name": "refund_deposit",
+    "args": {
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 19
+  },
+  {
+    "name": "register_zns_template",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 10
+  },
+  {
+    "name": "remove_member_from_group",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "group_id và customer_id required",
+    "ms": 10
+  },
+  {
+    "name": "remove_promotion_from_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "confirm": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 9
+  },
+  {
+    "name": "rename_ai_conversation",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 9
+  },
+  {
+    "name": "rename_document",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 11
+  },
+  {
+    "name": "report_revenue",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"Tháng này\",\"invoice_revenue\":0,\"invoice_count\":0,\"order_revenue\":0,\"order_count\":0,\"total",
+    "count": 1,
+    "ms": 20
+  },
+  {
+    "name": "request_document_signature",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 12
+  },
+  {
+    "name": "reschedule_callback",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "restore_document_version",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 14
+  },
+  {
+    "name": "revert_card_consumption",
+    "args": {
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 15
+  },
+  {
+    "name": "sales_leaderboard",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 24
+  },
+  {
+    "name": "send_appointment_reminder_zalo",
+    "args": {
+      "appointment_id": "placeholder-no-appt",
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 27
+  },
+  {
+    "name": "send_birthday_zalo",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 30
+  },
+  {
+    "name": "send_telegram_verification_code",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 34
+  },
+  {
+    "name": "send_test_telegram",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 34
+  },
+  {
+    "name": "send_zalo_broadcast",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 36
+  },
+  {
+    "name": "send_zalo_message",
+    "args": {
+      "title": "Test",
+      "message": "Test message",
+      "body": "Test body"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 20
+  },
+  {
+    "name": "set_default_app_workspace",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 20
+  },
+  {
+    "name": "set_document_permissions",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 21
+  },
+  {
+    "name": "set_sales_target",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 22
+  },
+  {
+    "name": "share_document",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 23
+  },
+  {
+    "name": "shipping_webhook",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 24
+  },
+  {
+    "name": "snooze_notification",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 24
+  },
+  {
+    "name": "submit_telegram_chat_id",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 26
+  },
+  {
+    "name": "subscribe_notifications_stream",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 9
+  },
+  {
+    "name": "sync_aitrucpage_now",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 10
+  },
+  {
+    "name": "sync_app_data",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 11
+  },
+  {
+    "name": "tag_document",
+    "args": {
+      "tag": "VIP",
+      "tag_id": "placeholder-no-tag",
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 11
+  },
+  {
+    "name": "telesale_call_log",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 11
+  },
+  {
+    "name": "telesale_leads_breakdown",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 13
+  },
+  {
+    "name": "telesale_overdue_callbacks",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "test_send_notification",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 15
+  },
+  {
+    "name": "test_shipping_connection",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 13
+  },
+  {
+    "name": "toggle_academy_course",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 16
+  },
+  {
+    "name": "toggle_aitrucpage_auto_sync",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 18
+  },
+  {
+    "name": "toggle_auto_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 19
+  },
+  {
+    "name": "toggle_promotion",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 19
+  },
+  {
+    "name": "toggle_telegram_subscription",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 25
+  },
+  {
+    "name": "toggle_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "active": true
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 26
+  },
+  {
+    "name": "track_academy_attendance",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 27
+  },
+  {
+    "name": "track_shipping_order",
+    "args": {
+      "order_id": "placeholder-no-order"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 13
+  },
+  {
+    "name": "transfer_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 13
+  },
+  {
+    "name": "unlink_app_workspace",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 12
+  },
+  {
+    "name": "unread_notifications_count",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 13
+  },
+  {
+    "name": "update_academy_course",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 12
+  },
+  {
+    "name": "update_academy_lesson",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 14
+  },
+  {
+    "name": "update_aitrucpage_sync_interval",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 16
+  },
+  {
+    "name": "update_appointment_status",
+    "args": {
+      "appointment_id": "placeholder-no-appt",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "status phải là 1 trong: BOOKED, CHECKED_IN, COMPLETED, CANCELLED, NO_SHOW, WAITING",
+    "ms": 17
+  },
+  {
+    "name": "update_call_log",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 11
+  },
+  {
+    "name": "update_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 11
+  },
+  {
+    "name": "update_customer_group",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "Không có field nào để update",
+    "ms": 12
+  },
+  {
+    "name": "update_deposit",
+    "args": {
+      "package_id": "placeholder-no-package",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 11
+  },
+  {
+    "name": "update_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 12
+  },
+  {
+    "name": "update_lead",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 13
+  },
+  {
+    "name": "update_lead_funnel",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 14
+  },
+  {
+    "name": "update_lead_status",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "status phải là một trong: NEW, CONTACTED, QUALIFIED, WON, LOST",
+    "ms": 14
+  },
+  {
+    "name": "update_loyalty_tier",
+    "args": {
+      "tier_id": "507c38b7-fce2-4086-9c21-640e719676e4",
+      "points": 10,
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"NO_FIELDS\"}",
+    "ms": 8
+  },
+  {
+    "name": "update_my_notification_preferences",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 9
+  },
+  {
+    "name": "update_order_status",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVALID_PARAMS\"}",
+    "ms": 11
+  },
+  {
+    "name": "update_promotion",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 12
+  },
+  {
+    "name": "update_sales_opportunity",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 13
+  },
+  {
+    "name": "update_service_card",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "card_id": "placeholder-no-card",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 14
+  },
+  {
+    "name": "update_shipping_shop_settings",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 17
+  },
+  {
+    "name": "update_telegram_subscription",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 17
+  },
+  {
+    "name": "update_telesale_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 11
+  },
+  {
+    "name": "update_voucher_campaign",
+    "args": {
+      "campaign_id": "f46ad648-e5ed-48eb-9d7a-6df73c374429",
+      "voucher_campaign_id": "ba8b2c8f-ecd5-4284-8436-a7bc44bf2c3f",
+      "voucher_code": "TEST",
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 12
+  },
+  {
+    "name": "update_workspace_info",
+    "args": {
+      "id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 13
+  },
+  {
+    "name": "upload_academy_material",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 14
+  },
+  {
+    "name": "upload_call_recording",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "upload_document",
+    "args": {
+      "document_id": "placeholder-no-doc"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 16
+  },
+  {
+    "name": "upload_lead_recording",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 17
+  },
+  {
+    "name": "verify_app_integration",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 17
+  },
+  {
+    "name": "void_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"voided\":false,\"invoice_id\":\"placeholder-no-invoice\",\"reason\":\"no_reason\"}",
+    "count": 1,
+    "ms": 9
+  },
+  {
+    "name": "zalo_config",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 8
+  },
+  {
+    "name": "zalo_live_chat",
+    "args": {
+      "conversation_id": "placeholder-no-conv"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 8
+  }
+]

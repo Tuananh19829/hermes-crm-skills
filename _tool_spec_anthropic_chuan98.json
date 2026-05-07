@@ -1,0 +1,886 @@
+{
+  "tools": [
+    {
+      "name": "add_member_to_group",
+      "description": "CRM skill: add_member_to_group",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "add_note",
+      "description": "CRM skill: add_note",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "assign_funnel_deal",
+      "description": "CRM skill: assign_funnel_deal",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "assign_loyalty_tier",
+      "description": "CRM skill: assign_loyalty_tier",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "bulk_tag",
+      "description": "CRM skill: bulk_tag",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "bulk_update_funnel_stage",
+      "description": "CRM skill: bulk_update_funnel_stage",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "cancel_service_refund",
+      "description": "CRM skill: cancel_service_refund",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "cashbook_report",
+      "description": "CRM skill: cashbook_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "collect_debt",
+      "description": "CRM skill: collect_debt",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "count_leads_today",
+      "description": "CRM skill: count_leads_today",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "count_loyalty_customers",
+      "description": "CRM skill: count_loyalty_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_appointment",
+      "description": "CRM skill: create_appointment",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_bundle",
+      "description": "CRM skill: create_bundle",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_cashbook_entry",
+      "description": "CRM skill: create_cashbook_entry",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_customer",
+      "description": "CRM skill: create_customer",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_customer_group",
+      "description": "CRM skill: create_customer_group",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_export_stock",
+      "description": "CRM skill: create_export_stock",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_funnel_deal",
+      "description": "CRM skill: create_funnel_deal",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_import_stock",
+      "description": "CRM skill: create_import_stock",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_lead",
+      "description": "CRM skill: create_lead",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_loyalty_tier",
+      "description": "CRM skill: create_loyalty_tier",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_order",
+      "description": "CRM skill: create_order",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_service",
+      "description": "CRM skill: create_service",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_stock_transfer",
+      "description": "CRM skill: create_stock_transfer",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_stocktake",
+      "description": "CRM skill: create_stocktake",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "create_treatment",
+      "description": "CRM skill: create_treatment",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "customer_care_list",
+      "description": "CRM skill: customer_care_list",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "customers_summary",
+      "description": "CRM skill: customers_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "dashboard_overview",
+      "description": "CRM skill: dashboard_overview",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "delete_customer",
+      "description": "CRM skill: delete_customer",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "delete_customer_group",
+      "description": "CRM skill: delete_customer_group",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "delete_funnel_deal",
+      "description": "CRM skill: delete_funnel_deal",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "delete_loyalty_tier",
+      "description": "CRM skill: delete_loyalty_tier",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "deposit_card",
+      "description": "CRM skill: deposit_card",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "find_customer",
+      "description": "CRM skill: find_customer",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "funnel_conversion_report",
+      "description": "CRM skill: funnel_conversion_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "funnel_summary",
+      "description": "CRM skill: funnel_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_customer_detail",
+      "description": "CRM skill: get_customer_detail",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_customer_group_detail",
+      "description": "CRM skill: get_customer_group_detail",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_funnel_deal_detail",
+      "description": "CRM skill: get_funnel_deal_detail",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_loyalty_points",
+      "description": "CRM skill: get_loyalty_points",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_order_detail",
+      "description": "CRM skill: get_order_detail",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_service_detail",
+      "description": "CRM skill: get_service_detail",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "get_stock_report",
+      "description": "CRM skill: get_stock_report",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "lead_detail",
+      "description": "CRM skill: lead_detail",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "link_ads_lead",
+      "description": "CRM skill: link_ads_lead",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_appointments",
+      "description": "CRM skill: list_appointments",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_campaigns",
+      "description": "CRM skill: list_campaigns",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_customer_groups",
+      "description": "CRM skill: list_customer_groups",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_customers",
+      "description": "CRM skill: list_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_debts",
+      "description": "CRM skill: list_debts",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_funnel_deals",
+      "description": "CRM skill: list_funnel_deals",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_group_members",
+      "description": "CRM skill: list_group_members",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_input_invoices",
+      "description": "CRM skill: list_input_invoices",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_invoices",
+      "description": "CRM skill: list_invoices",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_leads",
+      "description": "CRM skill: list_leads",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_loyalty_history",
+      "description": "CRM skill: list_loyalty_history",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_loyalty_labels",
+      "description": "CRM skill: list_loyalty_labels",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_loyalty_sources",
+      "description": "CRM skill: list_loyalty_sources",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_loyalty_tiers",
+      "description": "CRM skill: list_loyalty_tiers",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_orders",
+      "description": "CRM skill: list_orders",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_service_cards",
+      "description": "CRM skill: list_service_cards",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_service_categories",
+      "description": "CRM skill: list_service_categories",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "list_services",
+      "description": "CRM skill: list_services",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "loyalty_summary",
+      "description": "CRM skill: loyalty_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_brands",
+      "description": "CRM skill: manage_brands",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_finance_categories",
+      "description": "CRM skill: manage_finance_categories",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_funnel_stages",
+      "description": "CRM skill: manage_funnel_stages",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_loyalty_label",
+      "description": "CRM skill: manage_loyalty_label",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_loyalty_source",
+      "description": "CRM skill: manage_loyalty_source",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_marketing_cost",
+      "description": "CRM skill: manage_marketing_cost",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_payment_methods",
+      "description": "CRM skill: manage_payment_methods",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_suppliers",
+      "description": "CRM skill: manage_suppliers",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_units",
+      "description": "CRM skill: manage_units",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "manage_vouchers",
+      "description": "CRM skill: manage_vouchers",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "orders_summary",
+      "description": "CRM skill: orders_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "pos_add_payment",
+      "description": "CRM skill: pos_add_payment",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "pos_complete_appointment",
+      "description": "CRM skill: pos_complete_appointment",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "pos_create_invoice",
+      "description": "CRM skill: pos_create_invoice",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "print_invoice",
+      "description": "CRM skill: print_invoice",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "remove_member_from_group",
+      "description": "CRM skill: remove_member_from_group",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "report_revenue",
+      "description": "CRM skill: report_revenue",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "sales_summary",
+      "description": "CRM skill: sales_summary",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "search_customers",
+      "description": "CRM skill: search_customers",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "search_orders",
+      "description": "CRM skill: search_orders",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "search_products",
+      "description": "CRM skill: search_products",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "search_services",
+      "description": "CRM skill: search_services",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "search_treatments",
+      "description": "CRM skill: search_treatments",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "top_sources",
+      "description": "CRM skill: top_sources",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_appointment_status",
+      "description": "CRM skill: update_appointment_status",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_customer",
+      "description": "CRM skill: update_customer",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_customer_group",
+      "description": "CRM skill: update_customer_group",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_invoice",
+      "description": "CRM skill: update_invoice",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_lead_status",
+      "description": "CRM skill: update_lead_status",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_loyalty_tier",
+      "description": "CRM skill: update_loyalty_tier",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "update_order_status",
+      "description": "CRM skill: update_order_status",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "view_invoice",
+      "description": "CRM skill: view_invoice",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "void_invoice",
+      "description": "CRM skill: void_invoice",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      }
+    }
+  ]
+}

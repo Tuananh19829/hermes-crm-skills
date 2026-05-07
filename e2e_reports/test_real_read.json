@@ -1,0 +1,1723 @@
+[
+  {
+    "name": "academy_progress_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 161
+  },
+  {
+    "name": "academy_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 90
+  },
+  {
+    "name": "ads_dashboard",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 93
+  },
+  {
+    "name": "booking_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 95
+  },
+  {
+    "name": "card_movements_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 96
+  },
+  {
+    "name": "card_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 95
+  },
+  {
+    "name": "cashbook_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"period\":\"month\",\"total_income\":0,\"total_expense\":0,\"net\":0,\"tx_count\":0}",
+    "count": 1,
+    "ms": 95
+  },
+  {
+    "name": "commission_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 92
+  },
+  {
+    "name": "count_leads_today",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"count\":3}",
+    "count": 1,
+    "ms": 45
+  },
+  {
+    "name": "count_loyalty_customers",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":0,\"tier_id\":\"fake-tier\"}",
+    "count": 1,
+    "ms": 31
+  },
+  {
+    "name": "cskh_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 37
+  },
+  {
+    "name": "cskh_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 37
+  },
+  {
+    "name": "customer_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 38
+  },
+  {
+    "name": "customers_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":21,\"vip_count\":2,\"new_30d\":21}",
+    "count": 1,
+    "ms": 41
+  },
+  {
+    "name": "debt_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 36
+  },
+  {
+    "name": "deposits_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 37
+  },
+  {
+    "name": "documents_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 11
+  },
+  {
+    "name": "find_customer",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "10 item(s) {\"id\":\"1c28367a-d4a8-4d67-bc96-51acab7a1936\",\"name\":\"Chain Test KH 294834\",\"phon",
+    "count": 10,
+    "ms": 35
+  },
+  {
+    "name": "funnel_conversion_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"stages\":[]}",
+    "count": 1,
+    "ms": 29
+  },
+  {
+    "name": "funnel_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"stages\":[],\"total\":0}",
+    "count": 1,
+    "ms": 31
+  },
+  {
+    "name": "get_academy_course_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 18
+  },
+  {
+    "name": "get_account_profile",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 21
+  },
+  {
+    "name": "get_ai_call_review",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 23
+  },
+  {
+    "name": "get_ai_conversation",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 25
+  },
+  {
+    "name": "get_ai_usage",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 12
+  },
+  {
+    "name": "get_aitrucpage_stats",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 13
+  },
+  {
+    "name": "get_audit_log",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 14
+  },
+  {
+    "name": "get_call_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "get_card_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 13
+  },
+  {
+    "name": "get_card_movement_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 13
+  },
+  {
+    "name": "get_commissions",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 14
+  },
+  {
+    "name": "get_customer_detail",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"6a55a0e8-a484-442b-8acf-84ea88dde824\",\"workspace_id\":\"fc11aab9-c954-4846-8b08-5f9159739e3d\",\"",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "get_customer_group_detail",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"8e333016-94b6-40c2-9c62-83d3b7ceb2c8\",\"name\":\"Chain Test Group 513721\",\"description\":null,\"co",
+    "count": 1,
+    "ms": 33
+  },
+  {
+    "name": "get_deposit_detail",
+    "args": {
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 10
+  },
+  {
+    "name": "get_document_signature_status",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 11
+  },
+  {
+    "name": "get_document_url",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 11
+  },
+  {
+    "name": "get_funnel_deal_detail",
+    "args": {
+      "deal_id": "fake-deal-id-test"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"DEAL_NOT_FOUND\"}",
+    "ms": 26
+  },
+  {
+    "name": "get_funnel_deal_history",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "deal_id": "fake-deal-id-test"
+    },
+    "status": 500,
+    "v": "BUG",
+    "detail": "Lỗi hệ thống, vui lòng thử lại",
+    "ms": 27
+  },
+  {
+    "name": "get_kpi_by_staff",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 19
+  },
+  {
+    "name": "get_loyalty_points",
+    "args": {
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 400,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"MISSING_ID\"}",
+    "ms": 20
+  },
+  {
+    "name": "get_my_income",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 9
+  },
+  {
+    "name": "get_order_detail",
+    "args": {
+      "order_id": "placeholder-no-order"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"ORDER_NOT_FOUND\"}",
+    "ms": 24
+  },
+  {
+    "name": "get_payroll",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 12
+  },
+  {
+    "name": "get_pickup_address",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 14
+  },
+  {
+    "name": "get_plan_usage",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 15
+  },
+  {
+    "name": "get_promotion_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 17
+  },
+  {
+    "name": "get_sales_target_progress",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 20
+  },
+  {
+    "name": "get_service_detail",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"id\":\"4dcada8c-bb91-469f-a45a-871bf9825b73\",\"workspace_id\":\"fc11aab9-c954-4846-8b08-5f9159739e3d\",\"",
+    "count": 1,
+    "ms": 27
+  },
+  {
+    "name": "get_shift_schedule",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 8
+  },
+  {
+    "name": "get_staff_detail",
+    "args": {
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 12
+  },
+  {
+    "name": "get_staff_performance",
+    "args": {
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 14
+  },
+  {
+    "name": "get_stock_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 25
+  },
+  {
+    "name": "get_telegram_chat_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 16
+  },
+  {
+    "name": "get_telesale_campaign_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 18
+  },
+  {
+    "name": "get_timesheet",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 18
+  },
+  {
+    "name": "get_voucher_campaign_detail",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 19
+  },
+  {
+    "name": "get_workspace_info",
+    "args": {},
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 10
+  },
+  {
+    "name": "inventory_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 12
+  },
+  {
+    "name": "kpi_by_branch",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "branch_id": "31d6c8cb-185f-4d4f-b3fe-d44f769387bf"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 12
+  },
+  {
+    "name": "kpi_config",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 13
+  },
+  {
+    "name": "kpi_overview",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 16
+  },
+  {
+    "name": "list_academy_courses",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 17
+  },
+  {
+    "name": "list_academy_lessons",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 18
+  },
+  {
+    "name": "list_active_promotions_for_invoice",
+    "args": {
+      "limit": 5,
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 18
+  },
+  {
+    "name": "list_ads_leads",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 10
+  },
+  {
+    "name": "list_ai_call_reviews",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 11
+  },
+  {
+    "name": "list_ai_conversations",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 13
+  },
+  {
+    "name": "list_ai_prompt_suggestions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ai_assistant",
+    "ms": 19
+  },
+  {
+    "name": "list_aitrucpage_connections",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 19
+  },
+  {
+    "name": "list_aitrucpage_sync_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 20
+  },
+  {
+    "name": "list_app_integrations",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 21
+  },
+  {
+    "name": "list_appointments",
+    "args": {
+      "limit": 5,
+      "appointment_id": "placeholder-no-appt"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_branches",
+    "args": {
+      "limit": 5,
+      "branch_id": "31d6c8cb-185f-4d4f-b3fe-d44f769387bf"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 8
+  },
+  {
+    "name": "list_call_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 9
+  },
+  {
+    "name": "list_callbacks",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 11
+  },
+  {
+    "name": "list_campaign_redemptions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 12
+  },
+  {
+    "name": "list_campaigns",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"crm_pipeline\":[{\"step\":\"LEAD\",\"active\":8,\"won\":0,\"lost\":0,\"total\":8}],\"active_promotions\":[]}",
+    "count": 1,
+    "ms": 25
+  },
+  {
+    "name": "list_card_movements",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 16
+  },
+  {
+    "name": "list_connected_shipping_providers",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 18
+  },
+  {
+    "name": "list_consumed_events",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 20
+  },
+  {
+    "name": "list_course_enrollments",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 16
+  },
+  {
+    "name": "list_cskh_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cskh",
+    "ms": 17
+  },
+  {
+    "name": "list_customer_groups",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"c980a7cd-974f-4c33-80d2-d83df1b64c48\",\"name\":\"Direct 790534\",\"description",
+    "count": 5,
+    "ms": 31
+  },
+  {
+    "name": "list_customers",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"1c28367a-d4a8-4d67-bc96-51acab7a1936\",\"full_name\":\"Chain Test KH 294834\",",
+    "count": 5,
+    "ms": 33
+  },
+  {
+    "name": "list_debts",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 35
+  },
+  {
+    "name": "list_departments",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 22
+  },
+  {
+    "name": "list_deposit_movements",
+    "args": {
+      "limit": 5,
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 22
+  },
+  {
+    "name": "list_deposits",
+    "args": {
+      "limit": 5,
+      "package_id": "placeholder-no-package"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 21
+  },
+  {
+    "name": "list_discount_campaigns",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 15
+  },
+  {
+    "name": "list_document_folders",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 16
+  },
+  {
+    "name": "list_document_versions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 16
+  },
+  {
+    "name": "list_documents",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 16
+  },
+  {
+    "name": "list_funnel_deals",
+    "args": {
+      "limit": 5,
+      "deal_id": "fake-deal-id-test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 20
+  },
+  {
+    "name": "list_group_members",
+    "args": {
+      "limit": 5,
+      "group_id": "8e333016-94b6-40c2-9c62-83d3b7ceb2c8"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"group\":{\"id\":\"8e333016-94b6-40c2-9c62-83d3b7ceb2c8\",\"name\":\"Chain Test Group 513721\"},\"members\":[]",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "list_input_invoices",
+    "args": {
+      "limit": 5,
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_invoices",
+    "args": {
+      "limit": 5,
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 19
+  },
+  {
+    "name": "list_leads",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"f19a0b0c-2290-4cde-81db-a208b89a8eb6\",\"full_name\":\"Direct 790233\",\"phone\"",
+    "count": 5,
+    "ms": 22
+  },
+  {
+    "name": "list_loyalty_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_loyalty_labels",
+    "args": {
+      "limit": 5,
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_loyalty_sources",
+    "args": {
+      "limit": 5,
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 23
+  },
+  {
+    "name": "list_loyalty_tiers",
+    "args": {
+      "limit": 5,
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "4 item(s) {\"id\":\"41e4e5df-ff65-4710-9cf3-7592bc916edc\",\"name\":\"AI_TEST_DRY_RUN\",\"min_point",
+    "count": 4,
+    "ms": 22
+  },
+  {
+    "name": "list_members",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 14
+  },
+  {
+    "name": "list_my_notifications",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 14
+  },
+  {
+    "name": "list_orders",
+    "args": {
+      "limit": 5,
+      "order_id": "placeholder-no-order"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 22
+  },
+  {
+    "name": "list_promotions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 10
+  },
+  {
+    "name": "list_published_events",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 11
+  },
+  {
+    "name": "list_remote_workspaces",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 14
+  },
+  {
+    "name": "list_rooms",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=settings",
+    "ms": 15
+  },
+  {
+    "name": "list_sales_pipelines",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 15
+  },
+  {
+    "name": "list_sent_notifications",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=notifications",
+    "ms": 18
+  },
+  {
+    "name": "list_service_cards",
+    "args": {
+      "limit": 5,
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 33
+  },
+  {
+    "name": "list_service_categories",
+    "args": {
+      "limit": 5,
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "32 item(s) {\"id\":\"d3249512-181e-4bba-9a7c-b713fab2a3a4\",\"name\":\"Trị mụn\",\"description\":null",
+    "count": 32,
+    "ms": 29
+  },
+  {
+    "name": "list_services",
+    "args": {
+      "limit": 5,
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "5 item(s) {\"id\":\"10396419-0cdc-471b-b97a-4d8c460cb727\",\"name\":\"Ấn huyệt chuyên sâu\",\"price",
+    "count": 5,
+    "ms": 66
+  },
+  {
+    "name": "list_shipping_providers",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 15
+  },
+  {
+    "name": "list_staff",
+    "args": {
+      "limit": 5,
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=hr",
+    "ms": 17
+  },
+  {
+    "name": "list_staff_certificates",
+    "args": {
+      "limit": 5,
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=academy",
+    "ms": 25
+  },
+  {
+    "name": "list_telegram_chats",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 30
+  },
+  {
+    "name": "list_telegram_event_types",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 35
+  },
+  {
+    "name": "list_telegram_push_history",
+    "args": {
+      "limit": 5,
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 38
+  },
+  {
+    "name": "list_telegram_subscriptions",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 41
+  },
+  {
+    "name": "list_telesale_campaigns",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 8
+  },
+  {
+    "name": "list_telesale_queue",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 8
+  },
+  {
+    "name": "list_uncalled_leads",
+    "args": {
+      "limit": 5,
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 11
+  },
+  {
+    "name": "list_voucher_campaigns",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 13
+  },
+  {
+    "name": "list_zalo_templates",
+    "args": {
+      "limit": 5
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 14
+  },
+  {
+    "name": "loyalty_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 14
+  },
+  {
+    "name": "loyalty_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "tier_id": "fake-tier",
+      "points": 10,
+      "account_id": "fake-account"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"tiers_count\":4,\"customers\":{\"total\":0,\"active\":0}}",
+    "count": 1,
+    "ms": 22
+  },
+  {
+    "name": "marketing_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 18
+  },
+  {
+    "name": "orders_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "order_id": "placeholder-no-order"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"total\":0,\"delivered\":0,\"cancelled\":0,\"total_revenue\":0,\"total_debt\":0}",
+    "count": 1,
+    "ms": 21
+  },
+  {
+    "name": "prepaid_cards_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=cards_deposits",
+    "ms": 9
+  },
+  {
+    "name": "promotion_redemption_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 9
+  },
+  {
+    "name": "revenue_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 10
+  },
+  {
+    "name": "sale_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=sale",
+    "ms": 16
+  },
+  {
+    "name": "sales_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"range\":\"7d\",\"total_paid\":0,\"invoice_count\":0}",
+    "count": 1,
+    "ms": 19
+  },
+  {
+    "name": "search_customers",
+    "args": {
+      "customer_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "person_id": "6a55a0e8-a484-442b-8acf-84ea88dde824",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "16 item(s) {\"id\":\"1c28367a-d4a8-4d67-bc96-51acab7a1936\",\"full_name\":\"Chain Test KH 294834\",",
+    "count": 16,
+    "ms": 21
+  },
+  {
+    "name": "search_documents",
+    "args": {
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=documents",
+    "ms": 16
+  },
+  {
+    "name": "search_orders",
+    "args": {
+      "order_id": "placeholder-no-order",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 17
+  },
+  {
+    "name": "search_products",
+    "args": {
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 17
+  },
+  {
+    "name": "search_services",
+    "args": {
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73",
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 17
+  },
+  {
+    "name": "search_treatments",
+    "args": {
+      "q": "test",
+      "query": "test"
+    },
+    "status": 200,
+    "v": "EMPTY_OK",
+    "detail": "returned 0 items",
+    "ms": 18
+  },
+  {
+    "name": "service_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "service_id": "4dcada8c-bb91-469f-a45a-871bf9825b73"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 12
+  },
+  {
+    "name": "shipping_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=integrations",
+    "ms": 13
+  },
+  {
+    "name": "staff_performance_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "staff_id": "d9116fd5-5c36-45ac-8b97-06ac08b88af1"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 14
+  },
+  {
+    "name": "telesale_campaign_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=telesale",
+    "ms": 14
+  },
+  {
+    "name": "telesale_hub_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=ads",
+    "ms": 7
+  },
+  {
+    "name": "telesale_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=reports",
+    "ms": 7
+  },
+  {
+    "name": "top_sources",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "REAL_DATA",
+    "detail": "1 item(s) {\"count\":1,\"sources\":[{\"source\":\"facebook\",\"total\":2,\"won\":0,\"won_rate\":0}]}",
+    "count": 1,
+    "ms": 14
+  },
+  {
+    "name": "view_invoice",
+    "args": {
+      "invoice_id": "placeholder-no-invoice"
+    },
+    "status": 404,
+    "v": "VALIDATE_OK",
+    "detail": "{\"code\":\"INVOICE_NOT_FOUND\"}",
+    "ms": 14
+  },
+  {
+    "name": "voucher_campaign_report",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 9
+  },
+  {
+    "name": "voucher_campaigns_summary",
+    "args": {
+      "from": "2026-01-01",
+      "to": "2026-12-31",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    },
+    "status": 200,
+    "v": "NOT_IMPL",
+    "detail": "module=marketing",
+    "ms": 11
+  }
+]
